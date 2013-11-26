@@ -1,0 +1,490 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1031</width>
+    <height>616</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>600</width>
+    <height>400</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"> QStatusBar {
+	 background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+	 stop: 0 #A4A4A4, stop: 0.1 #333333);
+	 border: none;
+	 border-top: 1px solid #2E2E2E;
+	 color: #007acc;
+ }
+
+ QMainWindow {
+	background: #424242;
+}
+/*Desing MenuBar*/
+ QMenuBar {
+   background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+	stop: 0 #a6a6a6, stop: 0.08 #7f7f7f,
+	stop: 0.39999 #717171, stop: 0.4 #626262,
+	stop: 0.9 #4c4c4c, stop: 1 #333333);
+	border: none; 
+	color: #D8D8D8;
+}
+
+ QMenuBar::item {
+     spacing: 3px; /* spacing between menu bar items */
+     padding: 3px 8px;
+     background: transparent;
+ }
+
+ QMenuBar::item:selected { /* when selected using mouse or keyboard */
+    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+	stop: 0 #2E9AFE, stop: 0.08 #0174DF,
+	stop: 0.39999 #0080FF, stop: 0.4 #045FB4,
+	stop: 0.9 #084B8A, stop: 1 #0B243B);
+ }
+
+ QMenuBar::item:pressed {
+     background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+	stop: 0 #2E9AFE, stop: 0.08 #0174DF,
+	stop: 0.39999 #0080FF, stop: 0.4 #045FB4,
+	stop: 0.6 #084B8A, stop: 1 #0B243B);
+ }
+
+/*Design Menu*/
+ QMenu {
+	background: #585858; 
+	border: 1px solid #2E2E2E;	
+	color: #D8D8D8;
+ }
+
+ QMenu::item {
+     /* sets background of menu item. set this to something non-transparent
+         if you want menu color and menu item color to be different */
+     background-color: transparent;
+ }
+
+ QMenu::item:selected { /* when user selects item using mouse or keyboard */
+     background-color: #007acc;
+ }
+
+</string>
+  </property>
+  <property name="animated">
+   <bool>true</bool>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout">
+    <property name="spacing">
+     <number>3</number>
+    </property>
+    <property name="sizeConstraint">
+     <enum>QLayout::SetDefaultConstraint</enum>
+    </property>
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <item>
+     <widget class="QFrame" name="sideframe">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>80</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">#sideframe {
+    background: qlineargradient(x1: 0, y0: 1, x2:1, y2: 0,
+	stop: 0.96 #383838, stop: 0.99 #2e2e2e);
+	border: none;
+	border-right: 1px solid #2E2E2E;
+}</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QFrame" name="title">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>80</width>
+         <height>24</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">#title {
+	background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+	stop: 0 #a6a6a6, stop: 0.08 #7f7f7f,
+	stop: 0.39999 #717171, stop: 0.4 #626262,
+	stop: 0.9 #4c4c4c, stop: 1 #333333);
+	border: none;
+	border-right: 1px solid #2E2E2E;
+	color: #D8D8D8;
+}</string>
+       </property>
+       <property name="frameShape">
+        <enum>QFrame::StyledPanel</enum>
+       </property>
+       <property name="frameShadow">
+        <enum>QFrame::Raised</enum>
+       </property>
+       <widget class="QLabel" name="Brush">
+        <property name="geometry">
+         <rect>
+          <x>3</x>
+          <y>4</y>
+          <width>73</width>
+          <height>13</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">#Brush {
+	color: #D8D8D8;
+}</string>
+        </property>
+        <property name="text">
+         <string>Brush Tools</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QPushButton" name="btnBrush">
+       <property name="geometry">
+        <rect>
+         <x>17</x>
+         <y>35</y>
+         <width>46</width>
+         <height>46</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+     border: 1px solid #2E2E2E;
+	 border-radius: 4px;
+     background-color: #52524f;
+ }
+
+ QPushButton:pressed {
+      border: 1px solid #007acc;
+      background-color: #52524f;
+ }</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/Images/icons/brush.png</normaloff>:/Images/icons/brush.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>42</width>
+         <height>32</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btnTest">
+       <property name="geometry">
+        <rect>
+         <x>17</x>
+         <y>94</y>
+         <width>46</width>
+         <height>46</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+     border: 1px solid #2E2E2E;
+	 border-radius: 4px;
+     background-color: #52524f;
+ }
+
+ QPushButton:pressed {
+      border: 1px solid #007acc;
+      background-color: #52524f;
+ }</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset>
+         <normaloff>:/Images/icons/brush.png</normaloff>:/Images/icons/brush.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>42</width>
+         <height>32</height>
+        </size>
+       </property>
+      </widget>
+     </widget>
+    </item>
+    <item>
+     <widget class="QFrame" name="frame">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <property name="leftMargin">
+        <number>0</number>
+       </property>
+       <property name="topMargin">
+        <number>0</number>
+       </property>
+       <property name="rightMargin">
+        <number>2</number>
+       </property>
+       <property name="bottomMargin">
+        <number>1</number>
+       </property>
+       <item>
+        <widget class="QTabWidget" name="imagetab">
+         <property name="font">
+          <font>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">/*Image Frame*/
+QTabWidget::pane { 
+	 border: 1px solid #2E2E2E;
+}
+
+
+
+QTabBar::tab {
+	background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+	stop: 0 #a6a6a6, stop: 0.08 #7f7f7f,
+	stop: 0.39999 #717171, stop: 0.4 #626262,
+	stop: 0.9 #4c4c4c, stop: 1 #333333);
+	border: none;
+	border: 1px solid #2E2E2E;
+	color: #D8D8D8;
+	min-width: 8ex;
+	border-top-left-radius: 2.5px;
+	border-top-right-radius: 2.5px;
+	padding: 2px 10px
+}
+	QTabBar::tab:selected, QTabBar::tab:hover {
+	background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+	stop: 0 #2E9AFE, stop: 0.08 #0174DF,
+	stop: 0.39999 #0080FF, stop: 0.4 #045FB4,
+	stop: 0.9 #084B8A, stop: 1 #0B243B)
+}
+QTabBar::tab:selected {
+	background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
+	stop: 0 #2E9AFE, stop: 0.08 #0174DF,
+	stop: 0.39999 #0080FF, stop: 0.4 #045FB4,
+	stop: 0.9 #084B8A, stop: 1 #0B243B)
+}
+QTabBar::tab:!selected {
+margin-top: 3px; /* make non-selected tabs look smaller */
+}</string>
+         </property>
+         <property name="currentIndex">
+          <number>1</number>
+         </property>
+         <property name="tabsClosable">
+          <bool>true</bool>
+         </property>
+         <property name="movable">
+          <bool>true</bool>
+         </property>
+         <widget class="QWidget" name="img_1">
+          <attribute name="title">
+           <string>Lena.gif</string>
+          </attribute>
+         </widget>
+         <widget class="QWidget" name="img_2">
+          <attribute name="title">
+           <string>Image 2</string>
+          </attribute>
+         </widget>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QStatusBar" name="statusbar">
+   <property name="sizeGripEnabled">
+    <bool>false</bool>
+   </property>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1031</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
+   </property>
+   <widget class="QMenu" name="menuTest">
+    <property name="title">
+     <string>Datei</string>
+    </property>
+    <addaction name="actionNeu"/>
+    <addaction name="action_ffnen"/>
+    <addaction name="separator"/>
+    <addaction name="actionSpeichern"/>
+    <addaction name="actionSpeichern_unter"/>
+    <addaction name="separator"/>
+    <addaction name="actionDrucken"/>
+    <addaction name="separator"/>
+    <addaction name="actionBeenden"/>
+   </widget>
+   <widget class="QMenu" name="menuBearbeiten">
+    <property name="title">
+     <string>Bearbeiten</string>
+    </property>
+    <addaction name="actionR_ckg_gngig"/>
+    <addaction name="actionWiederherstellen"/>
+    <addaction name="separator"/>
+    <addaction name="actionKopieren"/>
+    <addaction name="actionEinf_gen"/>
+    <addaction name="actionL_schen"/>
+   </widget>
+   <widget class="QMenu" name="menuFilter">
+    <property name="title">
+     <string>Filter</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuHilfe">
+    <property name="title">
+     <string>Hilfe</string>
+    </property>
+    <addaction name="actionHilfe"/>
+    <addaction name="separator"/>
+    <addaction name="action_ber"/>
+   </widget>
+   <addaction name="menuTest"/>
+   <addaction name="menuBearbeiten"/>
+   <addaction name="menuFilter"/>
+   <addaction name="menuHilfe"/>
+  </widget>
+  <action name="actionNeu">
+   <property name="text">
+    <string>Neu</string>
+   </property>
+  </action>
+  <action name="action_ffnen">
+   <property name="text">
+    <string>Öffnen</string>
+   </property>
+  </action>
+  <action name="actionSpeichern">
+   <property name="text">
+    <string>Speichern</string>
+   </property>
+  </action>
+  <action name="actionSpeichern_unter">
+   <property name="text">
+    <string>Speichern unter ...</string>
+   </property>
+  </action>
+  <action name="actionKopieren">
+   <property name="text">
+    <string>Kopieren</string>
+   </property>
+  </action>
+  <action name="actionEinf_gen">
+   <property name="text">
+    <string>Einfügen</string>
+   </property>
+  </action>
+  <action name="action_ber">
+   <property name="text">
+    <string>Über ...</string>
+   </property>
+  </action>
+  <action name="actionHilfe">
+   <property name="text">
+    <string>Hilfe</string>
+   </property>
+  </action>
+  <action name="actionBeenden">
+   <property name="text">
+    <string>Beenden</string>
+   </property>
+  </action>
+  <action name="actionDrucken">
+   <property name="text">
+    <string>Drucken</string>
+   </property>
+  </action>
+  <action name="actionR_ckg_gngig">
+   <property name="text">
+    <string>Rückgägngig</string>
+   </property>
+  </action>
+  <action name="actionWiederherstellen">
+   <property name="text">
+    <string>Wiederherstellen</string>
+   </property>
+  </action>
+  <action name="actionL_schen">
+   <property name="text">
+    <string>Ausschneiden</string>
+   </property>
+  </action>
+ </widget>
+ <tabstops>
+  <tabstop>imagetab</tabstop>
+  <tabstop>btnBrush</tabstop>
+  <tabstop>btnTest</tabstop>
+ </tabstops>
+ <resources/>
+ <connections/>
+</ui>
