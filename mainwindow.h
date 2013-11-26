@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QtCore>
 #include <QtGui>
+#include "ueberdialog.h"
 
 
 namespace Ui {
@@ -21,6 +22,8 @@ public:
 private slots:
     void on_action_ffnen_triggered();
     void on_actionBeenden_triggered();
+
+    void on_action_ber_triggered();
 
 private:
     Ui::MainWindow *ui;

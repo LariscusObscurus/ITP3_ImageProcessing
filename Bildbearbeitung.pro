@@ -13,12 +13,13 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+	mainwindow.cpp \
+    ueberdialog.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    ueberdialog.h
 
 FORMS    += mainwindow.ui \
-    neudialog.ui \
     ueberdialog.ui
 
 RESOURCES += \

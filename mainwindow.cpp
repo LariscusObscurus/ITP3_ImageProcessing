@@ -52,5 +52,9 @@ void MainWindow::on_actionBeenden_triggered()
     ui->statusbar->showMessage("Programm Beenden",2000);
 }
 
-
-
+void MainWindow::on_action_ber_triggered()
+{
+    Ueberdialog about;
+    about.setModal(true);
+    about.exec();
+}
