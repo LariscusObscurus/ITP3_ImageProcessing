@@ -17,7 +17,8 @@ SOURCES += main.cpp\
     ueberdialog.cpp
 
 HEADERS  += mainwindow.h \
-    ueberdialog.h
+    ueberdialog.h \
+    IOperation.h
 
 FORMS    += mainwindow.ui \
     ueberdialog.ui
