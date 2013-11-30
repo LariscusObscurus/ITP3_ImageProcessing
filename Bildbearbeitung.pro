@@ -14,14 +14,20 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
 	mainwindow.cpp \
-    ueberdialog.cpp
+    ueberdialog.cpp \
+    Conversion.cpp
 
 HEADERS  += mainwindow.h \
     ueberdialog.h \
-    IOperation.h
+    IOperation.h \
+    Conversion.h
 
 FORMS    += mainwindow.ui \
     ueberdialog.ui
 
 RESOURCES += \
     Icons.qrc
+
+unix:!macx: LIBS += -lopencv_core
+
+unix:!macx: LIBS += -lopencv_imgproc

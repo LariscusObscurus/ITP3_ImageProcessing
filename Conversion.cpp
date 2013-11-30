@@ -1,8 +1,6 @@
 // Conversion.cpp
 
 #include "Conversion.h"
-#include <opencv2/core/core.hpp>
-#include <QImage>
 
 QImage MatToQimage(cv::Mat& mat, QImage::Format format)
 {
