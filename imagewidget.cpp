@@ -2,7 +2,9 @@
 #include "imagewidget.h"
 
 ImageWidget::ImageWidget(QWidget *parent) :
-	QWidget(parent)
+	QWidget(parent),
+	m_penColor(Qt::blue),
+	m_drawing(false)
 {
 	setAttribute(Qt::WA_StaticContents);
 }
@@ -13,12 +15,55 @@ bool ImageWidget::openImage(const QString &fileName)
 	if(!loadedImage.load(fileName)) {
 		return false;
 	}
-	//QSize imageSize = loadedImage.size();
+	QSize imageSize = loadedImage.size();
+	this->resize(imageSize);
 	loadedImage.convertToFormat(QImage::Format_RGB32);
 	m_image = loadedImage;
 	drawImage();
 	update();
 	return true;
+}
+
+bool ImageWidget::saveImage(const QString &fileName, const char *fileFormat)
+{
+	if(m_image.save(fileName, fileFormat)) {
+		return true;
+	}
+	return false;
+}
+
+void ImageWidget::setPenColor(const QColor &newColor)
+{
+	m_penColor = newColor;
+}
+
+void ImageWidget::clearImage()
+{
+	m_image.fill(Qt::white);
+	update();
+}
+
+void ImageWidget::mousePressEvent(QMouseEvent *event)
+{
+	if (event->button() == Qt::LeftButton) {
+		m_lastPoint = event->pos();
+		m_drawing = true;
+	}
+}
+
+void ImageWidget::mouseMoveEvent(QMouseEvent *event)
+{
+	if ((event->buttons() & Qt::LeftButton) && m_drawing) {
+		drawLineTo(event->pos());
+	}
+}
+
+void ImageWidget::mouseReleaseEvent(QMouseEvent *event)
+{
+	if (event->button() == Qt::LeftButton && m_drawing) {
+		drawLineTo(event->pos());
+		m_drawing = false;
+	}
 }
 
 void ImageWidget::resizeEvent(QResizeEvent *event)
@@ -28,14 +73,24 @@ void ImageWidget::resizeEvent(QResizeEvent *event)
 
 void ImageWidget::paintEvent(QPaintEvent *event)
 {
-    QPainter painter(this);
-    QRect dirtyRect = event->rect();
-    painter.drawImage(dirtyRect, m_image, dirtyRect);
+	QPainter painter(this);
+	QRect dirtyRect = event->rect();
+	painter.drawImage(dirtyRect, m_image, dirtyRect);
 }
-
 
 void ImageWidget::drawImage()
 {
 	QPainter painter(&m_image);
 	painter.drawImage(QPoint(0,0), m_image);
+}
+
+void ImageWidget::drawLineTo(const QPoint &endPoint)
+{
+	QPainter painter(&m_image);
+	painter.setPen(QPen(m_penColor, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+	painter.drawLine(m_lastPoint, endPoint);
+
+	int rad = (0) + 2;
+	update(QRect(m_lastPoint, endPoint).normalized().adjusted(-rad, -rad, +rad, +rad));
+	m_lastPoint = endPoint;
 }
