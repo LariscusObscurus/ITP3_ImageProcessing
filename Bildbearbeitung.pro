@@ -15,12 +15,14 @@ TEMPLATE = app
 SOURCES += main.cpp\
 	mainwindow.cpp \
     ueberdialog.cpp \
-    Conversion.cpp
+    Conversion.cpp \
+    imagewidget.cpp
 
 HEADERS  += mainwindow.h \
     ueberdialog.h \
     IOperation.h \
-    Conversion.h
+    Conversion.h \
+    imagewidget.h
 
 FORMS    += mainwindow.ui \
     ueberdialog.ui

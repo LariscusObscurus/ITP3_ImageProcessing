@@ -1,7 +1,11 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
 #include <QtGui>
 #include <QtCore>
+#include <QFileDialog>
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
+#include "ueberdialog.h"
+#include "imagewidget.h"
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -43,9 +47,13 @@ void MainWindow::createConnections()
 void MainWindow::on_action_ffnen_triggered()
 {
     ui->statusbar->showMessage("Datei Öffnen",2000);
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Bildatei öffnen"), QDir::homePath());
+    if(!fileName.isEmpty()) {
+	    // TODO:
+	    // Richtiges Widget für Tab aufrufen.
+	    ui->imageWidget->openImage(fileName);
+    }
 }
-
-
 
 void MainWindow::on_actionBeenden_triggered()
 {
