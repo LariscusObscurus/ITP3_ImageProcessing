@@ -18,12 +18,13 @@ signals:
 public slots:
 
 protected:
-	//void resizeEvent(QResizeEvent *event);
+	void resizeEvent(QResizeEvent *event);
+	void paintEvent(QPaintEvent *);
 
 private:
-	void resizeImage(QImage *image, const QSize &newSize);
+	void drawImage();
 
-	QImage image;
+	QImage m_image;
 
 };
 
