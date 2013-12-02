@@ -22,7 +22,8 @@ HEADERS  += mainwindow.h \
     ueberdialog.h \
     IOperation.h \
     Conversion.h \
-    imagewidget.h
+    imagewidget.h \
+    ringbuffer.h
 
 FORMS    += mainwindow.ui \
     ueberdialog.ui
