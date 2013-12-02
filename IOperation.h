@@ -4,14 +4,16 @@
 #define IOPERATION_H
 
 // Forward-Deklarationen
-class QMap;
-class QImage;
-class QString;
+#include <QMap>
+#include <QImage>
+#include <QString>
 
 //! Schnittstelle für Bildoperationen
 class IOperation
 {
 public:
+	//! Default destructor
+	virtual ~IOperation() throw() = default;
 	//! Initialisiert die Bildoperation.
 	virtual void Initialize() = 0;
 	//! Führt die Bildoperation aus

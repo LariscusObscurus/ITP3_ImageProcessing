@@ -16,14 +16,16 @@ SOURCES += main.cpp\
 	mainwindow.cpp \
     ueberdialog.cpp \
     Conversion.cpp \
-    imagewidget.cpp
+    imagewidget.cpp \
+    TestFilter.cpp
 
 HEADERS  += mainwindow.h \
     ueberdialog.h \
     IOperation.h \
     Conversion.h \
     imagewidget.h \
-    ringbuffer.h
+    ringbuffer.h \
+    TestFilter.h
 
 FORMS    += mainwindow.ui \
     ueberdialog.ui
