@@ -11,7 +11,7 @@ void Blur::Initialize() { }
 void Blur::Draw(QImage &image, const QMap<QString, QString> &args)
 {
 	int ksize = 3;
-	cv::Mat mat = QimageToMat(image, image.format());
+	cv::Mat mat = QimageToMat(image);
 	// Name des Argumentes steht noch nicht fest
 	auto it = args.find("KernelSize");
 
@@ -22,6 +22,7 @@ void Blur::Draw(QImage &image, const QMap<QString, QString> &args)
 		if (!ok) {
 			throw FormatException("Couldn't convert \"KernelSize\" argument for blur");
 		}
+		ksize = 2 * ksize + 1;
 	}
 	cv::blur(mat.clone(), mat, cv::Size(ksize, ksize));
 	image = MatToQimage(mat);

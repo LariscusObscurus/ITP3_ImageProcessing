@@ -14,7 +14,7 @@ void BilateralFilter::Draw(QImage &image, const QMap<QString, QString> &args)
 	double sigmaColor = 75;
 	double sigmaSpace = 75;
 	Arguments(args, d, sigmaColor, sigmaSpace);
-	cv::Mat mat = QimageToMat(image, image.format());
+	cv::Mat mat = QimageToMat(image);
 	cv::bilateralFilter(mat.clone(), mat, d, sigmaColor, sigmaSpace);
 	image = MatToQimage(mat);
 }

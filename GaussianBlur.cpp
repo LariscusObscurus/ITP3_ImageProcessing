@@ -13,7 +13,7 @@ void GaussianBlur::Draw(QImage &image, const QMap<QString, QString> &args)
 	double sigma = 0;
 	int ksize = 3;
 	Arguments(args, ksize, sigma);
-	cv::Mat mat = QimageToMat(image, image.format());
+	cv::Mat mat = QimageToMat(image);
 	cv::GaussianBlur(mat.clone(), mat, cv::Size(ksize, ksize), sigma);
 	image = MatToQimage(mat);
 }
@@ -32,9 +32,10 @@ void GaussianBlur::Arguments(const QMap<QString, QString> &args, int &ksize, dou
 
 		if (!ok) {
 			throw FormatException("couldn't convert \"KernelSize\" argument for gaussian blur");
-		} else if (ksize % 2 == 0 || ksize < 0) {
-			throw ArgumentException("\"KernelSize\" argument for gaussian blur must be positive and odd");
+		} else if (ksize < 0) {
+			throw ArgumentException("\"KernelSize\" argument for gaussian blur must be positive");
 		}
+		ksize = 2 * ksize + 1;
 	}
 	if (sg != args.end() && sg.key() == "Sigma") {
 		sigma = sg.value().toDouble(&ok);

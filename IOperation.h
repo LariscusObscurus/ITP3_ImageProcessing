@@ -3,7 +3,7 @@
 #ifndef IOPERATION_H
 #define IOPERATION_H
 
-// Forward-Deklarationen
+// Header
 #include <QMap>
 #include <QImage>
 #include <QString>

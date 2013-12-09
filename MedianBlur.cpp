@@ -19,12 +19,13 @@ void MedianBlur::Draw(QImage &image, const QMap<QString, QString> &args)
 
 		if (!ok) {
 			throw FormatException("couldn't convert \"KernelSize\" argument for median blur");
-		} else if (ksize % 2 == 0 || ksize < 3) {
+		} else if (ksize < 1) {
 			throw ArgumentException("\"KernelSize\" argument for median blur must be odd and greater than 1");
 		}
+		ksize = 2 * ksize + 1;
 	}
 
-	cv::Mat mat = QimageToMat(image, image.format());
+	cv::Mat mat = QimageToMat(image);
 	cv::medianBlur(mat.clone(), mat, ksize);
 	image = MatToQimage(mat);
 }

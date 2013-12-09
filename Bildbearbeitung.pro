@@ -21,7 +21,9 @@ SOURCES += main.cpp\
     Blur.cpp \
     GaussianBlur.cpp \
     MedianBlur.cpp \
-    BilateralFilter.cpp
+    BilateralFilter.cpp \
+    Erosion.cpp \
+    Dilation.cpp
 
 HEADERS  += mainwindow.h \
     ueberdialog.h \
@@ -34,7 +36,9 @@ HEADERS  += mainwindow.h \
     GaussianBlur.h \
     Exception.h \
     MedianBlur.h \
-    BilateralFilter.h
+    BilateralFilter.h \
+    Erosion.h \
+    Dilation.h
 
 FORMS    += mainwindow.ui \
     ueberdialog.ui
