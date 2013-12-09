@@ -35,7 +35,7 @@ void BilateralFilter::Arguments(const QMap<QString, QString> &args, int &d, doub
 	it = args.find("SigmaColor");
 
 	if (it != args.end() && it.key() == "SigmaColor") {
-		d = it.value().toDouble(&ok);
+		sigmaColor = it.value().toDouble(&ok);
 		if (!ok) {
 			throw FormatException("couldn't convert \"SigmaColor\" argument for bilateral filter");
 		}
@@ -43,7 +43,7 @@ void BilateralFilter::Arguments(const QMap<QString, QString> &args, int &d, doub
 	it = args.find("SigmaSpace");
 
 	if (it != args.end() && it.key() == "SigmaSpace") {
-		d = it.value().toDouble(&ok);
+		sigmaSpace = it.value().toDouble(&ok);
 		if (!ok) {
 			throw FormatException("couldn't convert \"SigmaSpace\" argument for bilateral filter");
 		}
