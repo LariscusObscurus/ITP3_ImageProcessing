@@ -17,7 +17,11 @@ SOURCES += main.cpp\
     ueberdialog.cpp \
     Conversion.cpp \
     imagewidget.cpp \
-    TestFilter.cpp
+    TestFilter.cpp \
+    Blur.cpp \
+    GaussianBlur.cpp \
+    MedianBlur.cpp \
+    BilateralFilter.cpp
 
 HEADERS  += mainwindow.h \
     ueberdialog.h \
@@ -25,7 +29,12 @@ HEADERS  += mainwindow.h \
     Conversion.h \
     imagewidget.h \
     ringbuffer.h \
-    TestFilter.h
+    TestFilter.h \
+    Blur.h \
+    GaussianBlur.h \
+    Exception.h \
+    MedianBlur.h \
+    BilateralFilter.h
 
 FORMS    += mainwindow.ui \
     ueberdialog.ui
@@ -36,3 +45,5 @@ RESOURCES += \
 unix:!macx: LIBS += -lopencv_core
 
 unix:!macx: LIBS += -lopencv_imgproc
+
+unix: QMAKE_CXXFLAGS += -std=c++11

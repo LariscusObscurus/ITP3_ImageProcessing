@@ -21,14 +21,14 @@
  * \param format Das zu verwendende Format
  * \return Ein valides QImage-objekt
  */
-QImage MatToQimage(cv::Mat& mat, int format = CV_8UC3);
+QImage MatToQimage(cv::Mat& mat, QImage::Format format = QImage::Format_RGB888);
 //! Konvertiert QImage zu cv::Mat
 /*!
  * \param img Bildobjekt aus Qt
  * \param format Qt-Format das verwendet wird
  * \return Eine valide OpenCV-Matrix
  */
-cv::Mat QimageToMat(QImage& img, QImage::Format format = QImage::Format_RGB888);
+cv::Mat QimageToMat(QImage& img, int format = CV_8UC3);
 
 #endif // CONVERSION_H
 

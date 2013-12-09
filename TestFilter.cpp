@@ -10,7 +10,7 @@ void TestFilter::Initialize()
 
 void TestFilter::Draw(QImage &image, const QMap<QString, QString> &args)
 {
-	qDebug() << "Draw TestFilter:\n" << image.text() << "\n" << args.size();
+	qDebug() << "Draw TestFilter";
 }
 
 void TestFilter::Finalize()
