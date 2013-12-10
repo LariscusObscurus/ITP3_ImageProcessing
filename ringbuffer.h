@@ -16,9 +16,9 @@ public:
 		delete[] m_buffer;
 	}
 
-	void push(T &newItem)
+	void push(T inputItem)
 	{
-		m_buffer[m_index++] = newItem;
+		m_buffer[m_index++] = inputItem;
 		if(m_index > m_bufferSize) {
 			m_index = 0;
 		}

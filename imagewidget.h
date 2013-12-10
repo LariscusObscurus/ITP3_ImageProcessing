@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QtGui>
 #include <QImage>
+#include "ringbuffer.h"
 
 class ImageWidget : public QWidget
 {
@@ -13,6 +14,7 @@ public:
 	bool openImage(const QString& fileName);
 	bool saveImage(const QString& fileName, const char *fileFormat);
 	void setPenColor(const QColor &newColor);
+	bool undo();
 	void clearImage();
 
 signals:
@@ -31,10 +33,12 @@ private:
 	void drawLineTo(const QPoint &endPoint);
 
 	QImage m_image;
+	QImage m_original;
 	QColor m_penColor;
 
 	bool m_drawing;
 	QPoint m_lastPoint;
+	RingBuffer<QImage> m_undoBuffer;
 };
 
 #endif // IMAGEWIDGET_H

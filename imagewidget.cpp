@@ -4,7 +4,8 @@
 ImageWidget::ImageWidget(QWidget *parent) :
 	QWidget(parent),
 	m_penColor(Qt::blue),
-	m_drawing(false)
+	m_drawing(false),
+	m_undoBuffer(20)
 {
 	setAttribute(Qt::WA_StaticContents);
 }
@@ -37,6 +38,16 @@ void ImageWidget::setPenColor(const QColor &newColor)
 	m_penColor = newColor;
 }
 
+bool ImageWidget::undo()
+{
+	QImage old = m_undoBuffer.pop();
+	if(old.isNull()) {
+		return false;
+	}
+	m_image = old;
+	return true;
+}
+
 void ImageWidget::clearImage()
 {
 	m_image.fill(Qt::white);
@@ -45,6 +56,7 @@ void ImageWidget::clearImage()
 
 void ImageWidget::mousePressEvent(QMouseEvent *event)
 {
+	m_undoBuffer.push(m_image);
 	if (event->button() == Qt::LeftButton) {
 		m_lastPoint = event->pos();
 		m_drawing = true;
