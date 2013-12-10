@@ -17,13 +17,13 @@ SOURCES += main.cpp\
     ueberdialog.cpp \
     Conversion.cpp \
     imagewidget.cpp \
-    TestFilter.cpp \
-    Blur.cpp \
-    GaussianBlur.cpp \
-    MedianBlur.cpp \
-    BilateralFilter.cpp \
-    Erosion.cpp \
-    Dilation.cpp
+    filters/TestFilter.cpp \
+    filters/MedianBlur.cpp \
+    filters/GaussianBlur.cpp \
+    filters/Erosion.cpp \
+    filters/Dilation.cpp \
+    filters/Blur.cpp \
+    filters/BilateralFilter.cpp
 
 HEADERS  += mainwindow.h \
     ueberdialog.h \
@@ -31,14 +31,14 @@ HEADERS  += mainwindow.h \
     Conversion.h \
     imagewidget.h \
     ringbuffer.h \
-    TestFilter.h \
-    Blur.h \
-    GaussianBlur.h \
     Exception.h \
-    MedianBlur.h \
-    BilateralFilter.h \
-    Erosion.h \
-    Dilation.h
+    filters/TestFilter.h \
+    filters/MedianBlur.h \
+    filters/GaussianBlur.h \
+    filters/Erosion.h \
+    filters/Dilation.h \
+    filters/Blur.h \
+    filters/BilateralFilter.h
 
 FORMS    += mainwindow.ui \
     ueberdialog.ui
