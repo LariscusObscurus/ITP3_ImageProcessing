@@ -51,7 +51,7 @@ bool ImageWidget::undo()
 
 bool ImageWidget::redo()
 {
-
+	return false;
 }
 
 void ImageWidget::resetImage()
