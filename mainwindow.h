@@ -29,6 +29,8 @@ private slots:
 
 	void on_actionR_ckg_ngig_triggered();
 
+	void on_actionZur_cksetzen_triggered();
+
 private:
 	Ui::MainWindow *ui;
 	//Dialogs

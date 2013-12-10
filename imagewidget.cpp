@@ -19,7 +19,7 @@ bool ImageWidget::openImage(const QString &fileName)
 	QSize imageSize = loadedImage.size();
 	this->resize(imageSize);
 	loadedImage.convertToFormat(QImage::Format_RGB32);
-	m_image = loadedImage;
+	m_image = m_original = loadedImage;
 	drawImage();
 	update();
 	return true;
@@ -47,6 +47,18 @@ bool ImageWidget::undo()
 	m_image = old;
 	update();
 	return true;
+}
+
+bool ImageWidget::redo()
+{
+
+}
+
+void ImageWidget::resetImage()
+{
+	m_undoBuffer.push(m_image);
+	m_image = m_original;
+	update();
 }
 
 void ImageWidget::clearImage()

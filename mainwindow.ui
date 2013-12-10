@@ -391,6 +391,7 @@ margin-top: 3px; /* make non-selected tabs look smaller */
     </property>
     <addaction name="actionR_ckg_ngig"/>
     <addaction name="actionWiederherstellen"/>
+    <addaction name="actionZur_cksetzen"/>
     <addaction name="separator"/>
     <addaction name="actionKopieren"/>
     <addaction name="actionEinf_gen"/>
@@ -477,6 +478,11 @@ margin-top: 3px; /* make non-selected tabs look smaller */
   <action name="actionL_schen">
    <property name="text">
     <string>Ausschneiden</string>
+   </property>
+  </action>
+  <action name="actionZur_cksetzen">
+   <property name="text">
+    <string>Zurücksetzen</string>
    </property>
   </action>
  </widget>

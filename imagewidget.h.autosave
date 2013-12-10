@@ -15,6 +15,7 @@ public:
 	bool saveImage(const QString& fileName, const char *fileFormat);
 	void setPenColor(const QColor &newColor);
 	bool undo();
+	bool redo();
 	void resetImage();
 	void clearImage();
 

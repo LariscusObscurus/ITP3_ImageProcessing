@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	/*Bearbeiten*/
 	ui->actionR_ckg_ngig->setShortcut(tr("CTRL+Z"));
 	ui->actionWiederherstellen->setShortcut(tr("CTRL+Y"));
+	ui->actionZur_cksetzen->setShortcut(tr("CTRL+SHIFT+Z"));
 	ui->actionKopieren->setShortcut(tr("CTRL+C"));
 	ui->actionEinf_gen->setShortcut(tr("CTRL+V"));
 	/*Hilfe*/
@@ -86,5 +87,12 @@ void MainWindow::on_actionSpeichern_unter_triggered()
 
 void MainWindow::on_actionR_ckg_ngig_triggered()
 {
+	ui->statusbar->showMessage("Rückgängig", 2000);
 	ui->imageWidget->undo();
+}
+
+void MainWindow::on_actionZur_cksetzen_triggered()
+{
+	ui->statusbar->showMessage("Zurücksetzen", 2000);
+	ui->imageWidget->resetImage();
 }
