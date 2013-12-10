@@ -389,7 +389,7 @@ margin-top: 3px; /* make non-selected tabs look smaller */
     <property name="title">
      <string>Bearbeiten</string>
     </property>
-    <addaction name="actionR_ckg_gngig"/>
+    <addaction name="actionR_ckg_ngig"/>
     <addaction name="actionWiederherstellen"/>
     <addaction name="separator"/>
     <addaction name="actionKopieren"/>
@@ -464,9 +464,9 @@ margin-top: 3px; /* make non-selected tabs look smaller */
     <string>Drucken</string>
    </property>
   </action>
-  <action name="actionR_ckg_gngig">
+  <action name="actionR_ckg_ngig">
    <property name="text">
-    <string>Rückgägngig</string>
+    <string>Rückgängig</string>
    </property>
   </action>
   <action name="actionWiederherstellen">

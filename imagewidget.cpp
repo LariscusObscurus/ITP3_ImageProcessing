@@ -45,6 +45,7 @@ bool ImageWidget::undo()
 		return false;
 	}
 	m_image = old;
+	update();
 	return true;
 }
 

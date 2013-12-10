@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->actionDrucken->setShortcut(tr("CTRL+P"));
 	ui->actionSpeichern_unter->setShortcut(tr("CTRL+SHIFT+S"));
 	/*Bearbeiten*/
-	ui->actionR_ckg_gngig->setShortcut(tr("CTRL+Z"));
+	ui->actionR_ckg_ngig->setShortcut(tr("CTRL+Z"));
 	ui->actionWiederherstellen->setShortcut(tr("CTRL+Y"));
 	ui->actionKopieren->setShortcut(tr("CTRL+C"));
 	ui->actionEinf_gen->setShortcut(tr("CTRL+V"));
@@ -82,4 +82,9 @@ void MainWindow::on_actionSpeichern_unter_triggered()
 	if(!fileName.isEmpty()) {
 		ui->imageWidget->saveImage(fileName, ext.toLatin1());
 	}
+}
+
+void MainWindow::on_actionR_ckg_ngig_triggered()
+{
+	ui->imageWidget->undo();
 }
