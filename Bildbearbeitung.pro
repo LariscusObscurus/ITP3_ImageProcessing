@@ -23,7 +23,9 @@ SOURCES += main.cpp\
     filters/Erosion.cpp \
     filters/Dilation.cpp \
     filters/Blur.cpp \
-    filters/BilateralFilter.cpp
+    filters/BilateralFilter.cpp \
+    filters/Outline.cpp \
+    filters/Grayscale.cpp
 
 HEADERS  += mainwindow.h \
     ueberdialog.h \
@@ -38,7 +40,9 @@ HEADERS  += mainwindow.h \
     filters/Erosion.h \
     filters/Dilation.h \
     filters/Blur.h \
-    filters/BilateralFilter.h
+    filters/BilateralFilter.h \
+    filters/Outline.h \
+    filters/Grayscale.h
 
 FORMS    += mainwindow.ui \
     ueberdialog.ui
