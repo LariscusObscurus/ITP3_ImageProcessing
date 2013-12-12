@@ -31,6 +31,8 @@ private slots:
 
 	void on_actionZur_cksetzen_triggered();
 
+	void on_actionBlur_triggered();
+
 private:
 	Ui::MainWindow *ui;
 	//Dialogs

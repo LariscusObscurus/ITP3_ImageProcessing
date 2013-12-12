@@ -6,6 +6,8 @@
 #include <QImage>
 #include "ringbuffer.h"
 
+class IOperation;
+
 class ImageWidget : public QWidget
 {
 	Q_OBJECT
@@ -14,6 +16,7 @@ public:
 	bool openImage(const QString& fileName);
 	bool saveImage(const QString& fileName, const char *fileFormat);
 	void setPenColor(const QColor &newColor);
+	void applyFilter(IOperation& filter);
 	bool undo();
 	bool redo();
 	void resetImage();

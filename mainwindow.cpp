@@ -5,7 +5,14 @@
 #include "ui_mainwindow.h"
 #include "ueberdialog.h"
 #include "imagewidget.h"
-
+#include "filters/BilateralFilter.h"
+#include "filters/Blur.h"
+#include "filters/Dilation.h"
+#include "filters/Erosion.h"
+#include "filters/GaussianBlur.h"
+#include "filters/Grayscale.h"
+#include "filters/MedianBlur.h"
+#include "filters/Outline.h"
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -95,4 +102,10 @@ void MainWindow::on_actionZur_cksetzen_triggered()
 {
 	ui->statusbar->showMessage("Zurücksetzen", 2000);
 	ui->imageWidget->resetImage();
+}
+
+void MainWindow::on_actionBlur_triggered()
+{
+	Blur blur;
+	ui->imageWidget->applyFilter(blur);
 }

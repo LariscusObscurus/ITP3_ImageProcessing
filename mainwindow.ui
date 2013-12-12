@@ -401,6 +401,14 @@ margin-top: 3px; /* make non-selected tabs look smaller */
     <property name="title">
      <string>Filter</string>
     </property>
+    <addaction name="actionBilateraler_Filter"/>
+    <addaction name="actionBlur"/>
+    <addaction name="actionDilation"/>
+    <addaction name="actionErosion"/>
+    <addaction name="actionGaussian_Blur"/>
+    <addaction name="actionGraustufen"/>
+    <addaction name="actionMedian_Blur"/>
+    <addaction name="actionOutline"/>
    </widget>
    <widget class="QMenu" name="menuHilfe">
     <property name="title">
@@ -483,6 +491,46 @@ margin-top: 3px; /* make non-selected tabs look smaller */
   <action name="actionZur_cksetzen">
    <property name="text">
     <string>Zurücksetzen</string>
+   </property>
+  </action>
+  <action name="actionBlur">
+   <property name="text">
+    <string>Blur</string>
+   </property>
+  </action>
+  <action name="actionBilateraler_Filter">
+   <property name="text">
+    <string>Bilateraler Filter</string>
+   </property>
+  </action>
+  <action name="actionDilation">
+   <property name="text">
+    <string>Dilation</string>
+   </property>
+  </action>
+  <action name="actionErosion">
+   <property name="text">
+    <string>Erosion</string>
+   </property>
+  </action>
+  <action name="actionGaussian_Blur">
+   <property name="text">
+    <string>Gaussian Blur</string>
+   </property>
+  </action>
+  <action name="actionGraustufen">
+   <property name="text">
+    <string>Graustufen</string>
+   </property>
+  </action>
+  <action name="actionMedian_Blur">
+   <property name="text">
+    <string>Median Blur</string>
+   </property>
+  </action>
+  <action name="actionOutline">
+   <property name="text">
+    <string>Outline</string>
    </property>
   </action>
  </widget>

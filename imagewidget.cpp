@@ -1,5 +1,6 @@
 #include <QPainter>
 #include "imagewidget.h"
+#include"IOperation.h"
 
 ImageWidget::ImageWidget(QWidget *parent) :
 	QWidget(parent),
@@ -36,6 +37,15 @@ bool ImageWidget::saveImage(const QString &fileName, const char *fileFormat)
 void ImageWidget::setPenColor(const QColor &newColor)
 {
 	m_penColor = newColor;
+}
+
+void ImageWidget::applyFilter(IOperation& filter)
+{
+	m_undoBuffer.push(m_image);
+	QMap<QString, QString> arg;
+	filter.Draw(m_image, arg);
+	update();
+
 }
 
 bool ImageWidget::undo()
