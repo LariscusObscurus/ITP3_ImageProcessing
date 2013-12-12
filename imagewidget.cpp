@@ -19,7 +19,7 @@ bool ImageWidget::openImage(const QString &fileName)
 	}
 	QSize imageSize = loadedImage.size();
 	this->resize(imageSize);
-	loadedImage.convertToFormat(QImage::Format_RGB32);
+	loadedImage.convertToFormat(QImage::Format_ARGB32);
 	m_image = m_original = loadedImage;
 	drawImage();
 	update();
