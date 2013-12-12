@@ -33,6 +33,20 @@ private slots:
 
 	void on_actionBlur_triggered();
 
+	void on_actionDilation_triggered();
+
+	void on_actionGaussian_Blur_triggered();
+
+	void on_actionGraustufen_triggered();
+
+	void on_actionErosion_triggered();
+
+	void on_actionBilateraler_Filter_triggered();
+
+	void on_actionMedian_Blur_triggered();
+
+	void on_actionOutline_triggered();
+
 private:
 	Ui::MainWindow *ui;
 	//Dialogs

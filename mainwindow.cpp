@@ -109,3 +109,45 @@ void MainWindow::on_actionBlur_triggered()
 	Blur blur;
 	ui->imageWidget->applyFilter(blur);
 }
+
+void MainWindow::on_actionDilation_triggered()
+{
+	Dilation dilation;
+	ui->imageWidget->applyFilter(dilation);
+}
+
+void MainWindow::on_actionGaussian_Blur_triggered()
+{
+	GaussianBlur gauss;
+	ui->imageWidget->applyFilter(gauss);
+}
+
+void MainWindow::on_actionGraustufen_triggered()
+{
+	Grayscale gray;
+	ui->imageWidget->applyFilter(gray);
+}
+
+void MainWindow::on_actionErosion_triggered()
+{
+	Erosion erosion;
+	ui->imageWidget->applyFilter(erosion);
+}
+
+void MainWindow::on_actionBilateraler_Filter_triggered()
+{
+	BilateralFilter bilat;
+	ui->imageWidget->applyFilter(bilat);
+}
+
+void MainWindow::on_actionMedian_Blur_triggered()
+{
+	MedianBlur media;
+	ui->imageWidget->applyFilter(media);
+}
+
+void MainWindow::on_actionOutline_triggered()
+{
+	Outline outline;
+	ui->imageWidget->applyFilter(outline);
+}
