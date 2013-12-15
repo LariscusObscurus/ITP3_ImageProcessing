@@ -14,6 +14,15 @@ public:
 	virtual void Initialize();
 	//! zeichnet "bilateral filter"
 	/*!
+	 * Folgende Argumente werden agenommen:
+	 * \b Argumente:
+	 * - Diameter: Stellt die Filtergröße dar. Werte die größer als 5 sind können eine sehr lange Berechnungszeit hervorrufen.
+	 *	Empfohlener Wert ist 5.
+	 * - SigmaColor: Gibt die Reichweite der verwendeten Pixel innerhalb des berechneten Pixels an.
+	 *	Je größer, umso mehr Pixel werden verwendet. Werte kleiner 10 haben kaum sichtbare veränderungen.
+	 *	Werte größer als 150 lassen das Bild wie einen Cartoon wirken.
+	 * - SigmaSpace: Es gilt dasselbe wie bei SigmaColor.
+	 *
 	 * \b Exceptions:
 	 * - FormatException
 	 */

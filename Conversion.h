@@ -15,17 +15,15 @@
 #include <QImage>
 #include <opencv2/core/core.hpp>
 
-//! Konvertiert cv::Mat zu QImage (Standardformat richtig?)
+//! Konvertiert cv::Mat zu QImage
 /*!
  * \param mat Matrixobjekt aus OpenCV
- * \param format Das zu verwendende Format
  * \return Ein valides QImage-objekt
  */
 QImage MatToQimage(cv::Mat& mat);
 //! Konvertiert QImage zu cv::Mat
 /*!
  * \param img Bildobjekt aus Qt
- * \param format Qt-Format das verwendet wird
  * \return Eine valide OpenCV-Matrix
  */
 cv::Mat QimageToMat(QImage& img);

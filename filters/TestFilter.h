@@ -2,6 +2,7 @@
 
 #include "IOperation.h"
 
+//! Dieser Filter hat keine direkte Bildoperation, er gibt lediglich Debugdaten aus.
 class TestFilter : public IOperation
 {
 public:

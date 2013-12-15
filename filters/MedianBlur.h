@@ -14,6 +14,10 @@ public:
 	virtual void Initialize();
 	//! zeichnet "median blur"
 	/*!
+	 * \b Argumente:
+	 * - KernelSize: Gibt die Größe der Kernelmatrix an.
+	 *	Dieser Wert bestimmt wieviele Pixel aus der Nachbarschaft des zentralen Pixel gemessen werden. Werte müssen >= 0 sein.
+	 *
 	 * \b Exceptions:
 	 * - FormatException
 	 * - ArgumentException
