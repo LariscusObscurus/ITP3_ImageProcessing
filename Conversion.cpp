@@ -6,10 +6,10 @@
 QImage::Format ConvertCvFormat(int format)
 {
 	switch (format) {
-	case CV_8UC3:
-		return QImage::Format_RGB888;
 	case CV_8UC4:
 		return QImage::Format_ARGB32;
+	case CV_8UC3:
+		return QImage::Format_RGB888;
 	case CV_8UC1:
 		return QImage::Format_Mono;
 	default:
@@ -46,16 +46,15 @@ QImage MatToQimage(cv::Mat& mat)
 	} else {
 		throw FormatException("can't convert this pixel format");
 	}
-	return QImage(mat.data, mat.cols, mat.rows, mat.step, ConvertCvFormat(mat.type())).copy();
 }
 
 int ConvertQformat(QImage::Format format)
 {
 	switch (format) {
-	case QImage::Format_RGB888:
-		return CV_8UC3;
 	case QImage::Format_ARGB32:
 		return CV_8UC4;
+	case QImage::Format_RGB888:
+		return CV_8UC3;
 	case QImage::Format_Mono:
 		return CV_8UC1;
 	default:
@@ -74,7 +73,7 @@ cv::Mat ConvertMat4(QImage& img)
 
 cv::Mat ConvertMat3(QImage& img)
 {
-	cv::Mat rgb = cv::Mat(img.height(), img.width(), CV_8UC4, img.bits(), img.bytesPerLine());
+	cv::Mat rgb = cv::Mat(img.height(), img.width(), CV_8UC3, img.bits(), img.bytesPerLine());
 	cv::Mat bgr(rgb.rows, rgb.cols, CV_8UC3);
 	int fromTo[] = { 2,0, 1,1, 0,2 };
 	cv::mixChannels(&rgb, 1, &bgr, 1, fromTo, 3);
