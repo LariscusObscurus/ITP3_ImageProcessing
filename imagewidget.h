@@ -15,7 +15,6 @@ public:
 	explicit ImageWidget(QWidget *parent = 0);
 	bool openImage(const QString& fileName);
 	bool saveImage(const QString& fileName, const char *fileFormat);
-	void setPenColor(const QColor &newColor);
 	void applyFilter(IOperation& filter);
 	bool undo();
 	bool redo();
@@ -25,6 +24,7 @@ public:
 signals:
 
 public slots:
+	void setPenColor(const QColor &newColor);
 
 protected:
 	void mousePressEvent(QMouseEvent *);

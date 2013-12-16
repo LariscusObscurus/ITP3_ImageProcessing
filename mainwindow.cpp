@@ -50,6 +50,7 @@ MainWindow::~MainWindow()
 void MainWindow::createConnections()
 {
 	connect(ui->actionBeenden, SIGNAL(triggered()), this, SLOT(close()));
+	connect(ui->ColorPicker, SIGNAL(colorChanged(QColor)),ui->imageWidget,SLOT(setPenColor(QColor)));
 }
 
 void MainWindow::on_action_ffnen_triggered()

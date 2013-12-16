@@ -259,6 +259,16 @@
         </size>
        </property>
       </widget>
+      <widget class="ColorDisplayWidget" name="ColorPicker" native="true">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>450</y>
+         <width>120</width>
+         <height>80</height>
+        </rect>
+       </property>
+      </widget>
      </widget>
     </item>
     <item>
@@ -539,6 +549,12 @@ margin-top: 3px; /* make non-selected tabs look smaller */
    <class>ImageWidget</class>
    <extends>QWidget</extends>
    <header>imagewidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ColorDisplayWidget</class>
+   <extends>QWidget</extends>
+   <header>colordisplaywidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
