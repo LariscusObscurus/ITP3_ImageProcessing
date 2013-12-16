@@ -26,7 +26,8 @@ SOURCES += main.cpp\
     filters/BilateralFilter.cpp \
     filters/Outline.cpp \
     filters/Grayscale.cpp \
-    colordisplaywidget.cpp
+    colordisplaywidget.cpp \
+    filters/EdgeDetection.cpp
 
 HEADERS  += mainwindow.h \
     ueberdialog.h \
@@ -44,7 +45,8 @@ HEADERS  += mainwindow.h \
     filters/BilateralFilter.h \
     filters/Outline.h \
     filters/Grayscale.h \
-    colordisplaywidget.h
+    colordisplaywidget.h \
+    filters/EdgeDetection.h
 
 FORMS    += mainwindow.ui \
     ueberdialog.ui

@@ -13,6 +13,7 @@
 #include "filters/Grayscale.h"
 #include "filters/MedianBlur.h"
 #include "filters/Outline.h"
+#include "filters/EdgeDetection.h"
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -151,4 +152,10 @@ void MainWindow::on_actionOutline_triggered()
 {
 	Outline outline;
 	ui->imageWidget->applyFilter(outline);
+}
+
+void MainWindow::on_actionEdge_Detection_triggered()
+{
+	EdgeDetection edge;
+	ui->imageWidget->applyFilter(edge);
 }

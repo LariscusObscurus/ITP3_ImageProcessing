@@ -373,7 +373,7 @@ margin-top: 3px; /* make non-selected tabs look smaller */
      <x>0</x>
      <y>0</y>
      <width>1031</width>
-     <height>23</height>
+     <height>27</height>
     </rect>
    </property>
    <property name="font">
@@ -419,6 +419,7 @@ margin-top: 3px; /* make non-selected tabs look smaller */
     <addaction name="actionGraustufen"/>
     <addaction name="actionMedian_Blur"/>
     <addaction name="actionOutline"/>
+    <addaction name="actionEdge_Detection"/>
    </widget>
    <widget class="QMenu" name="menuHilfe">
     <property name="title">
@@ -541,6 +542,11 @@ margin-top: 3px; /* make non-selected tabs look smaller */
   <action name="actionOutline">
    <property name="text">
     <string>Outline</string>
+   </property>
+  </action>
+  <action name="actionEdge_Detection">
+   <property name="text">
+    <string>Edge Detection</string>
    </property>
   </action>
  </widget>

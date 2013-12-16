@@ -47,6 +47,8 @@ private slots:
 
 	void on_actionOutline_triggered();
 
+	void on_actionEdge_Detection_triggered();
+
 private:
 	Ui::MainWindow *ui;
 	//Dialogs
