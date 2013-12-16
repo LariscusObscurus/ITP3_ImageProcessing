@@ -11,7 +11,7 @@ void Grayscale::Initialize() { }
 void Grayscale::Draw(QImage &image, const QMap<QString, QString> &args)
 {
 	cv::Mat mat = QimageToMat(image);
-	cv::cvtColor(mat.clone(), mat, CV_RGB2GRAY);
+	cv::cvtColor(mat.clone(), mat, CV_BGR2GRAY);
 	image = MatToQimage(mat);
 }
 

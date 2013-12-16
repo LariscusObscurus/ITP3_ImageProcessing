@@ -41,7 +41,7 @@ void ImageWidget::setPenColor(const QColor &newColor)
 
 void ImageWidget::applyFilter(IOperation& filter)
 {
-	m_undoBuffer.push(m_image);
+	m_undoBuffer.push(m_image.copy());
 	QMap<QString, QString> arg;
 	filter.Draw(m_image, arg);
 	update();
@@ -66,7 +66,7 @@ bool ImageWidget::redo()
 
 void ImageWidget::resetImage()
 {
-	m_undoBuffer.push(m_image);
+	m_undoBuffer.push(m_image.copy());
 	m_image = m_original;
 	update();
 }
@@ -79,7 +79,7 @@ void ImageWidget::clearImage()
 
 void ImageWidget::mousePressEvent(QMouseEvent *event)
 {
-	m_undoBuffer.push(m_image);
+	m_undoBuffer.push(m_image.copy());
 	if (event->button() == Qt::LeftButton) {
 		m_lastPoint = event->pos();
 		m_drawing = true;
