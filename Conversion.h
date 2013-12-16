@@ -18,15 +18,15 @@
 //! Konvertiert cv::Mat zu QImage
 /*!
  * \param mat Matrixobjekt aus OpenCV
- * \return Ein valides QImage-objekt
+ * \return Ein valides QImage-Objekt
  */
-QImage MatToQimage(cv::Mat& mat);
+QImage MatToQimage(const cv::Mat& mat);
 //! Konvertiert QImage zu cv::Mat
 /*!
  * \param img Bildobjekt aus Qt
  * \return Eine valide OpenCV-Matrix
  */
-cv::Mat QimageToMat(QImage& img);
+cv::Mat QimageToMat(const QImage& img);
 
 
 #endif // CONVERSION_H

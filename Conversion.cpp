@@ -19,7 +19,7 @@ QImage::Format ConvertCvFormat(int format)
 
 QImage ConvertQ4(const cv::Mat& argb)
 {
-	return QImage(argb.data, argb.cols, argb.rows, argb.step, QImage::Format_ARGB32).copy();
+	return QImage(argb.data, argb.cols, argb.rows, argb.step, QImage::Format_RGB32).copy();
 }
 
 QImage ConvertQ3(const cv::Mat& bgr)
@@ -41,7 +41,7 @@ QImage ConvertQ1(const cv::Mat& gray)
 	return img.copy();
 }
 
-QImage MatToQimage(cv::Mat& mat)
+QImage MatToQimage(const cv::Mat& mat)
 {
 	QImage::Format format = ConvertCvFormat(mat.type());
 
@@ -89,7 +89,7 @@ cv::Mat ConvertMat1(const QImage& gray) // gray.format() == Format_Indexed8
 	return cv::Mat(gray.height(), gray.width(), CV_8UC1, const_cast<uchar*>(gray.bits()), gray.bytesPerLine()).clone();
 }
 
-cv::Mat QimageToMat(QImage& img)
+cv::Mat QimageToMat(const QImage& img)
 {
 	int format = ConvertQformat(img.format());
 

@@ -10,11 +10,21 @@ void BilateralFilter::Initialize() { }
 
 void BilateralFilter::Draw(QImage &image, const QMap<QString, QString> &args)
 {
-	int d = 5;
-	double sigmaColor = 75;
-	double sigmaSpace = 75;
+	cv::Mat mat;
+	int d = 9;
+	double sigmaColor = 150;
+	double sigmaSpace = 150;
+
+	// convert image if necessary
+	if (image.format() == QImage::Format_RGB32 || image.format() == QImage::Format_ARGB32) {
+		mat = QimageRgb32ToMat24(image);
+	} else if (image.format() == QImage::Format_RGB888 || image.format() == QImage::Format_Indexed8) {
+		mat = QimageToMat(image);
+	} else {
+		throw ArgumentException("for bilateral filter only 1-channel or 3-channel images are valid");
+	}
+
 	Arguments(args, d, sigmaColor, sigmaSpace);
-	cv::Mat mat = QimageToMat(image);
 	cv::bilateralFilter(mat.clone(), mat, d, sigmaColor, sigmaSpace);
 	image = MatToQimage(mat);
 }
@@ -48,4 +58,9 @@ void BilateralFilter::Arguments(const QMap<QString, QString> &args, int &d, doub
 			throw FormatException("couldn't convert \"SigmaSpace\" argument for bilateral filter");
 		}
 	}
+}
+
+cv::Mat BilateralFilter::QimageRgb32ToMat24(QImage &img)
+{
+	return QimageToMat(img.convertToFormat(QImage::Format_RGB888));
 }

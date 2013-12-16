@@ -15,13 +15,15 @@ public:
 	//! Zeichnet Aussenlinien (Algorithmus muss noch geteset werden)
 	/*!
 	 * \b Argumente:
-	 * - MorphSize: Definiert die Morphgröße und die Größe der Kernelmatrix. Werte müssen >= 0 sein.
+	 * - KernelSize: Gibt die Größe der Kernelmatrix an.
+	 *	Dieser Wert bestimmt wieviele Pixel aus der Nachbarschaft des zentralen Pixel gemessen werden. Werte müssen >= 0 sein.
 	 * - Shape: Dieser Wert entscheidet die Anordnung des Strukturelements. Folgende Werte werden als String definiert:
 	 *	-- Rect: Das Strukturelement hat eine Rechtecksanordnung
 	 *	-- Ellipse: Das Strukturelement hat eine elliptische Anordnung
 	 *	-- Cross: Das Strukturelement hat eine Kreuzanordnung
 	 */
 	virtual void Draw(QImage &image, const QMap<QString, QString> &args);
+	//! keine funktion
 	virtual void Finalize();
 private:
 	void Arguments(const QMap<QString, QString>& args, int &shape, int &size);
