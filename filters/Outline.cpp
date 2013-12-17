@@ -12,7 +12,7 @@ void Outline::Draw(QImage &image, const QMap<QString, QString> &args)
 {
 	const int op = cv::MORPH_GRADIENT;
 	int shape = cv::MORPH_RECT;
-	int ksize = 2;
+	int ksize = 5;
 	Arguments(args, shape, ksize);
 	cv::Mat mat = QimageToMat(image);
 	cv::Mat kernel = cv::getStructuringElement(shape, cv::Size(ksize, ksize));
