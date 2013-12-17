@@ -28,15 +28,12 @@ void EdgeDetection::Draw(QImage &image, const QMap<QString, QString> &args)
 	cv::addWeighted(absGradX, 0.5, absGradY, 0.5, 0, grad);
 	grad.convertTo(result, CV_8U);
 	image = MatToQimage(result);
-<<<<<<< HEAD
 	/*
 	cv::Mat mat = QimageToMat(image);
 	SetupOperation(image, args);
 	cv::Canny(mat.clone(), mat, 90, 270);
 	image = MatToQimage(mat);
 	*/
-=======
->>>>>>> parent of c58cf3a... Zusätzlichen Algorithmus für Kantenfindung.
 }
 
 void EdgeDetection::Finalize() { }
