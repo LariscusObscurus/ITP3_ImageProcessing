@@ -32,7 +32,7 @@ void EdgeDetection::Draw(QImage &image, const QMap<QString, QString> &args)
 	/*
 	cv::Mat mat = QimageToMat(image);
 	SetupOperation(image, args);
-	cv::Canny(mat.clone(), mat, 45, 90);
+	cv::Canny(mat.clone(), mat, 90, 270);
 	image = MatToQimage(mat);
 	*/
 }
