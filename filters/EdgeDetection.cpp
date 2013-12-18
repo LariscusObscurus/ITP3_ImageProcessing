@@ -19,10 +19,8 @@ void EdgeDetection::Draw(QImage &image, const QMap<QString, QString> &args)
 	cv::Mat absGradX, absGradY;
 	SetupOperation(image, args, 1);
 	srcGray = QimageToMat(image);
-	//cv::Scharr(srcGray, gradX, ddepth, 1, 0);
 	cv::Sobel(srcGray, gradX, ddepth, 1, 0, ksize);
 	cv::convertScaleAbs( gradX, absGradX );
-	//cv::Scharr(srcGray, gradY, ddepth, 0, 1);
 	cv::Sobel(srcGray, gradY, ddepth, 0, 1, ksize);
 	cv::convertScaleAbs(gradY, absGradY);
 	cv::addWeighted(absGradX, 0.5, absGradY, 0.5, 0, grad);
@@ -42,7 +40,7 @@ void EdgeDetection::SetupOperation(QImage& image, QMap<QString, QString> args, i
 {
 	bool ok = false;
 	GaussianBlur gauss;
-	Grayscale gray;
+	//Grayscale gray;
 
 	if (args.find("KernelSize") == args.end()) {
 		args["KernelSize"] = QString().setNum(ksize);
@@ -56,5 +54,5 @@ void EdgeDetection::SetupOperation(QImage& image, QMap<QString, QString> args, i
 		}
 	}
 	gauss.Draw(image, args);
-	gray.Draw(image, args);
+	//gray.Draw(image, args);
 }

@@ -11,7 +11,7 @@ void Erosion::Initialize() { }
 void Erosion::Draw(QImage &image, const QMap<QString, QString> &args)
 {
 	int shape = cv::MORPH_RECT;
-	int ksize = 5;
+	int ksize = 2;
 	Arguments(args, shape, ksize);
 	cv::Mat mat = QimageToMat(image);
 	cv::Mat kernel = cv::getStructuringElement(shape, cv::Size(ksize, ksize));

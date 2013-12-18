@@ -73,7 +73,7 @@ int ConvertQformat(QImage::Format format)
 	}
 }
 
-cv::Mat ConvertMat4(const QImage& argb) // argb.format() == Format_ARGB32 || img.format() == Format_RGB32
+cv::Mat ConvertMat4(const QImage& argb) // argb.format() == Format_ARGB32 || argb.format() == Format_RGB32
 {
 	return cv::Mat(argb.height(), argb.width(), CV_8UC4, const_cast<uchar*>(argb.bits()), argb.bytesPerLine()).clone();
 }
