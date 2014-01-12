@@ -53,6 +53,8 @@ private slots:
 
 	void on_actionPinsel_gr_e_triggered();
 
+	void on_btnTest_clicked();
+
 private:
 	Ui::MainWindow *ui;
 	//Dialogs

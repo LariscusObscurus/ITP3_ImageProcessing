@@ -21,11 +21,17 @@ public:
 	void resetImage();
 	void clearImage();
 
+	enum PenStyle {
+		solid,
+		dots
+	};
+
 signals:
 
 public slots:
 	void setPenColor(const QColor& newColor);
 	void setPenWidth(int width);
+	void setPenStyle(PenStyle style);
 
 protected:
 	void mousePressEvent(QMouseEvent *);
@@ -47,6 +53,7 @@ private:
 	QPoint m_lastPoint;
 	RingBuffer<QImage> m_undoBuffer;
 	QPen m_pen;
+	PenStyle m_penStyle;
 };
 
 #endif // IMAGEWIDGET_H

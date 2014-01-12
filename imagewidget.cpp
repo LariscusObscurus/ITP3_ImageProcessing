@@ -8,7 +8,8 @@ ImageWidget::ImageWidget(QWidget *parent) :
 	m_drawing(false),
 	m_undoBuffer(20),
 	m_pen(m_penColor, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin),
-	m_penWidth(2)
+	m_penWidth(2),
+	m_penStyle(solid)
 {
 	setAttribute(Qt::WA_StaticContents);
 
@@ -46,7 +47,11 @@ void ImageWidget::setPenColor(const QColor &newColor)
 void ImageWidget::setPenWidth(int width)
 {
 	m_penWidth = width;
-	m_pen.setWidth(m_penWidth);
+}
+
+void ImageWidget::setPenStyle(PenStyle style)
+{
+	m_penStyle = style;
 }
 
 void ImageWidget::applyFilter(IOperation& filter)
@@ -131,11 +136,31 @@ void ImageWidget::drawImage()
 
 void ImageWidget::drawLineTo(const QPoint &endPoint)
 {
-	QPainter painter(&m_image);
-	painter.setPen(m_pen);
-	painter.drawLine(m_lastPoint, endPoint);
+	bool ok = false;
 
-	int rad = (0) + 2;
-	update(QRect(m_lastPoint, endPoint).normalized().adjusted(-rad, -rad, +rad, +rad));
-	m_lastPoint = endPoint;
+	QPainter painter(&m_image);
+	painter.setBrush(QBrush(m_penColor));
+	painter.setRenderHint(QPainter::HighQualityAntialiasing);
+	painter.setPen(m_pen);
+
+	switch (m_penStyle) {
+	case solid:
+		m_pen.setWidth(m_penWidth);
+		painter.drawLine(m_lastPoint, endPoint);
+		ok = true;
+		break;
+	case dots:
+		m_pen.setWidth(1);
+		QPoint vectAB = m_lastPoint - endPoint;
+		if((pow(vectAB.x(), 2.0) + pow(vectAB.y(),2.0)) >= 100) {
+			painter.drawEllipse(endPoint, m_penWidth, m_penWidth);
+			ok = true;
+		}
+		break;
+	}
+	if(ok)  {
+		int rad = (0) + m_penWidth;
+		update();
+		m_lastPoint = endPoint;
+	}
 }

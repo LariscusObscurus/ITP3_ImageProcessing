@@ -164,10 +164,16 @@ void MainWindow::on_actionEdge_Detection_triggered()
 }
 void MainWindow::on_btnBrush_clicked()
 {
+	ui->imageWidget->setPenStyle(ImageWidget::dots);
 }
 
 void MainWindow::on_actionPinsel_gr_e_triggered()
 {
 	m_dia->setModal(true);
 	m_dia->exec();
+}
+
+void MainWindow::on_btnTest_clicked()
+{
+	ui->imageWidget->setPenStyle(ImageWidget::solid);
 }
