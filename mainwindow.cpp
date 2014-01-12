@@ -17,7 +17,8 @@
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
-	ui(new Ui::MainWindow)
+	ui(new Ui::MainWindow),
+	m_dia(new SizeDialogue)
 {
 	ui->setupUi(this);
 
@@ -45,6 +46,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+	delete m_dia;
 	delete ui;
 }
 
@@ -52,6 +54,7 @@ void MainWindow::createConnections()
 {
 	connect(ui->actionBeenden, SIGNAL(triggered()), this, SLOT(close()));
 	connect(ui->ColorPicker, SIGNAL(colorChanged(QColor)),ui->imageWidget,SLOT(setPenColor(QColor)));
+	connect(m_dia,SIGNAL(sizeChanged(int)),ui->imageWidget, SLOT(setPenWidth(int)));
 }
 
 void MainWindow::on_action_ffnen_triggered()
@@ -158,4 +161,13 @@ void MainWindow::on_actionEdge_Detection_triggered()
 {
 	EdgeDetection edge;
 	ui->imageWidget->applyFilter(edge);
+}
+void MainWindow::on_btnBrush_clicked()
+{
+}
+
+void MainWindow::on_actionPinsel_gr_e_triggered()
+{
+	m_dia->setModal(true);
+	m_dia->exec();
 }

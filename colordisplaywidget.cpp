@@ -22,7 +22,9 @@ const QColor ColorDisplayWidget::getColor()
 
 void ColorDisplayWidget::mousePressEvent(QMouseEvent *)
 {
-	QColor color = QColorDialog::getColor();
+	QColorDialog colDia;
+	QColor color =  colDia.getColor(Qt::white,this,tr("Farbe auswählen"),QColorDialog::ShowAlphaChannel);
+	//color.setAlpha(0x80);
 	if(color.isValid()) {
 		m_selectedColor = color;
 		drawColor();

@@ -4,11 +4,14 @@
 
 ImageWidget::ImageWidget(QWidget *parent) :
 	QWidget(parent),
-	m_penColor(Qt::blue),
+	m_penColor(Qt::black),
 	m_drawing(false),
-	m_undoBuffer(20)
+	m_undoBuffer(20),
+	m_pen(m_penColor, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin),
+	m_penWidth(2)
 {
 	setAttribute(Qt::WA_StaticContents);
+
 }
 
 bool ImageWidget::openImage(const QString &fileName)
@@ -37,6 +40,13 @@ bool ImageWidget::saveImage(const QString &fileName, const char *fileFormat)
 void ImageWidget::setPenColor(const QColor &newColor)
 {
 	m_penColor = newColor;
+	m_pen.setColor(m_penColor);
+}
+
+void ImageWidget::setPenWidth(int width)
+{
+	m_penWidth = width;
+	m_pen.setWidth(m_penWidth);
 }
 
 void ImageWidget::applyFilter(IOperation& filter)
@@ -122,7 +132,7 @@ void ImageWidget::drawImage()
 void ImageWidget::drawLineTo(const QPoint &endPoint)
 {
 	QPainter painter(&m_image);
-	painter.setPen(QPen(m_penColor, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+	painter.setPen(m_pen);
 	painter.drawLine(m_lastPoint, endPoint);
 
 	int rad = (0) + 2;

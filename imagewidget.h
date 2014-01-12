@@ -24,7 +24,8 @@ public:
 signals:
 
 public slots:
-	void setPenColor(const QColor &newColor);
+	void setPenColor(const QColor& newColor);
+	void setPenWidth(int width);
 
 protected:
 	void mousePressEvent(QMouseEvent *);
@@ -40,10 +41,12 @@ private:
 	QImage m_image;
 	QImage m_original;
 	QColor m_penColor;
+	int m_penWidth;
 
 	bool m_drawing;
 	QPoint m_lastPoint;
 	RingBuffer<QImage> m_undoBuffer;
+	QPen m_pen;
 };
 
 #endif // IMAGEWIDGET_H

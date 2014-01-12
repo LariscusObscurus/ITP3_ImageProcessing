@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include <QtCore>
 #include <QtGui>
-
+#include "sizedialogue.h"
 
 namespace Ui {
 class MainWindow;
@@ -49,12 +49,17 @@ private slots:
 
 	void on_actionEdge_Detection_triggered();
 
+	void on_btnBrush_clicked();
+
+	void on_actionPinsel_gr_e_triggered();
+
 private:
 	Ui::MainWindow *ui;
 	//Dialogs
 
 
 	void createConnections();
+	SizeDialogue *m_dia;
 };
 
 #endif // MAINWINDOW_H

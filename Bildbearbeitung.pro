@@ -27,7 +27,8 @@ SOURCES += main.cpp\
     filters/Outline.cpp \
     filters/Grayscale.cpp \
     colordisplaywidget.cpp \
-    filters/EdgeDetection.cpp
+    filters/EdgeDetection.cpp \
+    sizedialogue.cpp
 
 HEADERS  += mainwindow.h \
     ueberdialog.h \
@@ -46,10 +47,12 @@ HEADERS  += mainwindow.h \
     filters/Outline.h \
     filters/Grayscale.h \
     colordisplaywidget.h \
-    filters/EdgeDetection.h
+    filters/EdgeDetection.h \
+    sizedialogue.h
 
 FORMS    += mainwindow.ui \
-    ueberdialog.ui
+    ueberdialog.ui \
+    sizedialogue.ui
 
 RESOURCES += \
     Icons.qrc
