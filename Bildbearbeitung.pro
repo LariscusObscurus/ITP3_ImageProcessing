@@ -27,8 +27,9 @@ SOURCES += main.cpp\
     filters/Outline.cpp \
     filters/Grayscale.cpp \
     colordisplaywidget.cpp \
-    filters/EdgeDetection.cpp \
-    sizedialogue.cpp
+    sizedialogue.cpp \
+    filters/Sobel.cpp \
+    filters/Canny.cpp
 
 HEADERS  += mainwindow.h \
     ueberdialog.h \
@@ -47,8 +48,9 @@ HEADERS  += mainwindow.h \
     filters/Outline.h \
     filters/Grayscale.h \
     colordisplaywidget.h \
-    filters/EdgeDetection.h \
-    sizedialogue.h
+    sizedialogue.h \
+    filters/Sobel.h \
+    filters/Canny.h
 
 FORMS    += mainwindow.ui \
     ueberdialog.ui \

@@ -13,7 +13,8 @@
 #include "filters/Grayscale.h"
 #include "filters/MedianBlur.h"
 #include "filters/Outline.h"
-#include "filters/EdgeDetection.h"
+#include "filters/Sobel.h"
+#include "filters/Canny.h"
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -109,59 +110,14 @@ void MainWindow::on_actionZur_cksetzen_triggered()
 	ui->imageWidget->resetImage();
 }
 
+/*
 void MainWindow::on_actionBlur_triggered()
 {
 	Blur blur;
 	ui->imageWidget->applyFilter(blur);
 }
+*/
 
-void MainWindow::on_actionDilation_triggered()
-{
-	Dilation dilation;
-	ui->imageWidget->applyFilter(dilation);
-}
-
-void MainWindow::on_actionGaussian_Blur_triggered()
-{
-	GaussianBlur gauss;
-	ui->imageWidget->applyFilter(gauss);
-}
-
-void MainWindow::on_actionGraustufen_triggered()
-{
-	Grayscale gray;
-	ui->imageWidget->applyFilter(gray);
-}
-
-void MainWindow::on_actionErosion_triggered()
-{
-	Erosion erosion;
-	ui->imageWidget->applyFilter(erosion);
-}
-
-void MainWindow::on_actionBilateraler_Filter_triggered()
-{
-	BilateralFilter bilat;
-	ui->imageWidget->applyFilter(bilat);
-}
-
-void MainWindow::on_actionMedian_Blur_triggered()
-{
-	MedianBlur media;
-	ui->imageWidget->applyFilter(media);
-}
-
-void MainWindow::on_actionOutline_triggered()
-{
-	Outline outline;
-	ui->imageWidget->applyFilter(outline);
-}
-
-void MainWindow::on_actionEdge_Detection_triggered()
-{
-	EdgeDetection edge;
-	ui->imageWidget->applyFilter(edge);
-}
 void MainWindow::on_btnBrush_clicked()
 {
 	ui->imageWidget->setPenStyle(ImageWidget::dots);
@@ -176,4 +132,46 @@ void MainWindow::on_actionPinsel_gr_e_triggered()
 void MainWindow::on_btnTest_clicked()
 {
 	ui->imageWidget->setPenStyle(ImageWidget::solid);
+}
+
+void MainWindow::on_actionBlur_triggered()
+{
+	Blur f;
+	ui->imageWidget->applyFilter(f);
+}
+
+void MainWindow::on_actionGaussian_Blur_triggered()
+{
+	GaussianBlur f;
+	ui->imageWidget->applyFilter(f);
+}
+
+void MainWindow::on_actionMedian_Blur_triggered()
+{
+	MedianBlur f;
+	ui->imageWidget->applyFilter(f);
+}
+
+void MainWindow::on_actionBilateral_Filter_triggered()
+{
+	BilateralFilter f;
+	ui->imageWidget->applyFilter(f);
+}
+
+void MainWindow::on_actionSobel_triggered()
+{
+	Sobel f;
+	ui->imageWidget->applyFilter(f);
+}
+
+void MainWindow::on_actionEdge_triggered()
+{
+	Outline f;
+	ui->imageWidget->applyFilter(f);
+}
+
+void MainWindow::on_actionCanny_triggered()
+{
+	Canny f;
+	ui->imageWidget->applyFilter(f);
 }

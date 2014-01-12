@@ -31,29 +31,25 @@ private slots:
 
 	void on_actionZur_cksetzen_triggered();
 
-	void on_actionBlur_triggered();
-
-	void on_actionDilation_triggered();
-
-	void on_actionGaussian_Blur_triggered();
-
-	void on_actionGraustufen_triggered();
-
-	void on_actionErosion_triggered();
-
-	void on_actionBilateraler_Filter_triggered();
-
-	void on_actionMedian_Blur_triggered();
-
-	void on_actionOutline_triggered();
-
-	void on_actionEdge_Detection_triggered();
-
 	void on_btnBrush_clicked();
 
 	void on_actionPinsel_gr_e_triggered();
 
 	void on_btnTest_clicked();
+
+	void on_actionBlur_triggered();
+
+	void on_actionGaussian_Blur_triggered();
+
+	void on_actionMedian_Blur_triggered();
+
+	void on_actionBilateral_Filter_triggered();
+
+	void on_actionSobel_triggered();
+
+	void on_actionEdge_triggered();
+
+	void on_actionCanny_triggered();
 
 private:
 	Ui::MainWindow *ui;

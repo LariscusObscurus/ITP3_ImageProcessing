@@ -214,7 +214,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset>
+        <iconset resource="Icons.qrc">
          <normaloff>:/Images/icons/brush.png</normaloff>:/Images/icons/brush.png</iconset>
        </property>
        <property name="iconSize">
@@ -249,7 +249,7 @@
         <string/>
        </property>
        <property name="icon">
-        <iconset>
+        <iconset resource="Icons.qrc">
          <normaloff>:/Images/icons/brush.png</normaloff>:/Images/icons/brush.png</iconset>
        </property>
        <property name="iconSize">
@@ -373,7 +373,7 @@ margin-top: 3px; /* make non-selected tabs look smaller */
      <x>0</x>
      <y>0</y>
      <width>1031</width>
-     <height>27</height>
+     <height>24</height>
     </rect>
    </property>
    <property name="font">
@@ -412,15 +412,25 @@ margin-top: 3px; /* make non-selected tabs look smaller */
     <property name="title">
      <string>Filter</string>
     </property>
-    <addaction name="actionBilateraler_Filter"/>
-    <addaction name="actionBlur"/>
-    <addaction name="actionDilation"/>
-    <addaction name="actionErosion"/>
-    <addaction name="actionGaussian_Blur"/>
-    <addaction name="actionGraustufen"/>
-    <addaction name="actionMedian_Blur"/>
-    <addaction name="actionOutline"/>
-    <addaction name="actionEdge_Detection"/>
+    <widget class="QMenu" name="menuBlur">
+     <property name="title">
+      <string>Blur</string>
+     </property>
+     <addaction name="actionBlur"/>
+     <addaction name="actionGaussian_Blur"/>
+     <addaction name="actionMedian_Blur"/>
+     <addaction name="actionBilateral_Filter"/>
+    </widget>
+    <widget class="QMenu" name="menuEdge_Detection">
+     <property name="title">
+      <string>Edge-Detection</string>
+     </property>
+     <addaction name="actionSobel"/>
+     <addaction name="actionEdge"/>
+     <addaction name="actionCanny"/>
+    </widget>
+    <addaction name="menuBlur"/>
+    <addaction name="menuEdge_Detection"/>
    </widget>
    <widget class="QMenu" name="menuHilfe">
     <property name="title">
@@ -505,24 +515,14 @@ margin-top: 3px; /* make non-selected tabs look smaller */
     <string>Zurücksetzen</string>
    </property>
   </action>
+  <action name="actionPinsel_gr_e">
+   <property name="text">
+    <string>Pinsel größe</string>
+   </property>
+  </action>
   <action name="actionBlur">
    <property name="text">
     <string>Blur</string>
-   </property>
-  </action>
-  <action name="actionBilateraler_Filter">
-   <property name="text">
-    <string>Bilateraler Filter</string>
-   </property>
-  </action>
-  <action name="actionDilation">
-   <property name="text">
-    <string>Dilation</string>
-   </property>
-  </action>
-  <action name="actionErosion">
-   <property name="text">
-    <string>Erosion</string>
    </property>
   </action>
   <action name="actionGaussian_Blur">
@@ -530,29 +530,29 @@ margin-top: 3px; /* make non-selected tabs look smaller */
     <string>Gaussian Blur</string>
    </property>
   </action>
-  <action name="actionGraustufen">
-   <property name="text">
-    <string>Graustufen</string>
-   </property>
-  </action>
   <action name="actionMedian_Blur">
    <property name="text">
     <string>Median Blur</string>
    </property>
   </action>
-  <action name="actionOutline">
+  <action name="actionBilateral_Filter">
    <property name="text">
-    <string>Outline</string>
+    <string>Bilateral Filter</string>
    </property>
   </action>
-  <action name="actionEdge_Detection">
+  <action name="actionSobel">
    <property name="text">
-    <string>Edge Detection</string>
+    <string>Sobel</string>
    </property>
   </action>
-  <action name="actionPinsel_gr_e">
+  <action name="actionEdge">
    <property name="text">
-    <string>Pinsel größe</string>
+    <string>Edge</string>
+   </property>
+  </action>
+  <action name="actionCanny">
+   <property name="text">
+    <string>Canny</string>
    </property>
   </action>
  </widget>
@@ -575,6 +575,8 @@ margin-top: 3px; /* make non-selected tabs look smaller */
   <tabstop>btnBrush</tabstop>
   <tabstop>btnTest</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="Icons.qrc"/>
+ </resources>
  <connections/>
 </ui>

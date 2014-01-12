@@ -1,6 +1,6 @@
-// EdgeDetection.cpp
+// Sobel.cpp
 
-#include "EdgeDetection.h"
+#include "Sobel.h"
 #include "Conversion.h"
 #include "Exception.h"
 #include "Grayscale.h"
@@ -8,9 +8,9 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 
-void EdgeDetection::Initialize() { }
+void Sobel::Initialize() { }
 
-void EdgeDetection::Draw(QImage &image, const QMap<QString, QString> &args)
+void Sobel::Draw(QImage &image, const QMap<QString, QString> &args)
 {
 	int ddepth = CV_16U;
 	int ksize = 3;
@@ -26,17 +26,11 @@ void EdgeDetection::Draw(QImage &image, const QMap<QString, QString> &args)
 	cv::addWeighted(absGradX, 0.5, absGradY, 0.5, 0, grad);
 	grad.convertTo(result, CV_8U);
 	image = MatToQimage(result);
-	/*
-	cv::Mat mat = QimageToMat(image);
-	SetupOperation(image, args);
-	cv::Canny(mat.clone(), mat, 90, 270);
-	image = MatToQimage(mat);
-	*/
 }
 
-void EdgeDetection::Finalize() { }
+void Sobel::Finalize() { }
 
-void EdgeDetection::SetupOperation(QImage& image, QMap<QString, QString> args, int ksize)
+void Sobel::SetupOperation(QImage& image, QMap<QString, QString> args, int ksize)
 {
 	bool ok = false;
 	GaussianBlur gauss;

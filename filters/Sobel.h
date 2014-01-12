@@ -1,11 +1,11 @@
-// EdgeDetection.h
+// Sobel.h
 
-#ifndef EDGEDETECTION_H
-#define EDGEDETECTION_H
+#ifndef SOBEL_H
+#define SOBEL_H
 
 #include "IOperation.h"
 
-class EdgeDetection : public IOperation
+class Sobel : public IOperation
 {
 public:
 	virtual void Initialize();
