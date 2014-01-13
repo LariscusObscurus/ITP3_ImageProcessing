@@ -3,15 +3,15 @@
 #ifndef BLUR_H
 #define BLUR_H
 
-#include "IOperation.h"
+#include "../IOperation.h"
 
 class Blur : public IOperation
 {
 public:
 	//! Default constructor
-	Blur() = default;
+	Blur() { }
 	//! Default destructor
-	virtual ~Blur() throw() = default;
+	virtual ~Blur() throw() { }
 	//! keine funktion
 	virtual void Initialize();
 	//! zeichnet "homogeneous blur"

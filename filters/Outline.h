@@ -3,13 +3,13 @@
 #ifndef OUTLINE_H
 #define OUTLINE_H
 
-#include "IOperation.h"
+#include "../IOperation.h"
 
 class Outline : public IOperation
 {
 public:
-	Outline() = default;
-	virtual ~Outline() throw() = default;
+	Outline() { }
+	virtual ~Outline() throw() { }
 	//! keine Funktion
 	virtual void Initialize();
 	//! Zeichnet Aussenlinien (Algorithmus muss noch geteset werden)

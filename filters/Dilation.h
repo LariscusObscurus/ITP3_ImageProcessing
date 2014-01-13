@@ -3,13 +3,13 @@
 #ifndef DILATION_H
 #define DILATION_H
 
-#include "IOperation.h"
+#include "../IOperation.h"
 
 class Dilation : public IOperation
 {
 public:
-	Dilation() = default;
-	virtual ~Dilation() throw() = default;
+	Dilation() { }
+	virtual ~Dilation() throw() { }
 	//! keine funktion
 	virtual void Initialize();
 	//! zeichnet einen dilationseffekt

@@ -1,8 +1,8 @@
 // Sobel.cpp
 
 #include "Sobel.h"
-#include "Conversion.h"
-#include "Exception.h"
+#include "../Conversion.h"
+#include "../Exception.h"
 #include "Grayscale.h"
 #include "GaussianBlur.h"
 #include <opencv2/core/core.hpp>

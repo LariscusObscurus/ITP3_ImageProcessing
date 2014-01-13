@@ -13,7 +13,7 @@ class IOperation
 {
 public:
 	//! Default destructor
-	virtual ~IOperation() throw() = default;
+	virtual ~IOperation() throw() { }
 	//! Initialisiert die Bildoperation.
 	virtual void Initialize() = 0;
 	//! Führt die Bildoperation aus

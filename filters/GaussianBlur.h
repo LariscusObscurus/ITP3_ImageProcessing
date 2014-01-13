@@ -3,13 +3,13 @@
 #ifndef GAUSSIANBLUR_H
 #define GAUSSIANBLUR_H
 
-#include "IOperation.h"
+#include "../IOperation.h"
 
 class GaussianBlur : public IOperation
 {
 public:
-	GaussianBlur() = default;
-	virtual ~GaussianBlur() throw() = default;
+	GaussianBlur() { }
+	virtual ~GaussianBlur() throw() { }
 	//! keine funktion
 	virtual void Initialize();
 	//! zeichnet "gaussian blur"

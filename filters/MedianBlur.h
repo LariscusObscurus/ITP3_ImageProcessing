@@ -3,13 +3,13 @@
 #ifndef MEDIANBLUR_H
 #define MEDIANBLUR_H
 
-#include "IOperation.h"
+#include "../IOperation.h"
 
 class MedianBlur : public IOperation
 {
 public:
-	MedianBlur() = default;
-	virtual ~MedianBlur() throw() = default;
+	MedianBlur() { }
+	virtual ~MedianBlur() throw() { }
 	//! keine funktion
 	virtual void Initialize();
 	//! zeichnet "median blur"

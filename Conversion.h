@@ -30,4 +30,3 @@ cv::Mat QimageToMat(const QImage& img);
 
 
 #endif // CONVERSION_H
-

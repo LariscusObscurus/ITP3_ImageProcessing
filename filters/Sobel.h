@@ -3,11 +3,13 @@
 #ifndef SOBEL_H
 #define SOBEL_H
 
-#include "IOperation.h"
+#include "../IOperation.h"
 
 class Sobel : public IOperation
 {
 public:
+	Sobel() { }
+	virtual ~Sobel() throw() { }
 	virtual void Initialize();
 	virtual void Draw(QImage &image, const QMap<QString, QString> &args);
 	virtual void Finalize();

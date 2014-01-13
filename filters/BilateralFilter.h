@@ -3,7 +3,7 @@
 #ifndef BILATERALFILTER_H
 #define BILATERALFILTER_H
 
-#include "IOperation.h"
+#include "../IOperation.h"
 namespace cv {
 	class Mat;
 }
@@ -11,8 +11,8 @@ namespace cv {
 class BilateralFilter : public IOperation
 {
 public:
-	BilateralFilter() = default;
-	virtual ~BilateralFilter() throw() = default;
+	BilateralFilter() { }
+	virtual ~BilateralFilter() throw() { }
 	//! keine funktion
 	virtual void Initialize();
 	//! zeichnet "bilateral filter"

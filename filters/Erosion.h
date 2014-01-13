@@ -3,13 +3,13 @@
 #ifndef EROSION_H
 #define EROSION_H
 
-#include "IOperation.h"
+#include "../IOperation.h"
 
 class Erosion : public IOperation
 {
 public:
-	Erosion() = default;
-	virtual ~Erosion() throw() = default;
+	Erosion() { }
+	virtual ~Erosion() throw() { }
 	//! keine funktion
 	virtual void Initialize();
 	//! zeichnet einen erosionseffekt

@@ -3,15 +3,15 @@
 #ifndef CANNY_H
 #define CANNY_H
 
-#include "IOperation.h"
+#include "../IOperation.h"
 
 class Canny : public virtual IOperation
 {
 public:
 	//! Default constructor
-	Canny() = default;
+	Canny() { }
 	//! Default destructor
-	virtual ~Canny() throw() = default;
+	virtual ~Canny() throw() { }
 	//! keine funktion
 	virtual void Initialize();
 	//!
