@@ -11,6 +11,7 @@ class MainWindow;
 }
 
 class ImageWidget;
+class Exception;
 
 class MainWindow : public QMainWindow
 {
@@ -69,6 +70,7 @@ private:
 
 
 	void createConnections();
+	void showError(const Exception &e);
 	ImageWidget* getImageWidget() const;
 	QString extractFileName(QString fileName);
 	SizeDialogue *m_dia;

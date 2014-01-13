@@ -1,7 +1,9 @@
 #include <QtGui>
 #include <QtCore>
+#include <QStyle>
 #include <QFileDialog>
-#include <qscrollarea.h>
+#include <QScrollArea>
+#include <QMessageBox>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "ueberdialog.h"
@@ -200,8 +202,7 @@ void MainWindow::on_actionBlur_triggered()
 			img->applyFilter(f);
 		}
 	} catch (Exception&e) {
-	} catch (const char*e) {
-	} catch (...) {
+		showError(e);
 	}
 }
 
@@ -215,8 +216,7 @@ void MainWindow::on_actionGaussian_Blur_triggered()
 			img->applyFilter(f);
 		}
 	} catch (Exception&e) {
-	} catch (const char*e) {
-	} catch (...) {
+		showError(e);
 	}
 }
 
@@ -230,8 +230,7 @@ void MainWindow::on_actionMedian_Blur_triggered()
 			img->applyFilter(f);
 		}
 	} catch (Exception&e) {
-	} catch (const char*e) {
-	} catch (...) {
+		showError(e);
 	}
 }
 
@@ -245,8 +244,7 @@ void MainWindow::on_actionBilateral_Filter_triggered()
 			img->applyFilter(f);
 		}
 	} catch (Exception&e) {
-	} catch (const char*e) {
-	} catch (...) {
+		showError(e);
 	}
 }
 
@@ -260,8 +258,7 @@ void MainWindow::on_actionSobel_triggered()
 			img->applyFilter(f);
 		}
 	} catch (Exception&e) {
-	} catch (const char*e) {
-	} catch (...) {
+		showError(e);
 	}
 }
 
@@ -275,8 +272,7 @@ void MainWindow::on_actionEdge_triggered()
 			img->applyFilter(f);
 		}
 	} catch (Exception&e) {
-	} catch (const char*e) {
-	} catch (...) {
+		showError(e);
 	}
 }
 
@@ -290,8 +286,7 @@ void MainWindow::on_actionCanny_triggered()
 			img->applyFilter(f);
 		}
 	} catch (Exception&e) {
-	} catch (const char*e) {
-	} catch (...) {
+		showError(e);
 	}
 }
 
@@ -305,8 +300,7 @@ void MainWindow::on_actionDilation_triggered()
 			img->applyFilter(f);
 		}
 	} catch (Exception&e) {
-	} catch (const char*e) {
-	} catch (...) {
+		showError(e);
 	}
 }
 
@@ -320,8 +314,7 @@ void MainWindow::on_actionErotion_triggered()
 			img->applyFilter(f);
 		}
 	} catch (Exception&e) {
-	} catch (const char*e) {
-	} catch (...) {
+		showError(e);
 	}
 }
 
@@ -337,13 +330,10 @@ void MainWindow::on_imagetab_tabCloseRequested(int index)
 
 void MainWindow::on_imagetab_currentChanged(int index)
 {
-	/*
-	QWidget* widget = ui->imagetab->currentWidget();
+	// do nothing
+}
 
-	if (widget) {
-		ImageWidget* img = qobject_cast<ImageWidget*>(qobject_cast<QScrollArea*>(widget)->widget());
-		connect(ui->ColorPicker, SIGNAL(colorChanged(QColor)), img, SLOT(setPenColor(QColor)));
-		connect(m_dia, SIGNAL(sizeChanged(int)), img, SLOT(setPenWidth(int)));
-	}
-	*/
+void MainWindow::showError(const Exception &e)
+{
+	QMessageBox::critical(0, "Error", e.Message());
 }
