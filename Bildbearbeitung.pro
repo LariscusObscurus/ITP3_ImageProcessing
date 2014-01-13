@@ -63,7 +63,7 @@ unix:!macx: LIBS += -lopencv_core
 
 unix:!macx: LIBS += -lopencv_imgproc
 
-uinx: QMAKE_CXXFLAGS += -std=c++11
+unix: QMAKE_CXXFLAGS += -std=c++11
 win32-g++: QMAKE_CXXFLAGS += -std=c++11
 
 win32-msvc2012:!contains(QMAKE_HOST.arch, x86_64): {
