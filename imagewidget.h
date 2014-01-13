@@ -21,6 +21,8 @@ public:
 	void resetImage();
 	void clearImage();
 
+	QColor getPenColor() const;
+
 	enum PenStyle {
 		solid,
 		dots

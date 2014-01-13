@@ -40,6 +40,11 @@ bool ImageWidget::saveImage(const QString &fileName, const char *fileFormat)
 	return false;
 }
 
+QColor ImageWidget::getPenColor() const
+{
+	return m_penColor;
+}
+
 void ImageWidget::setPenColor(const QColor &newColor)
 {
 	m_penColor = newColor;

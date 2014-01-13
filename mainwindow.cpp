@@ -71,7 +71,8 @@ void MainWindow::on_action_ffnen_triggered()
 
 		if (image->openImage(fileName)) {
 			area->setWidget(image);
-			ui->imagetab->addTab(area, extractFileName(fileName));
+			area->setStyleSheet("background: qlineargradient(x1: 0, y0: 1, x2:1, y2: 0, stop: 0.96 #383838, stop: 0.99 #2e2e2e);");
+			ui->imagetab->setCurrentIndex(ui->imagetab->addTab(area, extractFileName(fileName)));
 		}
 	}
 }
@@ -335,5 +336,8 @@ void MainWindow::on_imagetab_currentChanged(int index)
 		ImageWidget* img = qobject_cast<ImageWidget*>(qobject_cast<QScrollArea*>(widget)->widget());
 		connect(ui->ColorPicker, SIGNAL(colorChanged(QColor)), img, SLOT(setPenColor(QColor)));
 		connect(m_dia, SIGNAL(sizeChanged(int)), img, SLOT(setPenWidth(int)));
+
+		// setzt die korrekte farbe für ColorPicker
+		ui->ColorPicker->setColor(img->getPenColor());
 	}
 }
