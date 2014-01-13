@@ -63,7 +63,7 @@ unix:!macx: LIBS += -lopencv_core
 
 unix:!macx: LIBS += -lopencv_imgproc
 
-unix:win32-g++: QMAKE_CXXFLAGS += -std=c++11
+QMAKE_CXXFLAGS += -std=c++11
 
 win32-msvc2010:!contains(QMAKE_HOST.arch, x86_64): {
 	CONFIG(release, debug|release): LIBS += -L$$PWD/dep/lib/x86/vc10/ -lopencv_core248
