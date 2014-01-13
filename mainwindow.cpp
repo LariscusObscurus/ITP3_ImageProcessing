@@ -120,7 +120,11 @@ void MainWindow::on_action_ber_triggered()
 
 void MainWindow::on_actionSpeichern_triggered()
 {
-	// do nothing
+	ImageWidget* img = getImageWidget();
+
+	if (img) {
+		img->saveImage();
+	}
 }
 
 void MainWindow::on_actionSpeichern_unter_triggered()

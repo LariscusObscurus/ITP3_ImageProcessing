@@ -32,12 +32,21 @@ bool ImageWidget::openImage(const QString &fileName)
 	return true;
 }
 
+bool ImageWidget::saveImage()
+{
+	QStringList splitedFile = m_fileName.split(".");
+	QString ext;
+
+	if (!splitedFile.isEmpty()) {
+		ext = splitedFile.last();
+	}
+
+	return (m_image.save(m_fileName, ext.toLatin1()));
+}
+
 bool ImageWidget::saveImage(const QString &fileName, const char *fileFormat)
 {
-	if(m_image.save(fileName, fileFormat)) {
-		return true;
-	}
-	return false;
+	return (m_image.save(fileName, fileFormat));
 }
 
 QColor ImageWidget::getPenColor() const

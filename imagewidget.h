@@ -14,6 +14,7 @@ class ImageWidget : public QWidget
 public:
 	explicit ImageWidget(QWidget *parent = 0);
 	bool openImage(const QString& fileName);
+	bool saveImage();
 	bool saveImage(const QString& fileName, const char *fileFormat);
 	void applyFilter(IOperation& filter);
 	bool undo();
