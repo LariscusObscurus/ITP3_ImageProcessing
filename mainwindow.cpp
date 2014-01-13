@@ -110,14 +110,6 @@ void MainWindow::on_actionZur_cksetzen_triggered()
 	ui->imageWidget->resetImage();
 }
 
-/*
-void MainWindow::on_actionBlur_triggered()
-{
-	Blur blur;
-	ui->imageWidget->applyFilter(blur);
-}
-*/
-
 void MainWindow::on_btnBrush_clicked()
 {
 	ui->imageWidget->setPenStyle(ImageWidget::dots);
@@ -173,5 +165,17 @@ void MainWindow::on_actionEdge_triggered()
 void MainWindow::on_actionCanny_triggered()
 {
 	Canny f;
+	ui->imageWidget->applyFilter(f);
+}
+
+void MainWindow::on_actionDilation_triggered()
+{
+	Dilation f;
+	ui->imageWidget->applyFilter(f);
+}
+
+void MainWindow::on_actionErotion_triggered()
+{
+	Erosion f;
 	ui->imageWidget->applyFilter(f);
 }

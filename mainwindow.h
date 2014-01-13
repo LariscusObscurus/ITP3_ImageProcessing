@@ -51,6 +51,10 @@ private slots:
 
 	void on_actionCanny_triggered();
 
+	void on_actionDilation_triggered();
+
+	void on_actionErotion_triggered();
+
 private:
 	Ui::MainWindow *ui;
 	//Dialogs

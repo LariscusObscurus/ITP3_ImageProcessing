@@ -65,58 +65,22 @@ unix:!macx: LIBS += -lopencv_imgproc
 
 QMAKE_CXXFLAGS += -std=c++11
 
-win32-msvc2010:!contains(QMAKE_HOST.arch, x86_64): {
-	CONFIG(release, debug|release): LIBS += -L$$PWD/dep/lib/x86/vc10/ -lopencv_core248
-	else:CONFIG(debug, debug|release): LIBS += -L$$PWD/dep/lib/x86/vc10/ -lopencv_core248d
-	CONFIG(release, debug|release): LIBS += -L$$PWD/dep/lib/x86/vc10/ -lopencv_imgproc248
-	else:CONFIG(debug, debug|release): LIBS += -L$$PWD/dep/lib/x86/vc10/ -lopencv_imgproc248d
-	INCLUDEPATH += $$PWD/dep/lib/x86/vc10
-	DEPENDPATH += $$PWD/dep/lib/x86/vc10
-}
-
 win32-msvc2012:!contains(QMAKE_HOST.arch, x86_64): {
-	CONFIG(release, debug|release): LIBS += -L$$PWD/dep/lib/x86/vc11/ -lopencv_core248
-	else:CONFIG(debug, debug|release): LIBS += -L$$PWD/dep/lib/x86/vc11/ -lopencv_core248d
-	CONFIG(release, debug|release): LIBS += -L$$PWD/dep/lib/x86/vc11/ -lopencv_imgproc248
-	else:CONFIG(debug, debug|release): LIBS += -L$$PWD/dep/lib/x86/vc11/ -lopencv_imgproc248d
-	INCLUDEPATH += $$PWD/dep/lib/x86/vc11
-	DEPENDPATH += $$PWD/dep/lib/x86/vc11
-}
-
-win32-msvc2013:!contains(QMAKE_HOST.arch, x86_64): {
-	CONFIG(release, debug|release): LIBS += -L$$PWD/dep/lib/x86/vc12/ -lopencv_core248
-	else:CONFIG(debug, debug|release): LIBS += -L$$PWD/dep/lib/x86/vc12/ -lopencv_core248d
-	CONFIG(release, debug|release): LIBS += -L$$PWD/dep/lib/x86/vc12/ -lopencv_imgproc248
-	else:CONFIG(debug, debug|release): LIBS += -L$$PWD/dep/lib/x86/vc12/ -lopencv_imgproc248d
-	INCLUDEPATH += $$PWD/dep/lib/x86/vc12
-	DEPENDPATH += $$PWD/dep/lib/x86/vc12
-}
-
-win32-msvc2010:contains(QMAKE_HOST.arch, x86_64): {
-	CONFIG(release, debug|release): LIBS += -L$$PWD/dep/lib/x64/vc10/ -lopencv_core248
-	else:CONFIG(debug, debug|release): LIBS += -L$$PWD/dep/lib/x64/vc10/ -lopencv_core248d
-	CONFIG(release, debug|release): LIBS += -L$$PWD/dep/lib/x64/vc10/ -lopencv_imgproc248
-	else:CONFIG(debug, debug|release): LIBS += -L$$PWD/dep/lib/x64/vc10/ -lopencv_imgproc248d
-	INCLUDEPATH += $$PWD/dep/lib/x64/vc10
-	DEPENDPATH += $$PWD/dep/lib/x64/vc10
+	CONFIG(release, debug|release): LIBS += -L$$PWD/dep/lib/x86/ -lopencv_core248
+	else:CONFIG(debug, debug|release): LIBS += -L$$PWD/dep/lib/x86/ -lopencv_core248d
+	CONFIG(release, debug|release): LIBS += -L$$PWD/dep/lib/x86/ -lopencv_imgproc248
+	else:CONFIG(debug, debug|release): LIBS += -L$$PWD/dep/lib/x86/ -lopencv_imgproc248d
+	INCLUDEPATH += $$PWD/dep/lib/x86
+	DEPENDPATH += $$PWD/dep/lib/x86
 }
 
 win32-msvc2012:contains(QMAKE_HOST.arch, x86_64): {
-	CONFIG(release, debug|release): LIBS += -L$$PWD/dep/lib/x64/vc11/ -lopencv_core248
-	else:CONFIG(debug, debug|release): LIBS += -L$$PWD/dep/lib/x64/vc11/ -lopencv_core248d
-	CONFIG(release, debug|release): LIBS += -L$$PWD/dep/lib/x64/vc11/ -lopencv_imgproc248
-	else:CONFIG(debug, debug|release): LIBS += -L$$PWD/dep/lib/x64/vc11/ -lopencv_imgproc248d
-	INCLUDEPATH += $$PWD/dep/lib/x64/vc11
-	DEPENDPATH += $$PWD/dep/lib/x64/vc11
-}
-
-win32-msvc2013:contains(QMAKE_HOST.arch, x86_64): {
-	CONFIG(release, debug|release): LIBS += -L$$PWD/dep/lib/x64/vc12/ -lopencv_core248
-	else:CONFIG(debug, debug|release): LIBS += -L$$PWD/dep/lib/x64/vc12/ -lopencv_core248d
-	CONFIG(release, debug|release): LIBS += -L$$PWD/dep/lib/x64/vc12/ -lopencv_imgproc248
-	else:CONFIG(debug, debug|release): LIBS += -L$$PWD/dep/lib/x64/vc12/ -lopencv_imgproc248d
-	INCLUDEPATH += $$PWD/dep/lib/x64/vc12
-	DEPENDPATH += $$PWD/dep/lib/x64/vc12
+	CONFIG(release, debug|release): LIBS += -L$$PWD/dep/lib/x64/ -lopencv_core248
+	else:CONFIG(debug, debug|release): LIBS += -L$$PWD/dep/lib/x64/ -lopencv_core248d
+	CONFIG(release, debug|release): LIBS += -L$$PWD/dep/lib/x64/ -lopencv_imgproc248
+	else:CONFIG(debug, debug|release): LIBS += -L$$PWD/dep/lib/x64/ -lopencv_imgproc248d
+	INCLUDEPATH += $$PWD/dep/lib/x64
+	DEPENDPATH += $$PWD/dep/lib/x64
 }
 
 win32: INCLUDEPATH += $$PWD/dep/inc

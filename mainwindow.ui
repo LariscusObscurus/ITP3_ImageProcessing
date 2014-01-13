@@ -429,8 +429,16 @@ margin-top: 3px; /* make non-selected tabs look smaller */
      <addaction name="actionEdge"/>
      <addaction name="actionCanny"/>
     </widget>
+    <widget class="QMenu" name="menuArtistic">
+     <property name="title">
+      <string>Artistic</string>
+     </property>
+     <addaction name="actionDilation"/>
+     <addaction name="actionErotion"/>
+    </widget>
     <addaction name="menuBlur"/>
     <addaction name="menuEdge_Detection"/>
+    <addaction name="menuArtistic"/>
    </widget>
    <widget class="QMenu" name="menuHilfe">
     <property name="title">
@@ -553,6 +561,16 @@ margin-top: 3px; /* make non-selected tabs look smaller */
   <action name="actionCanny">
    <property name="text">
     <string>Canny</string>
+   </property>
+  </action>
+  <action name="actionDilation">
+   <property name="text">
+    <string>Dilation</string>
+   </property>
+  </action>
+  <action name="actionErotion">
+   <property name="text">
+    <string>Erotion</string>
    </property>
   </action>
  </widget>
