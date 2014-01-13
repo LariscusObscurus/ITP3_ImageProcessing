@@ -192,6 +192,26 @@ void MainWindow::on_btnTest_clicked()
 	}
 }
 
+void MainWindow::on_imagetab_tabCloseRequested(int index)
+{
+	QWidget* widget = ui->imagetab->widget(index);
+	ui->imagetab->removeTab(index);
+
+	if (widget) {
+		widget->deleteLater();
+	}
+}
+
+void MainWindow::on_imagetab_currentChanged(int index)
+{
+	// do nothing
+}
+
+void MainWindow::showError(const Exception &e)
+{
+	QMessageBox::critical(0, "Error", e.Message());
+}
+
 void MainWindow::on_actionBlur_triggered()
 {
 	try {
@@ -318,22 +338,16 @@ void MainWindow::on_actionErotion_triggered()
 	}
 }
 
-void MainWindow::on_imagetab_tabCloseRequested(int index)
+void MainWindow::on_actionGrayscale_triggered()
 {
-	QWidget* widget = ui->imagetab->widget(index);
-	ui->imagetab->removeTab(index);
+	try {
+		Grayscale f;
+		ImageWidget* img = getImageWidget();
 
-	if (widget) {
-		widget->deleteLater();
+		if (img) {
+			img->applyFilter(f);
+		}
+	} catch (Exception&e) {
+		showError(e);
 	}
-}
-
-void MainWindow::on_imagetab_currentChanged(int index)
-{
-	// do nothing
-}
-
-void MainWindow::showError(const Exception &e)
-{
-	QMessageBox::critical(0, "Error", e.Message());
 }

@@ -64,6 +64,8 @@ private slots:
 
 	void on_imagetab_currentChanged(int index);
 
+	void on_actionGrayscale_triggered();
+
 private:
 	Ui::MainWindow *ui;
 	//Dialogs

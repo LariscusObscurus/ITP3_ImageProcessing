@@ -426,9 +426,16 @@ margin-top: 3px; /* make non-selected tabs look smaller */
      <addaction name="actionDilation"/>
      <addaction name="actionErotion"/>
     </widget>
+    <widget class="QMenu" name="menuColor">
+     <property name="title">
+      <string>Color</string>
+     </property>
+     <addaction name="actionGrayscale"/>
+    </widget>
     <addaction name="menuBlur"/>
     <addaction name="menuEdge_Detection"/>
     <addaction name="menuArtistic"/>
+    <addaction name="menuColor"/>
    </widget>
    <widget class="QMenu" name="menuHilfe">
     <property name="title">
@@ -561,6 +568,11 @@ margin-top: 3px; /* make non-selected tabs look smaller */
   <action name="actionErotion">
    <property name="text">
     <string>Erotion</string>
+   </property>
+  </action>
+  <action name="actionGrayscale">
+   <property name="text">
+    <string>Grayscale</string>
    </property>
   </action>
  </widget>
