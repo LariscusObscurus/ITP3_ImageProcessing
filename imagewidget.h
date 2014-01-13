@@ -54,6 +54,8 @@ private:
 	RingBuffer<QImage> m_undoBuffer;
 	QPen m_pen;
 	PenStyle m_penStyle;
+
+	QString m_fileName;
 };
 
 #endif // IMAGEWIDGET_H

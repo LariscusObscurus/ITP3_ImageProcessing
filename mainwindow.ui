@@ -337,7 +337,7 @@ margin-top: 3px; /* make non-selected tabs look smaller */
 }</string>
          </property>
          <property name="currentIndex">
-          <number>0</number>
+          <number>-1</number>
          </property>
          <property name="tabsClosable">
           <bool>true</bool>
@@ -345,16 +345,6 @@ margin-top: 3px; /* make non-selected tabs look smaller */
          <property name="movable">
           <bool>true</bool>
          </property>
-         <widget class="ImageWidget" name="imageWidget">
-          <attribute name="title">
-           <string>Lena.gif</string>
-          </attribute>
-         </widget>
-         <widget class="QWidget" name="img_2">
-          <attribute name="title">
-           <string>Image 2</string>
-          </attribute>
-         </widget>
         </widget>
        </item>
       </layout>
@@ -575,12 +565,6 @@ margin-top: 3px; /* make non-selected tabs look smaller */
   </action>
  </widget>
  <customwidgets>
-  <customwidget>
-   <class>ImageWidget</class>
-   <extends>QWidget</extends>
-   <header>imagewidget.h</header>
-   <container>1</container>
-  </customwidget>
   <customwidget>
    <class>ColorDisplayWidget</class>
    <extends>QWidget</extends>

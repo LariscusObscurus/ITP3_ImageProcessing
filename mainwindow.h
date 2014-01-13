@@ -55,12 +55,19 @@ private slots:
 
 	void on_actionErotion_triggered();
 
+	void on_imagetab_tabCloseRequested(int index);
+
+	void on_actionSpeichern_triggered();
+
+	void on_imagetab_currentChanged(int index);
+
 private:
 	Ui::MainWindow *ui;
 	//Dialogs
 
 
 	void createConnections();
+	QString extractFileName(QString fileName);
 	SizeDialogue *m_dia;
 };
 

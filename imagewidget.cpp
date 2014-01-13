@@ -9,7 +9,8 @@ ImageWidget::ImageWidget(QWidget *parent) :
 	m_undoBuffer(20),
 	m_pen(m_penColor, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin),
 	m_penWidth(2),
-	m_penStyle(solid)
+	m_penStyle(solid),
+	m_fileName("")
 {
 	setAttribute(Qt::WA_StaticContents);
 
@@ -25,6 +26,7 @@ bool ImageWidget::openImage(const QString &fileName)
 	this->resize(imageSize);
 	loadedImage.convertToFormat(QImage::Format_ARGB32);
 	m_image = m_original = loadedImage;
+	m_fileName = fileName;
 	drawImage();
 	update();
 	return true;
