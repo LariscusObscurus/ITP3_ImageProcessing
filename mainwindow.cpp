@@ -1,6 +1,7 @@
 #include <QtGui>
 #include <QtCore>
 #include <QFileDialog>
+#include <qscrollarea.h>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "ueberdialog.h"
@@ -15,6 +16,7 @@
 #include "filters/Outline.h"
 #include "filters/Sobel.h"
 #include "filters/Canny.h"
+#include "Exception.h"
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
@@ -64,10 +66,12 @@ void MainWindow::on_action_ffnen_triggered()
 	QString fileName = QFileDialog::getOpenFileName(this, tr("Bilddatei öffnen"), QDir::homePath());
 	if(!fileName.isEmpty()) {
 		//ui->imageWidget->openImage(fileName);
+		QScrollArea* area = new QScrollArea();
 		ImageWidget* image = new ImageWidget();
 
 		if (image->openImage(fileName)) {
-			ui->imagetab->addTab(image, extractFileName(fileName));
+			area->setWidget(image);
+			ui->imagetab->addTab(area, extractFileName(fileName));
 		}
 	}
 }
@@ -83,6 +87,18 @@ QString MainWindow::extractFileName(QString fileName)
 	} else {
 		QString tmp = fileName.mid(index+1);
 		return (tmp.length() > 16 ? QString("%1...").arg(fileName.mid(index+1, 13)) : tmp);
+	}
+}
+
+ImageWidget* MainWindow::getImageWidget() const
+{
+	QWidget* widget = ui->imagetab->currentWidget();
+
+	if (widget) {
+		QScrollArea* area = qobject_cast<QScrollArea*>(widget);
+		return qobject_cast<ImageWidget*>(area->widget());
+	} else {
+		return nullptr;
 	}
 }
 
@@ -114,29 +130,41 @@ void MainWindow::on_actionSpeichern_unter_triggered()
 		ext = splitedFile.takeLast();
 	}
 	if(!fileName.isEmpty()) {
-		ImageWidget* img = dynamic_cast<ImageWidget*>(ui->imagetab->currentWidget());
-		img->saveImage(fileName, ext.toLatin1());
+		ImageWidget* img = getImageWidget();
+
+		if (img) {
+			img->saveImage(fileName, ext.toLatin1());
+		}
 	}
 }
 
 void MainWindow::on_actionR_ckg_ngig_triggered()
 {
-	ImageWidget* img = dynamic_cast<ImageWidget*>(ui->imagetab->currentWidget());
-	ui->statusbar->showMessage("Rückgängig", 2000);
-	img->undo();
+	ImageWidget* img = getImageWidget();
+
+	if (img) {
+		ui->statusbar->showMessage("Rückgängig", 2000);
+		img->undo();
+	}
 }
 
 void MainWindow::on_actionZur_cksetzen_triggered()
 {
-	ImageWidget* img = dynamic_cast<ImageWidget*>(ui->imagetab->currentWidget());
-	ui->statusbar->showMessage("Zurücksetzen", 2000);
-	img->resetImage();
+	ImageWidget* img = getImageWidget();
+
+	if (img) {
+		ui->statusbar->showMessage("Zurücksetzen", 2000);
+		img->resetImage();
+	}
 }
 
 void MainWindow::on_btnBrush_clicked()
 {
-	ImageWidget* img = dynamic_cast<ImageWidget*>(ui->imagetab->currentWidget());
-	img->setPenStyle(ImageWidget::dots);
+	ImageWidget* img = getImageWidget();
+
+	if (img) {
+		img->setPenStyle(ImageWidget::dots);
+	}
 }
 
 void MainWindow::on_actionPinsel_gr_e_triggered()
@@ -147,82 +175,165 @@ void MainWindow::on_actionPinsel_gr_e_triggered()
 
 void MainWindow::on_btnTest_clicked()
 {
-	ImageWidget* img = dynamic_cast<ImageWidget*>(ui->imagetab->currentWidget());
-	img->setPenStyle(ImageWidget::solid);
+	ImageWidget* img = getImageWidget();
+
+	if (img) {
+		img->setPenStyle(ImageWidget::solid);
+	}
 }
 
 void MainWindow::on_actionBlur_triggered()
 {
-	Blur f;
-	ImageWidget* img = dynamic_cast<ImageWidget*>(ui->imagetab->currentWidget());
-	img->applyFilter(f);
+	try {
+		Blur f;
+		ImageWidget* img = getImageWidget();
+
+		if (img) {
+			img->applyFilter(f);
+		}
+	} catch (Exception&e) {
+	} catch (const char*e) {
+	} catch (...) {
+	}
 }
 
 void MainWindow::on_actionGaussian_Blur_triggered()
 {
-	GaussianBlur f;
-	ImageWidget* img = dynamic_cast<ImageWidget*>(ui->imagetab->currentWidget());
-	img->applyFilter(f);
+	try {
+		GaussianBlur f;
+		ImageWidget* img = getImageWidget();
+
+		if (img) {
+			img->applyFilter(f);
+		}
+	} catch (Exception&e) {
+	} catch (const char*e) {
+	} catch (...) {
+	}
 }
 
 void MainWindow::on_actionMedian_Blur_triggered()
 {
-	MedianBlur f;
-	ImageWidget* img = dynamic_cast<ImageWidget*>(ui->imagetab->currentWidget());
-	img->applyFilter(f);
+	try {
+		MedianBlur f;
+		ImageWidget* img = getImageWidget();
+
+		if (img) {
+			img->applyFilter(f);
+		}
+	} catch (Exception&e) {
+	} catch (const char*e) {
+	} catch (...) {
+	}
 }
 
 void MainWindow::on_actionBilateral_Filter_triggered()
 {
-	BilateralFilter f;
-	ImageWidget* img = dynamic_cast<ImageWidget*>(ui->imagetab->currentWidget());
-	img->applyFilter(f);
+	try {
+		BilateralFilter f;
+		ImageWidget* img = getImageWidget();
+
+		if (img) {
+			img->applyFilter(f);
+		}
+	} catch (Exception&e) {
+	} catch (const char*e) {
+	} catch (...) {
+	}
 }
 
 void MainWindow::on_actionSobel_triggered()
 {
-	Sobel f;
-	ImageWidget* img = dynamic_cast<ImageWidget*>(ui->imagetab->currentWidget());
-	img->applyFilter(f);
+	try {
+		Sobel f;
+		ImageWidget* img = getImageWidget();
+
+		if (img) {
+			img->applyFilter(f);
+		}
+	} catch (Exception&e) {
+	} catch (const char*e) {
+	} catch (...) {
+	}
 }
 
 void MainWindow::on_actionEdge_triggered()
 {
-	Outline f;
-	ImageWidget* img = dynamic_cast<ImageWidget*>(ui->imagetab->currentWidget());
-	img->applyFilter(f);
+	try {
+		Outline f;
+		ImageWidget* img = getImageWidget();
+
+		if (img) {
+			img->applyFilter(f);
+		}
+	} catch (Exception&e) {
+	} catch (const char*e) {
+	} catch (...) {
+	}
 }
 
 void MainWindow::on_actionCanny_triggered()
 {
-	Canny f;
-	ImageWidget* img = dynamic_cast<ImageWidget*>(ui->imagetab->currentWidget());
-	img->applyFilter(f);
+	try {
+		Canny f;
+		ImageWidget* img = getImageWidget();
+
+		if (img) {
+			img->applyFilter(f);
+		}
+	} catch (Exception&e) {
+	} catch (const char*e) {
+	} catch (...) {
+	}
 }
 
 void MainWindow::on_actionDilation_triggered()
 {
-	Dilation f;
-	ImageWidget* img = dynamic_cast<ImageWidget*>(ui->imagetab->currentWidget());
-	img->applyFilter(f);
+	try {
+		Dilation f;
+		ImageWidget* img = getImageWidget();
+
+		if (img) {
+			img->applyFilter(f);
+		}
+	} catch (Exception&e) {
+	} catch (const char*e) {
+	} catch (...) {
+	}
 }
 
 void MainWindow::on_actionErotion_triggered()
 {
-	Erosion f;
-	ImageWidget* img = dynamic_cast<ImageWidget*>(ui->imagetab->currentWidget());
-	img->applyFilter(f);
+	try {
+		Erosion f;
+		ImageWidget* img = getImageWidget();
+
+		if (img) {
+			img->applyFilter(f);
+		}
+	} catch (Exception&e) {
+	} catch (const char*e) {
+	} catch (...) {
+	}
 }
 
 void MainWindow::on_imagetab_tabCloseRequested(int index)
 {
-	delete (ui->imagetab->currentWidget());
-	//ui->imagetab->removeTab(index);
+	QWidget* widget = ui->imagetab->widget(index);
+	ui->imagetab->removeTab(index);
+
+	if (widget) {
+		widget->deleteLater();
+	}
 }
 
 void MainWindow::on_imagetab_currentChanged(int index)
 {
-	ImageWidget* img = dynamic_cast<ImageWidget*>(ui->imagetab->currentWidget());
-	connect(ui->ColorPicker, SIGNAL(colorChanged(QColor)), img, SLOT(setPenColor(QColor)));
-	connect(m_dia, SIGNAL(sizeChanged(int)), img, SLOT(setPenWidth(int)));
+	QWidget* widget = ui->imagetab->widget(index);
+
+	if (widget) {
+		ImageWidget* img = qobject_cast<ImageWidget*>(qobject_cast<QScrollArea*>(widget)->widget());
+		connect(ui->ColorPicker, SIGNAL(colorChanged(QColor)), img, SLOT(setPenColor(QColor)));
+		connect(m_dia, SIGNAL(sizeChanged(int)), img, SLOT(setPenWidth(int)));
+	}
 }

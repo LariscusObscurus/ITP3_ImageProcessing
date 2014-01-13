@@ -10,6 +10,8 @@ namespace Ui {
 class MainWindow;
 }
 
+class ImageWidget;
+
 class MainWindow : public QMainWindow
 {
 	Q_OBJECT
@@ -67,6 +69,7 @@ private:
 
 
 	void createConnections();
+	ImageWidget* getImageWidget() const;
 	QString extractFileName(QString fileName);
 	SizeDialogue *m_dia;
 };
