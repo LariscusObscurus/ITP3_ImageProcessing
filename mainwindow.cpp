@@ -1,7 +1,25 @@
+/* © 2013 Leonhardt Schwarz, Tom Schalbar, David Wolf
+ *
+ * This file is part of ImageProcessing.
+ *
+ * ImageProcessing is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * ImageProcessing is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with ImageProcessing.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include <QtGui>
 #include <QtCore>
 #include <QStyle>
-#include <QHash>
+#include <QChar>
 #include <QFileDialog>
 #include <QScrollArea>
 #include <QMessageBox>
@@ -47,26 +65,53 @@ void MainWindow::on_actionOpen_triggered()
 				QDir::homePath(),
 				tr("Images (*.bmp *.png *.jpg *.jpeg *.ppm *.xbm *.xpm);;All Files (*)"));
 
-	if(!fileName.isEmpty()) {
-		QScrollArea* area = new QScrollArea();
-		ImageWidget* img = new ImageWidget();
+	if(fileName.isEmpty()) {
+		return;
+	}
 
-		// Nur les- und schreibbare Bildformate werden unterstützt
-		if (img->openImage(fileName)) {
-			// Bild in die ScrollArea laden
-			area->setWidget(img);
-			area->setStyleSheet("background: qlineargradient(x1: 0, y0: 1, x2:1, y2: 0, stop: 0.96 #383838, stop: 0.99 #2e2e2e);");
+	// Überprüfe ob das Bild bereits offen ist
+	for (int i = 0; i < ui->imagetab->count(); i++) {
+		QWidget* widget = ui->imagetab->widget(i);
 
-			// neuen Tab hinzufügen
-			ui->imagetab->setCurrentIndex(ui->imagetab->addTab(area, ExtractFileName(fileName)));
+		if (widget) {
+			QScrollArea* area = qobject_cast<QScrollArea*>(widget);
+			ImageWidget* img = qobject_cast<ImageWidget*>(area->widget());
 
-			// schließlich Signalhandler setzen
-			connect(ui->ColorPicker, SIGNAL(colorChanged(QColor)), img, SLOT(setPenColor(QColor)));
-			connect(mDia, SIGNAL(sizeChanged(int)), img, SLOT(setPenWidth(int)));
-			img->setPenColor(ui->ColorPicker->getColor());
+			// ist das Bild bereits geladen, dann änder zu den entsprechenden Tab
+			if (img && img->getFileName() == fileName) {
+				ui->imagetab->setCurrentIndex(i);
+				return;
+			}
 		}
-	} else {
-		QMessageBox::critical(0, "Error", "Couldn't open file, no name was given.");
+	}
+
+	// Falls das Bild noch nicht geladen wurde, dann lade es jetzt
+	openImage(fileName);
+}
+
+void MainWindow::openImage(const QString &fileName)
+{
+	QScrollArea* area = new QScrollArea();
+	ImageWidget* img = new ImageWidget();
+
+	// Nur les- und schreibbare Bildformate werden unterstützt
+	if (img->openImage(fileName)) {
+		QString shortFileName = ExtractFileName(fileName);
+		shortFileName = shortFileName.mid(0, shortFileName.lastIndexOf('.'));
+
+		// Bild in die ScrollArea laden
+		area->setWidget(img);
+		area->setStyleSheet("background: qlineargradient(x1: 0, y0: 1, x2:1, y2: 0, stop: 0.96 #383838, stop: 0.99 #2e2e2e);");
+
+		// neuen Tab hinzufügen
+		int index = ui->imagetab->addTab(area, shortFileName);
+		ui->imagetab->setTabToolTip(index, shortFileName);
+		ui->imagetab->setCurrentIndex(index);
+
+		// schließlich Signalhandler setzen
+		connect(ui->ColorPicker, SIGNAL(colorChanged(QColor)), img, SLOT(setPenColor(QColor)));
+		connect(mDia, SIGNAL(sizeChanged(int)), img, SLOT(setPenWidth(int)));
+		img->setPenColor(ui->ColorPicker->getColor());
 	}
 }
 
@@ -84,7 +129,7 @@ ImageWidget* MainWindow::getImageWidget() const
 
 void MainWindow::on_actionClose_triggered()
 {
-	ui->statusbar->showMessage("Programm Beenden",2000);
+	ui->statusbar->showMessage("Quit Image Processing",2000);
 }
 
 void MainWindow::on_actionAbout_triggered()
@@ -164,7 +209,7 @@ void MainWindow::on_actionResetImage_triggered()
 	ImageWidget* img = getImageWidget();
 
 	if (img) {
-		ui->statusbar->showMessage("Undo History", 2000);
+		ui->statusbar->showMessage("Reset Image", 2000);
 		img->resetImage();
 	}
 }
@@ -175,6 +220,7 @@ void MainWindow::on_btnPencil_clicked()
 
 	if (img) {
 		img->setPenStyle(ImageWidget::solid);
+		ui->statusbar->showMessage("Pencil selected", 2000);
 	}
 }
 
@@ -182,12 +228,18 @@ void MainWindow::on_actionBrushSize_triggered()
 {
 	mDia->setModal(true);
 	mDia->exec();
+	ui->statusbar->showMessage("Brush Size", 2000);
 }
 
-void MainWindow::on_imagetab_currentChanged(int index)
+void MainWindow::on_imagetab_currentChanged(int)
 {
 	ImageWidget* img = getImageWidget();
-	setWindowTitle(img->getFileName());
+
+	if (img) {
+		setWindowTitle(img->getFileName());
+	} else {
+		setWindowTitle("Image Processing");
+	}
 }
 
 void MainWindow::on_imagetab_tabCloseRequested(int index)

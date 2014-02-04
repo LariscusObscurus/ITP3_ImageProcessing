@@ -49,14 +49,14 @@ QLabel {
       </font>
      </property>
      <property name="text">
-      <string>Tom Wuerrers Blackwolf</string>
+      <string>Image Processing</string>
      </property>
     </widget>
    </item>
    <item>
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Version 0.0.1</string>
+      <string>Version 0.2.0</string>
      </property>
     </widget>
    </item>
@@ -74,7 +74,7 @@ QLabel {
       </font>
      </property>
      <property name="text">
-      <string>Im Rahmen dieses ITP3 Projektes  wurde eine Bildbearbeitungssoftware entwickelt. Mitglieder: Tom Schalbar, Leonhardt Schwarz, David Wolf und Florian Würrer</string>
+      <string>Im Rahmen dieses ITP3 Projektes  wurde eine Bildbearbeitungssoftware entwickelt. Mitglieder: Tom Schalbar, Leonhardt Schwarz, David Wolf und Florian Würrer © 2013</string>
      </property>
      <property name="scaledContents">
       <bool>false</bool>

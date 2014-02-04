@@ -13,6 +13,9 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QGroupBox" name="groupBox">
@@ -22,6 +25,9 @@
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
        <widget class="QSlider" name="horizontalSlider">
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
