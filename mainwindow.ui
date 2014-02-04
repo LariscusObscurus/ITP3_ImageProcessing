@@ -389,16 +389,17 @@ margin-top: 3px; /* make non-selected tabs look smaller */
     </widget>
     <widget class="QMenu" name="menuArtistic">
      <property name="title">
-      <string>Artistic</string>
+      <string>Generic</string>
      </property>
      <addaction name="actionDilation"/>
      <addaction name="actionErosion"/>
     </widget>
     <widget class="QMenu" name="menuColor">
      <property name="title">
-      <string>Color</string>
+      <string>Artistic</string>
      </property>
-     <addaction name="actionGrayscale"/>
+     <addaction name="actionCartoon"/>
+     <addaction name="actionOilify"/>
     </widget>
     <addaction name="menuBlur"/>
     <addaction name="menuEdge_Detection"/>
@@ -413,8 +414,46 @@ margin-top: 3px; /* make non-selected tabs look smaller */
     <addaction name="separator"/>
     <addaction name="actionAbout"/>
    </widget>
+   <widget class="QMenu" name="menuColor_2">
+    <property name="title">
+     <string>Color</string>
+    </property>
+    <addaction name="actionGrayscale"/>
+    <addaction name="actionBalance"/>
+    <addaction name="actionSaturation"/>
+    <addaction name="actionBrightness"/>
+    <addaction name="actionContrast"/>
+    <addaction name="actionDisaturate"/>
+    <addaction name="actionColorize"/>
+    <addaction name="actionHistogram"/>
+    <addaction name="actionInvert"/>
+   </widget>
+   <widget class="QMenu" name="menuTool">
+    <property name="title">
+     <string>Tool</string>
+    </property>
+    <addaction name="actionZoom"/>
+    <addaction name="actionEyedropper"/>
+    <addaction name="actionText"/>
+   </widget>
+   <widget class="QMenu" name="menuSelect">
+    <property name="title">
+     <string>Select</string>
+    </property>
+    <addaction name="actionAll"/>
+    <addaction name="actionNone"/>
+    <addaction name="actionInvert_2"/>
+    <addaction name="actionRectangle"/>
+    <addaction name="actionMagic_Wand"/>
+    <addaction name="separator"/>
+    <addaction name="actionGrowth"/>
+    <addaction name="actionShrink"/>
+   </widget>
    <addaction name="menuTest"/>
    <addaction name="menuBearbeiten"/>
+   <addaction name="menuSelect"/>
+   <addaction name="menuColor_2"/>
+   <addaction name="menuTool"/>
    <addaction name="menuFilter"/>
    <addaction name="menuHilfe"/>
   </widget>
@@ -591,14 +630,114 @@ margin-top: 3px; /* make non-selected tabs look smaller */
     <string>Erosion</string>
    </property>
   </action>
+  <action name="actionResetImage">
+   <property name="text">
+    <string>Reset Image</string>
+   </property>
+  </action>
+  <action name="actionCartoon">
+   <property name="text">
+    <string>Cartoon</string>
+   </property>
+  </action>
+  <action name="actionOilify">
+   <property name="text">
+    <string>Oilify</string>
+   </property>
+  </action>
   <action name="actionGrayscale">
    <property name="text">
     <string>Grayscale</string>
    </property>
   </action>
-  <action name="actionResetImage">
+  <action name="actionBalance">
    <property name="text">
-    <string>Reset Image</string>
+    <string>Balance</string>
+   </property>
+  </action>
+  <action name="actionSaturation">
+   <property name="text">
+    <string>Saturation</string>
+   </property>
+  </action>
+  <action name="actionBrightness">
+   <property name="text">
+    <string>Brightness</string>
+   </property>
+  </action>
+  <action name="actionContrast">
+   <property name="text">
+    <string>Contrast</string>
+   </property>
+  </action>
+  <action name="actionDisaturate">
+   <property name="text">
+    <string>Disaturate</string>
+   </property>
+  </action>
+  <action name="actionColorize">
+   <property name="text">
+    <string>Colorize</string>
+   </property>
+  </action>
+  <action name="actionHistogram">
+   <property name="text">
+    <string>Histogram</string>
+   </property>
+  </action>
+  <action name="actionInvert">
+   <property name="text">
+    <string>Invert</string>
+   </property>
+  </action>
+  <action name="actionZoom">
+   <property name="text">
+    <string>Magnifier</string>
+   </property>
+  </action>
+  <action name="actionEyedropper">
+   <property name="text">
+    <string>Eyedropper</string>
+   </property>
+  </action>
+  <action name="actionText">
+   <property name="text">
+    <string>Text</string>
+   </property>
+  </action>
+  <action name="actionAll">
+   <property name="text">
+    <string>All</string>
+   </property>
+  </action>
+  <action name="actionNone">
+   <property name="text">
+    <string>None</string>
+   </property>
+  </action>
+  <action name="actionInvert_2">
+   <property name="text">
+    <string>Invert</string>
+   </property>
+  </action>
+  <action name="actionRectangle">
+   <property name="text">
+    <string>By Color</string>
+   </property>
+  </action>
+  <action name="actionMagic_Wand">
+   <property name="text">
+    <string>Magic Wand</string>
+   </property>
+  </action>
+  <action name="actionGrowth">
+   <property name="text">
+    <string>Grow</string>
+   </property>
+  </action>
+  <action name="actionShrink">
+   <property name="text">
+    <string>Shrink</string>
    </property>
   </action>
  </widget>

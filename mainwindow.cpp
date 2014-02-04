@@ -46,7 +46,7 @@ MainWindow::MainWindow(QWidget *parent) :
 	mDia(new SizeDialogue)
 {
 	ui->setupUi(this);
-	connect(ui->actionClose, SIGNAL(triggered()), this, SLOT(close()));
+	//connect(ui->actionClose, SIGNAL(triggered()), this, SLOT(close()));
 	setWindowTitle("Image Processing");
 }
 
@@ -127,10 +127,12 @@ ImageWidget* MainWindow::getImageWidget() const
 	}
 }
 
+/*
 void MainWindow::on_actionClose_triggered()
 {
 	ui->statusbar->showMessage("Quit Image Processing",2000);
 }
+*/
 
 void MainWindow::on_actionAbout_triggered()
 {
