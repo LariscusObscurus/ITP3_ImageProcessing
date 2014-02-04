@@ -8,7 +8,7 @@ QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = Bildbearbeitung
+TARGET = ImageProcessing
 TEMPLATE = app
 
 
@@ -17,40 +17,43 @@ SOURCES += main.cpp\
     ueberdialog.cpp \
     Conversion.cpp \
     imagewidget.cpp \
-    filters/TestFilter.cpp \
-    filters/MedianBlur.cpp \
-    filters/GaussianBlur.cpp \
-    filters/Erosion.cpp \
-    filters/Dilation.cpp \
-    filters/Blur.cpp \
-    filters/BilateralFilter.cpp \
-    filters/Outline.cpp \
-    filters/Grayscale.cpp \
     colordisplaywidget.cpp \
     sizedialogue.cpp \
+    filters/BilateralFilter.cpp \
+    filters/Blur.cpp \
+    filters/Canny.cpp \
+    filters/Dilation.cpp \
+    filters/Erosion.cpp \
+    filters/GaussianBlur.cpp \
+    filters/Grayscale.cpp \
+    filters/MedianBlur.cpp \
+    filters/Outline.cpp \
     filters/Sobel.cpp \
-    filters/Canny.cpp
+    filters/TestFilter.cpp \
+    Utility.cpp
 
-HEADERS  += mainwindow.h \
-    ueberdialog.h \
-    IOperation.h \
-    Conversion.h \
-    imagewidget.h \
-    ringbuffer.h \
-    Exception.h \
-    filters/TestFilter.h \
-    filters/MedianBlur.h \
-    filters/GaussianBlur.h \
-    filters/Erosion.h \
-    filters/Dilation.h \
-    filters/Blur.h \
-    filters/BilateralFilter.h \
-    filters/Outline.h \
-    filters/Grayscale.h \
-    colordisplaywidget.h \
-    sizedialogue.h \
-    filters/Sobel.h \
-    filters/Canny.h
+HEADERS  += \
+    colordisplaywidget.hpp \
+    Conversion.hpp \
+    Exception.hpp \
+    imagewidget.hpp \
+    IOperation.hpp \
+    mainwindow.hpp \
+    ringbuffer.hpp \
+    sizedialogue.hpp \
+    ueberdialog.hpp \
+    filters/BilateralFilter.hpp \
+    filters/Blur.hpp \
+    filters/Canny.hpp \
+    filters/Dilation.hpp \
+    filters/Erosion.hpp \
+    filters/GaussianBlur.hpp \
+    filters/Grayscale.hpp \
+    filters/MedianBlur.hpp \
+    filters/Outline.hpp \
+    filters/Sobel.hpp \
+    filters/TestFilter.hpp \
+    Utility.hpp
 
 FORMS    += mainwindow.ui \
     ueberdialog.ui \
@@ -59,8 +62,10 @@ FORMS    += mainwindow.ui \
 RESOURCES += \
     Icons.qrc
 
-unix:!macx: LIBS += -lopencv_core
+unix: QMAKE_CXXFLAGS += -std=c++11
+win32-g++: QMAKE_CXXFLAGS += -std=c++11
 
+unix:!macx: LIBS += -lopencv_core
 unix:!macx: LIBS += -lopencv_imgproc
 
 unix: QMAKE_CXXFLAGS += -std=c++11

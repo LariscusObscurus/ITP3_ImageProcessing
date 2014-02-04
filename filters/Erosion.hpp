@@ -1,17 +1,15 @@
-// Erosion.h
+// Erosion.hpp
 
 #ifndef EROSION_H
 #define EROSION_H
 
-#include "../IOperation.h"
+#include "../IOperation.hpp"
 
 class Erosion : public IOperation
 {
 public:
 	Erosion() { }
 	virtual ~Erosion() throw() { }
-	//! keine funktion
-	virtual void Initialize();
 	//! zeichnet einen erosionseffekt
 	/*!
 	 * \b Argumente:
@@ -27,8 +25,7 @@ public:
 	 * - ArgumentException
 	 */
 	virtual void Draw(QImage &image, const QMap<QString, QString> &args);
-	//! keine funktion
-	virtual void Finalize();
+	virtual QString GetName() const;
 private:
 	void Arguments(const QMap<QString, QString>& args, int &shape, int &ksize);
 };

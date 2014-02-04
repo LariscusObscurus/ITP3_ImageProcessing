@@ -1,12 +1,12 @@
 // Erosion.cpp
 
-#include "Erosion.h"
-#include "../Exception.h"
-#include "../Conversion.h"
+#include "Erosion.hpp"
+#include "../Exception.hpp"
+#include "../Conversion.hpp"
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-
-void Erosion::Initialize() { }
+#include <QMap>
+#include <QImage>
 
 void Erosion::Draw(QImage &image, const QMap<QString, QString> &args)
 {
@@ -18,8 +18,6 @@ void Erosion::Draw(QImage &image, const QMap<QString, QString> &args)
 	cv::erode(mat.clone(), mat, kernel);
 	image = MatToQimage(mat);
 }
-
-void Erosion::Finalize() { }
 
 void Erosion::Arguments(const QMap<QString, QString> &args, int& shape, int& ksize)
 {
@@ -49,4 +47,9 @@ void Erosion::Arguments(const QMap<QString, QString> &args, int& shape, int& ksi
 		}
 		ksize = 2 * ksize + 1;
 	}
+}
+
+QString Erosion::GetName() const
+{
+	return "Erosion";
 }

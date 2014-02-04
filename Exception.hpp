@@ -1,4 +1,4 @@
-// Exception.h
+// Exception.hpp
 
 #ifndef EXCEPTION_H
 #define EXCEPTION_H

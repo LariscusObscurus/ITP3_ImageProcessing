@@ -1,98 +1,72 @@
 #include <QtGui>
 #include <QtCore>
 #include <QStyle>
+#include <QHash>
 #include <QFileDialog>
 #include <QScrollArea>
 #include <QMessageBox>
-#include "mainwindow.h"
+#include "mainwindow.hpp"
 #include "ui_mainwindow.h"
-#include "ueberdialog.h"
-#include "imagewidget.h"
-#include "filters/BilateralFilter.h"
-#include "filters/Blur.h"
-#include "filters/Dilation.h"
-#include "filters/Erosion.h"
-#include "filters/GaussianBlur.h"
-#include "filters/Grayscale.h"
-#include "filters/MedianBlur.h"
-#include "filters/Outline.h"
-#include "filters/Sobel.h"
-#include "filters/Canny.h"
-#include "Exception.h"
+#include "ueberdialog.hpp"
+#include "imagewidget.hpp"
+#include "filters/BilateralFilter.hpp"
+#include "filters/Blur.hpp"
+#include "filters/Dilation.hpp"
+#include "filters/Erosion.hpp"
+#include "filters/GaussianBlur.hpp"
+#include "filters/Grayscale.hpp"
+#include "filters/MedianBlur.hpp"
+#include "filters/Outline.hpp"
+#include "filters/Sobel.hpp"
+#include "filters/Canny.hpp"
+#include "Exception.hpp"
+#include "Utility.hpp"
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow),
-	m_dia(new SizeDialogue)
+	mDia(new SizeDialogue)
 {
 	ui->setupUi(this);
-
-	/*Shortcuts MenuBar*/
-	/*Datei*/
-	ui->actionBeenden->setShortcut(tr("CTRL+B"));
-	ui->actionNeu->setShortcut(tr("CTRL+N"));
-	ui->action_ffnen->setShortcut(tr("CTRL+O"));
-	ui->actionSpeichern->setShortcut(tr("CTRL+S"));
-	ui->actionDrucken->setShortcut(tr("CTRL+P"));
-	ui->actionSpeichern_unter->setShortcut(tr("CTRL+SHIFT+S"));
-	/*Bearbeiten*/
-	ui->actionR_ckg_ngig->setShortcut(tr("CTRL+Z"));
-	ui->actionWiederherstellen->setShortcut(tr("CTRL+Y"));
-	ui->actionZur_cksetzen->setShortcut(tr("CTRL+SHIFT+Z"));
-	ui->actionKopieren->setShortcut(tr("CTRL+C"));
-	ui->actionEinf_gen->setShortcut(tr("CTRL+V"));
-	/*Hilfe*/
-	ui->actionHilfe->setShortcut(tr("CTRL+H"));
-	ui->action_ber->setShortcut(tr("CTRL+A"));
-
-	createConnections();
-
+	connect(ui->actionClose, SIGNAL(triggered()), this, SLOT(close()));
+	setWindowTitle("Image Processing");
 }
 
 MainWindow::~MainWindow()
 {
-	delete m_dia;
+	delete mDia;
 	delete ui;
 }
 
-void MainWindow::createConnections()
+void MainWindow::on_actionOpen_triggered()
 {
-	connect(ui->actionBeenden, SIGNAL(triggered()), this, SLOT(close()));
-	//connect(ui->ColorPicker, SIGNAL(colorChanged(QColor)),ui->imageWidget,SLOT(setPenColor(QColor)));
-	//connect(m_dia,SIGNAL(sizeChanged(int)),ui->imageWidget, SLOT(setPenWidth(int)));
-}
+	ui->statusbar->showMessage("Open File",2000);
+	QString fileName = QFileDialog::getOpenFileName(
+				this,
+				tr("Open Image File"),
+				QDir::homePath(),
+				tr("Images (*.bmp *.png *.jpg *.jpeg *.ppm *.xbm *.xpm);;All Files (*)"));
 
-void MainWindow::on_action_ffnen_triggered()
-{
-	ui->statusbar->showMessage("Datei Öffnen",2000);
-	QString fileName = QFileDialog::getOpenFileName(this, tr("Bilddatei öffnen"), QDir::homePath());
 	if(!fileName.isEmpty()) {
-		//ui->imageWidget->openImage(fileName);
 		QScrollArea* area = new QScrollArea();
 		ImageWidget* img = new ImageWidget();
 
+		// Nur les- und schreibbare Bildformate werden unterstützt
 		if (img->openImage(fileName)) {
+			// Bild in die ScrollArea laden
 			area->setWidget(img);
 			area->setStyleSheet("background: qlineargradient(x1: 0, y0: 1, x2:1, y2: 0, stop: 0.96 #383838, stop: 0.99 #2e2e2e);");
-			ui->imagetab->setCurrentIndex(ui->imagetab->addTab(area, extractFileName(fileName)));
+
+			// neuen Tab hinzufügen
+			ui->imagetab->setCurrentIndex(ui->imagetab->addTab(area, ExtractFileName(fileName)));
+
+			// schließlich Signalhandler setzen
 			connect(ui->ColorPicker, SIGNAL(colorChanged(QColor)), img, SLOT(setPenColor(QColor)));
-			connect(m_dia, SIGNAL(sizeChanged(int)), img, SLOT(setPenWidth(int)));
+			connect(mDia, SIGNAL(sizeChanged(int)), img, SLOT(setPenWidth(int)));
 			img->setPenColor(ui->ColorPicker->getColor());
 		}
-	}
-}
-
-QString MainWindow::extractFileName(QString fileName)
-{
-	int index = -1;
-	fileName.replace('\\', '/');
-	index = fileName.lastIndexOf('/');
-
-	if (index == -1) {
-		return fileName;
 	} else {
-		QString tmp = fileName.mid(index+1);
-		return (tmp.length() > 16 ? QString("%1...").arg(fileName.mid(index+1, 13)) : tmp);
+		QMessageBox::critical(0, "Error", "Couldn't open file, no name was given.");
 	}
 }
 
@@ -108,19 +82,19 @@ ImageWidget* MainWindow::getImageWidget() const
 	}
 }
 
-void MainWindow::on_actionBeenden_triggered()
+void MainWindow::on_actionClose_triggered()
 {
 	ui->statusbar->showMessage("Programm Beenden",2000);
 }
 
-void MainWindow::on_action_ber_triggered()
+void MainWindow::on_actionAbout_triggered()
 {
 	Ueberdialog about;
 	about.setModal(true);
 	about.exec();
 }
 
-void MainWindow::on_actionSpeichern_triggered()
+void MainWindow::on_actionSave_triggered()
 {
 	ImageWidget* img = getImageWidget();
 
@@ -129,16 +103,23 @@ void MainWindow::on_actionSpeichern_triggered()
 	}
 }
 
-void MainWindow::on_actionSpeichern_unter_triggered()
+void MainWindow::on_actionSaveAs_triggered()
 {
-	ui->statusbar->showMessage("Speichern unter", 2000);
-	QString fileName = QFileDialog::getSaveFileName(this, tr("Bilddatei abspeichern"),
-		QDir::homePath(), tr("png(*.png);;jpg(*.jpg *jpeg)"));
+	ui->statusbar->showMessage("Save As", 2000);
+
+	// Nur les- und schreibbare Bildformate werden unterstützt
+	QString fileName = QFileDialog::getSaveFileName(
+				this,
+				tr("Save Image"),
+				QDir::homePath(),
+				tr("Windows Bitmap (*.bmp);;Joint Photographic Experts Group (*.jpg *.jpeg);;Portable Network Graphics (*.png);;Portable Pixmap (*.ppm);;X11 Bitmap (*.xbm);;X11 Pixmap (*.xpm)"));
 	QStringList splitedFile = fileName.split(".");
 	QString ext;
+
 	if(!splitedFile.isEmpty()) {
 		ext = splitedFile.takeLast();
 	}
+
 	if(!fileName.isEmpty()) {
 		ImageWidget* img = getImageWidget();
 
@@ -148,48 +129,65 @@ void MainWindow::on_actionSpeichern_unter_triggered()
 	}
 }
 
-void MainWindow::on_actionR_ckg_ngig_triggered()
+void MainWindow::on_actionUndo_triggered()
 {
 	ImageWidget* img = getImageWidget();
 
 	if (img) {
-		ui->statusbar->showMessage("Rückgängig", 2000);
+		ui->statusbar->showMessage("Undo", 2000);
 		img->undo();
 	}
 }
 
-void MainWindow::on_actionZur_cksetzen_triggered()
+void MainWindow::on_actionRedo_triggered()
 {
 	ImageWidget* img = getImageWidget();
 
 	if (img) {
-		ui->statusbar->showMessage("Zurücksetzen", 2000);
+		ui->statusbar->showMessage("Redo", 2000);
+		img->redo();
+	}
+}
+
+void MainWindow::on_actionUndoHistory_triggered()
+{
+	ImageWidget* img = getImageWidget();
+
+	if (img) {
+		ui->statusbar->showMessage("Undo History", 2000);
+		img->undoHistory();
+	}
+}
+
+void MainWindow::on_actionResetImage_triggered()
+{
+	ImageWidget* img = getImageWidget();
+
+	if (img) {
+		ui->statusbar->showMessage("Undo History", 2000);
 		img->resetImage();
 	}
 }
 
-void MainWindow::on_btnBrush_clicked()
-{
-	ImageWidget* img = getImageWidget();
-
-	if (img) {
-		img->setPenStyle(ImageWidget::dots);
-	}
-}
-
-void MainWindow::on_actionPinsel_gr_e_triggered()
-{
-	m_dia->setModal(true);
-	m_dia->exec();
-}
-
-void MainWindow::on_btnTest_clicked()
+void MainWindow::on_btnPencil_clicked()
 {
 	ImageWidget* img = getImageWidget();
 
 	if (img) {
 		img->setPenStyle(ImageWidget::solid);
 	}
+}
+
+void MainWindow::on_actionBrushSize_triggered()
+{
+	mDia->setModal(true);
+	mDia->exec();
+}
+
+void MainWindow::on_imagetab_currentChanged(int index)
+{
+	ImageWidget* img = getImageWidget();
+	setWindowTitle(img->getFileName());
 }
 
 void MainWindow::on_imagetab_tabCloseRequested(int index)
@@ -202,152 +200,72 @@ void MainWindow::on_imagetab_tabCloseRequested(int index)
 	}
 }
 
-void MainWindow::on_imagetab_currentChanged(int index)
-{
-	// do nothing
-}
-
 void MainWindow::showError(const Exception &e)
 {
 	QMessageBox::critical(0, "Error", e.Message());
 }
 
+void MainWindow::applyFilter(IOperation* operation)
+{
+	try {
+		ImageWidget* img = getImageWidget();
+
+		if (img) {
+			img->applyFilter(operation);
+		}
+	} catch (Exception& e) {
+		showError(e);
+	}
+
+	delete operation;
+}
+
 void MainWindow::on_actionBlur_triggered()
 {
-	try {
-		Blur f;
-		ImageWidget* img = getImageWidget();
-
-		if (img) {
-			img->applyFilter(f);
-		}
-	} catch (Exception&e) {
-		showError(e);
-	}
+	applyFilter(new Blur());
 }
 
-void MainWindow::on_actionGaussian_Blur_triggered()
+void MainWindow::on_actionGaussianBlur_triggered()
 {
-	try {
-		GaussianBlur f;
-		ImageWidget* img = getImageWidget();
-
-		if (img) {
-			img->applyFilter(f);
-		}
-	} catch (Exception&e) {
-		showError(e);
-	}
+	applyFilter(new GaussianBlur());
 }
 
-void MainWindow::on_actionMedian_Blur_triggered()
+void MainWindow::on_actionMedianBlur_triggered()
 {
-	try {
-		MedianBlur f;
-		ImageWidget* img = getImageWidget();
-
-		if (img) {
-			img->applyFilter(f);
-		}
-	} catch (Exception&e) {
-		showError(e);
-	}
+	applyFilter(new MedianBlur());
 }
 
-void MainWindow::on_actionBilateral_Filter_triggered()
+void MainWindow::on_actionBilateralFilter_triggered()
 {
-	try {
-		BilateralFilter f;
-		ImageWidget* img = getImageWidget();
-
-		if (img) {
-			img->applyFilter(f);
-		}
-	} catch (Exception&e) {
-		showError(e);
-	}
-}
-
-void MainWindow::on_actionSobel_triggered()
-{
-	try {
-		Sobel f;
-		ImageWidget* img = getImageWidget();
-
-		if (img) {
-			img->applyFilter(f);
-		}
-	} catch (Exception&e) {
-		showError(e);
-	}
+	applyFilter(new BilateralFilter());
 }
 
 void MainWindow::on_actionEdge_triggered()
 {
-	try {
-		Outline f;
-		ImageWidget* img = getImageWidget();
-
-		if (img) {
-			img->applyFilter(f);
-		}
-	} catch (Exception&e) {
-		showError(e);
-	}
+	applyFilter(new Outline());
 }
 
 void MainWindow::on_actionCanny_triggered()
 {
-	try {
-		Canny f;
-		ImageWidget* img = getImageWidget();
+	applyFilter(new Canny());
+}
 
-		if (img) {
-			img->applyFilter(f);
-		}
-	} catch (Exception&e) {
-		showError(e);
-	}
+void MainWindow::on_actionSobel_triggered()
+{
+	applyFilter(new Sobel());
 }
 
 void MainWindow::on_actionDilation_triggered()
 {
-	try {
-		Dilation f;
-		ImageWidget* img = getImageWidget();
-
-		if (img) {
-			img->applyFilter(f);
-		}
-	} catch (Exception&e) {
-		showError(e);
-	}
+	applyFilter(new Dilation());
 }
 
-void MainWindow::on_actionErotion_triggered()
+void MainWindow::on_actionErosion_triggered()
 {
-	try {
-		Erosion f;
-		ImageWidget* img = getImageWidget();
-
-		if (img) {
-			img->applyFilter(f);
-		}
-	} catch (Exception&e) {
-		showError(e);
-	}
+	applyFilter(new Erosion());
 }
 
 void MainWindow::on_actionGrayscale_triggered()
 {
-	try {
-		Grayscale f;
-		ImageWidget* img = getImageWidget();
-
-		if (img) {
-			img->applyFilter(f);
-		}
-	} catch (Exception&e) {
-		showError(e);
-	}
+	applyFilter(new Grayscale());
 }

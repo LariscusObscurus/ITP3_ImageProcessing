@@ -1,7 +1,7 @@
 // Conversion.cpp
 
-#include "Conversion.h"
-#include "Exception.h"
+#include "Conversion.hpp"
+#include "Exception.hpp"
 
 QImage::Format ConvertCvFormat(int format)
 {

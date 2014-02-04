@@ -1,12 +1,12 @@
 // Dilation.cpp
 
-#include "Dilation.h"
-#include "../Exception.h"
-#include "../Conversion.h"
+#include "Dilation.hpp"
+#include "../Exception.hpp"
+#include "../Conversion.hpp"
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-
-void Dilation::Initialize() { }
+#include <QMap>
+#include <QImage>
 
 void Dilation::Draw(QImage &image, const QMap<QString, QString> &args)
 {
@@ -18,8 +18,6 @@ void Dilation::Draw(QImage &image, const QMap<QString, QString> &args)
 	cv::dilate(mat.clone(), mat, kernel);
 	image = MatToQimage(mat);
 }
-
-void Dilation::Finalize() { }
 
 void Dilation::Arguments(const QMap<QString, QString> &args, int& shape, int& ksize)
 {
@@ -49,4 +47,9 @@ void Dilation::Arguments(const QMap<QString, QString> &args, int& shape, int& ks
 		}
 		ksize = 2 * ksize + 1;
 	}
+}
+
+QString Dilation::GetName() const
+{
+	return "Dilation";
 }

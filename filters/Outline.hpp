@@ -1,18 +1,16 @@
-// Dilation.h
+// Outline.hpp
 
-#ifndef DILATION_H
-#define DILATION_H
+#ifndef OUTLINE_H
+#define OUTLINE_H
 
-#include "../IOperation.h"
+#include "../IOperation.hpp"
 
-class Dilation : public IOperation
+class Outline : public IOperation
 {
 public:
-	Dilation() { }
-	virtual ~Dilation() throw() { }
-	//! keine funktion
-	virtual void Initialize();
-	//! zeichnet einen dilationseffekt
+	Outline() { }
+	virtual ~Outline() throw() { }
+	//! Zeichnet Aussenlinien (Algorithmus muss noch geteset werden)
 	/*!
 	 * \b Argumente:
 	 * - KernelSize: Gibt die Größe der Kernelmatrix an.
@@ -21,16 +19,11 @@ public:
 	 *	-- Rect: Das Strukturelement hat eine Rechtecksanordnung
 	 *	-- Ellipse: Das Strukturelement hat eine elliptische Anordnung
 	 *	-- Cross: Das Strukturelement hat eine Kreuzanordnung
-	 *
-	 * \b Exceptions
-	 * - FormatException
-	 * - ArgumentException
 	 */
 	virtual void Draw(QImage &image, const QMap<QString, QString> &args);
-	//! keine funktion
-	virtual void Finalize();
+	virtual QString GetName() const;
 private:
-	void Arguments(const QMap<QString, QString>& args, int &shape, int &ksize);
+	void Arguments(const QMap<QString, QString>& args, int &shape, int &size);
 };
 
-#endif // DILATION_H
+#endif // OUTLINE_H

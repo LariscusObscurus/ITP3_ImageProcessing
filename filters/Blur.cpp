@@ -1,12 +1,12 @@
 // Blur.cpp
 
-#include "Blur.h"
-#include "../Conversion.h"
-#include "../Exception.h"
+#include "Blur.hpp"
+#include "../Conversion.hpp"
+#include "../Exception.hpp"
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-
-void Blur::Initialize() { }
+#include <QMap>
+#include <QImage>
 
 void Blur::Draw(QImage &image, const QMap<QString, QString> &args)
 {
@@ -28,4 +28,7 @@ void Blur::Draw(QImage &image, const QMap<QString, QString> &args)
 	image = MatToQimage(mat);
 }
 
-void Blur::Finalize() { }
+QString Blur::GetName() const
+{
+	return "Blur";
+}

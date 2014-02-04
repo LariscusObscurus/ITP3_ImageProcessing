@@ -1,9 +1,9 @@
-// Blur.h
+// Blur.hpp
 
 #ifndef BLUR_H
 #define BLUR_H
 
-#include "../IOperation.h"
+#include "../IOperation.hpp"
 
 class Blur : public IOperation
 {
@@ -12,8 +12,6 @@ public:
 	Blur() { }
 	//! Default destructor
 	virtual ~Blur() throw() { }
-	//! keine funktion
-	virtual void Initialize();
 	//! zeichnet "homogeneous blur"
 	/*!
 	 * \b Argumente:
@@ -23,8 +21,7 @@ public:
 	 * - FormatException
 	 */
 	virtual void Draw(QImage &image, const QMap<QString, QString> &args);
-	//! keine funktion
-	virtual void Finalize();
+	virtual QString GetName() const;
 };
 
 #endif // BLUR_H

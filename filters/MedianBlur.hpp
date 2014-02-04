@@ -1,17 +1,15 @@
-// MedianBlur.h
+// MedianBlur.hpp
 
 #ifndef MEDIANBLUR_H
 #define MEDIANBLUR_H
 
-#include "../IOperation.h"
+#include "../IOperation.hpp"
 
 class MedianBlur : public IOperation
 {
 public:
 	MedianBlur() { }
 	virtual ~MedianBlur() throw() { }
-	//! keine funktion
-	virtual void Initialize();
 	//! zeichnet "median blur"
 	/*!
 	 * \b Argumente:
@@ -23,8 +21,7 @@ public:
 	 * - ArgumentException
 	 */
 	virtual void Draw(QImage &image, const QMap<QString, QString> &args);
-	//! keine funktion
-	virtual void Finalize();
+	virtual QString GetName() const;
 };
 
 #endif // MEDIANBLUR_H

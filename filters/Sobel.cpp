@@ -1,14 +1,14 @@
 // Sobel.cpp
 
-#include "Sobel.h"
-#include "../Conversion.h"
-#include "../Exception.h"
-#include "Grayscale.h"
-#include "GaussianBlur.h"
+#include "Sobel.hpp"
+#include "../Conversion.hpp"
+#include "../Exception.hpp"
+#include "Grayscale.hpp"
+#include "GaussianBlur.hpp"
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-
-void Sobel::Initialize() { }
+#include <QMap>
+#include <QImage>
 
 void Sobel::Draw(QImage &image, const QMap<QString, QString> &args)
 {
@@ -27,8 +27,6 @@ void Sobel::Draw(QImage &image, const QMap<QString, QString> &args)
 	grad.convertTo(result, CV_8U);
 	image = MatToQimage(result);
 }
-
-void Sobel::Finalize() { }
 
 void Sobel::SetupOperation(QImage& image, QMap<QString, QString> args, int ksize)
 {
@@ -49,4 +47,9 @@ void Sobel::SetupOperation(QImage& image, QMap<QString, QString> args, int ksize
 	}
 	gauss.Draw(image, args);
 	//gray.Draw(image, args);
+}
+
+QString Sobel::GetName() const
+{
+	return "Sobel";
 }

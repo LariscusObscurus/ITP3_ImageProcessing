@@ -1,6 +1,6 @@
-// TestFilter.h
+// TestFilter.hpp
 
-#include "../IOperation.h"
+#include "../IOperation.hpp"
 
 //! Dieser Filter hat keine direkte Bildoperation, er gibt lediglich Debugdaten aus.
 class TestFilter : public IOperation
@@ -8,7 +8,6 @@ class TestFilter : public IOperation
 public:
 	TestFilter() { }
 	virtual ~TestFilter() throw() { }
-	virtual void Initialize();
 	virtual void Draw(QImage& image, const QMap<QString, QString>& args);
-	virtual void Finalize();
+	virtual QString GetName() const;
 };

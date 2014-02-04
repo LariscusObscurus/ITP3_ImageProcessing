@@ -1,4 +1,4 @@
-#include "ueberdialog.h"
+#include "ueberdialog.hpp"
 #include "ui_ueberdialog.h"
 
 Ueberdialog::Ueberdialog(QWidget *parent) :

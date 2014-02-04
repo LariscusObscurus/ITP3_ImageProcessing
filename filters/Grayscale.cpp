@@ -1,12 +1,12 @@
 // Grayscale.cpp
 
-#include "Grayscale.h"
-#include "../Exception.h"
-#include "../Conversion.h"
+#include "Grayscale.hpp"
+#include "../Exception.hpp"
+#include "../Conversion.hpp"
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-
-void Grayscale::Initialize() { }
+#include <QMap>
+#include <QImage>
 
 void Grayscale::Draw(QImage &image, const QMap<QString, QString> &args)
 {
@@ -15,4 +15,7 @@ void Grayscale::Draw(QImage &image, const QMap<QString, QString> &args)
 	image = MatToQimage(mat);
 }
 
-void Grayscale::Finalize() { }
+QString Grayscale::GetName() const
+{
+	return "Grayscale";
+}

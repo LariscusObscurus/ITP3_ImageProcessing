@@ -1,6 +1,6 @@
 #include <QPalette>
 #include <QColorDialog>
-#include "colordisplaywidget.h"
+#include "colordisplaywidget.hpp"
 
 ColorDisplayWidget::ColorDisplayWidget(QWidget *parent) :
 	QWidget(parent),
@@ -24,7 +24,7 @@ void ColorDisplayWidget::mousePressEvent(QMouseEvent *)
 {
 	QColorDialog colDia;
 	QColor color =  colDia.getColor(Qt::white,this,tr("Farbe auswählen"),QColorDialog::ShowAlphaChannel);
-	//color.setAlpha(0x80);
+
 	if(color.isValid()) {
 		m_selectedColor = color;
 		drawColor();

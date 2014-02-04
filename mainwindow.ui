@@ -189,7 +189,7 @@
         </property>
        </widget>
       </widget>
-      <widget class="QPushButton" name="btnBrush">
+      <widget class="QPushButton" name="btnPencil">
        <property name="geometry">
         <rect>
          <x>17</x>
@@ -215,42 +215,7 @@
        </property>
        <property name="icon">
         <iconset resource="Icons.qrc">
-         <normaloff>:/Images/icons/brush.png</normaloff>:/Images/icons/brush.png</iconset>
-       </property>
-       <property name="iconSize">
-        <size>
-         <width>42</width>
-         <height>32</height>
-        </size>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="btnTest">
-       <property name="geometry">
-        <rect>
-         <x>17</x>
-         <y>94</y>
-         <width>46</width>
-         <height>46</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">QPushButton {
-     border: 1px solid #2E2E2E;
-	 border-radius: 4px;
-     background-color: #52524f;
- }
-
- QPushButton:pressed {
-      border: 1px solid #007acc;
-      background-color: #52524f;
- }</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset resource="Icons.qrc">
-         <normaloff>:/Images/icons/brush.png</normaloff>:/Images/icons/brush.png</iconset>
+         <normaloff>:/Images/icons/Pencil-icon.png</normaloff>:/Images/icons/Pencil-icon.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -373,30 +338,31 @@ margin-top: 3px; /* make non-selected tabs look smaller */
    </property>
    <widget class="QMenu" name="menuTest">
     <property name="title">
-     <string>Datei</string>
+     <string>File</string>
     </property>
-    <addaction name="actionNeu"/>
-    <addaction name="action_ffnen"/>
+    <addaction name="actionNew"/>
+    <addaction name="actionOpen"/>
     <addaction name="separator"/>
-    <addaction name="actionSpeichern"/>
-    <addaction name="actionSpeichern_unter"/>
+    <addaction name="actionSave"/>
+    <addaction name="actionSaveAs"/>
     <addaction name="separator"/>
-    <addaction name="actionDrucken"/>
-    <addaction name="separator"/>
-    <addaction name="actionBeenden"/>
+    <addaction name="actionClose"/>
+    <addaction name="actionClose_All"/>
+    <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuBearbeiten">
     <property name="title">
-     <string>Bearbeiten</string>
+     <string>Edit</string>
     </property>
-    <addaction name="actionR_ckg_ngig"/>
-    <addaction name="actionWiederherstellen"/>
-    <addaction name="actionZur_cksetzen"/>
+    <addaction name="actionUndo"/>
+    <addaction name="actionRedo"/>
+    <addaction name="actionUndoHistory"/>
+    <addaction name="actionResetImage"/>
     <addaction name="separator"/>
-    <addaction name="actionKopieren"/>
-    <addaction name="actionEinf_gen"/>
-    <addaction name="actionL_schen"/>
-    <addaction name="actionPinsel_gr_e"/>
+    <addaction name="actionCopy"/>
+    <addaction name="actionPaste"/>
+    <addaction name="actionCut"/>
+    <addaction name="actionBrushSize"/>
    </widget>
    <widget class="QMenu" name="menuFilter">
     <property name="title">
@@ -407,24 +373,24 @@ margin-top: 3px; /* make non-selected tabs look smaller */
       <string>Blur</string>
      </property>
      <addaction name="actionBlur"/>
-     <addaction name="actionGaussian_Blur"/>
-     <addaction name="actionMedian_Blur"/>
-     <addaction name="actionBilateral_Filter"/>
+     <addaction name="actionGaussianBlur"/>
+     <addaction name="actionMedianBlur"/>
+     <addaction name="actionBilateralFilter"/>
     </widget>
     <widget class="QMenu" name="menuEdge_Detection">
      <property name="title">
-      <string>Edge-Detection</string>
+      <string>Edge Detection</string>
      </property>
-     <addaction name="actionSobel"/>
      <addaction name="actionEdge"/>
      <addaction name="actionCanny"/>
+     <addaction name="actionSobel"/>
     </widget>
     <widget class="QMenu" name="menuArtistic">
      <property name="title">
       <string>Artistic</string>
      </property>
      <addaction name="actionDilation"/>
-     <addaction name="actionErotion"/>
+     <addaction name="actionErosion"/>
     </widget>
     <widget class="QMenu" name="menuColor">
      <property name="title">
@@ -439,90 +405,143 @@ margin-top: 3px; /* make non-selected tabs look smaller */
    </widget>
    <widget class="QMenu" name="menuHilfe">
     <property name="title">
-     <string>Hilfe</string>
+     <string>Help</string>
     </property>
-    <addaction name="actionHilfe"/>
+    <addaction name="actionHelp"/>
     <addaction name="separator"/>
-    <addaction name="action_ber"/>
+    <addaction name="actionAbout"/>
    </widget>
    <addaction name="menuTest"/>
    <addaction name="menuBearbeiten"/>
    <addaction name="menuFilter"/>
    <addaction name="menuHilfe"/>
   </widget>
-  <action name="actionNeu">
+  <action name="actionNew">
    <property name="text">
-    <string>Neu</string>
+    <string>New</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
    </property>
   </action>
-  <action name="action_ffnen">
+  <action name="actionOpen">
    <property name="text">
-    <string>Öffnen</string>
+    <string>Open</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
    </property>
   </action>
-  <action name="actionSpeichern">
+  <action name="actionSave">
    <property name="text">
-    <string>Speichern</string>
+    <string>Save</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
-  <action name="actionSpeichern_unter">
+  <action name="actionSaveAs">
    <property name="text">
-    <string>Speichern unter ...</string>
+    <string>Save As ...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
    </property>
   </action>
-  <action name="actionKopieren">
+  <action name="actionCopy">
    <property name="text">
-    <string>Kopieren</string>
+    <string>Copy</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
    </property>
   </action>
-  <action name="actionEinf_gen">
+  <action name="actionPaste">
    <property name="text">
-    <string>Einfügen</string>
+    <string>Paste</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
    </property>
   </action>
-  <action name="action_ber">
+  <action name="actionAbout">
    <property name="text">
-    <string>Über ...</string>
+    <string>About</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
    </property>
   </action>
-  <action name="actionHilfe">
+  <action name="actionHelp">
    <property name="text">
-    <string>Hilfe</string>
+    <string>Help</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+H</string>
    </property>
   </action>
-  <action name="actionBeenden">
+  <action name="actionClose">
    <property name="text">
-    <string>Beenden</string>
+    <string>Close</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
    </property>
   </action>
-  <action name="actionDrucken">
+  <action name="actionUndo">
    <property name="text">
-    <string>Drucken</string>
+    <string>Undo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
    </property>
   </action>
-  <action name="actionR_ckg_ngig">
+  <action name="actionRedo">
    <property name="text">
-    <string>Rückgängig</string>
+    <string>Redo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
    </property>
   </action>
-  <action name="actionWiederherstellen">
+  <action name="actionCut">
    <property name="text">
-    <string>Wiederherstellen</string>
+    <string>Cut</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
    </property>
   </action>
-  <action name="actionL_schen">
+  <action name="actionUndoHistory">
    <property name="text">
-    <string>Ausschneiden</string>
+    <string>Undo History</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+Z</string>
    </property>
   </action>
-  <action name="actionZur_cksetzen">
+  <action name="actionBrushSize">
    <property name="text">
-    <string>Zurücksetzen</string>
+    <string>Brush Size</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
    </property>
   </action>
-  <action name="actionPinsel_gr_e">
+  <action name="actionClose_All">
    <property name="text">
-    <string>Pinsel größe</string>
+    <string>Close All</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+W</string>
+   </property>
+  </action>
+  <action name="actionQuit">
+   <property name="text">
+    <string>Quit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
    </property>
   </action>
   <action name="actionBlur">
@@ -530,24 +549,19 @@ margin-top: 3px; /* make non-selected tabs look smaller */
     <string>Blur</string>
    </property>
   </action>
-  <action name="actionGaussian_Blur">
+  <action name="actionGaussianBlur">
    <property name="text">
     <string>Gaussian Blur</string>
    </property>
   </action>
-  <action name="actionMedian_Blur">
+  <action name="actionMedianBlur">
    <property name="text">
     <string>Median Blur</string>
    </property>
   </action>
-  <action name="actionBilateral_Filter">
+  <action name="actionBilateralFilter">
    <property name="text">
     <string>Bilateral Filter</string>
-   </property>
-  </action>
-  <action name="actionSobel">
-   <property name="text">
-    <string>Sobel</string>
    </property>
   </action>
   <action name="actionEdge">
@@ -560,14 +574,19 @@ margin-top: 3px; /* make non-selected tabs look smaller */
     <string>Canny</string>
    </property>
   </action>
+  <action name="actionSobel">
+   <property name="text">
+    <string>Sobel</string>
+   </property>
+  </action>
   <action name="actionDilation">
    <property name="text">
     <string>Dilation</string>
    </property>
   </action>
-  <action name="actionErotion">
+  <action name="actionErosion">
    <property name="text">
-    <string>Erotion</string>
+    <string>Erosion</string>
    </property>
   </action>
   <action name="actionGrayscale">
@@ -575,19 +594,23 @@ margin-top: 3px; /* make non-selected tabs look smaller */
     <string>Grayscale</string>
    </property>
   </action>
+  <action name="actionResetImage">
+   <property name="text">
+    <string>Reset Image</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
    <class>ColorDisplayWidget</class>
    <extends>QWidget</extends>
-   <header>colordisplaywidget.h</header>
+   <header>colordisplaywidget.hpp</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>imagetab</tabstop>
-  <tabstop>btnBrush</tabstop>
-  <tabstop>btnTest</tabstop>
+  <tabstop>btnPencil</tabstop>
  </tabstops>
  <resources>
   <include location="Icons.qrc"/>

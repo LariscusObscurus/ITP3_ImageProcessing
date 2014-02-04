@@ -1,12 +1,12 @@
 // MedianBlur.cpp
 
-#include "MedianBlur.h"
-#include "../Conversion.h"
-#include "../Exception.h"
+#include "MedianBlur.hpp"
+#include "../Conversion.hpp"
+#include "../Exception.hpp"
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-
-void MedianBlur::Initialize() { }
+#include <QMap>
+#include <QImage>
 
 void MedianBlur::Draw(QImage &image, const QMap<QString, QString> &args)
 {
@@ -30,4 +30,7 @@ void MedianBlur::Draw(QImage &image, const QMap<QString, QString> &args)
 	image = MatToQimage(mat);
 }
 
-void MedianBlur::Finalize() { }
+QString MedianBlur::GetName() const
+{
+	return "Median Blur";
+}

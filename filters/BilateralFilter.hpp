@@ -1,9 +1,9 @@
-// BilateralFilter.h
+// BilateralFilter.hpp
 
 #ifndef BILATERALFILTER_H
 #define BILATERALFILTER_H
 
-#include "../IOperation.h"
+#include "../IOperation.hpp"
 namespace cv {
 	class Mat;
 }
@@ -13,8 +13,6 @@ class BilateralFilter : public IOperation
 public:
 	BilateralFilter() { }
 	virtual ~BilateralFilter() throw() { }
-	//! keine funktion
-	virtual void Initialize();
 	//! zeichnet "bilateral filter"
 	/*!
 	 * Folgende Argumente werden agenommen:
@@ -31,8 +29,7 @@ public:
 	 * - ArgumentException
 	 */
 	virtual void Draw(QImage &image, const QMap<QString, QString> &args);
-	//! keine funktion
-	virtual void Finalize();
+	virtual QString GetName() const;
 private:
 	void Arguments(const QMap<QString, QString> &args, int& d, double& sigmaColor, double& sigmaSpace);
 	cv::Mat QimageRgb32ToMat24(QImage& img);

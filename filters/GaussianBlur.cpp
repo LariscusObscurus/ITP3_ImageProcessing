@@ -1,12 +1,12 @@
 // GaussianBlur.cpp
 
-#include "GaussianBlur.h"
-#include "../Conversion.h"
-#include "../Exception.h"
+#include "GaussianBlur.hpp"
+#include "../Conversion.hpp"
+#include "../Exception.hpp"
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-
-void GaussianBlur::Initialize() { }
+#include <QMap>
+#include <QImage>
 
 void GaussianBlur::Draw(QImage &image, const QMap<QString, QString> &args)
 {
@@ -17,8 +17,6 @@ void GaussianBlur::Draw(QImage &image, const QMap<QString, QString> &args)
 	cv::GaussianBlur(mat.clone(), mat, cv::Size(ksize, ksize), sigma);
 	image = MatToQimage(mat);
 }
-
-void GaussianBlur::Finalize() { }
 
 void GaussianBlur::Arguments(const QMap<QString, QString> &args, int &ksize, double &sigma)
 {
@@ -46,4 +44,9 @@ void GaussianBlur::Arguments(const QMap<QString, QString> &args, int &ksize, dou
 			throw ArgumentException("\"Sigma\" argument for gaussian blur must be positive");
 		}
 	}
+}
+
+QString GaussianBlur::GetName() const
+{
+	return "Gaussian Blur";
 }

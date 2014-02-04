@@ -1,19 +1,18 @@
 // TestFilter.cpp
 
-#include "TestFilter.h"
+#include "TestFilter.hpp"
+#include "../Exception.hpp"
 #include <QDebug>
-
-void TestFilter::Initialize()
-{
-	qDebug() << "Initialize TestFilter";
-}
+#include <QMap>
+#include <QImage>
 
 void TestFilter::Draw(QImage &image, const QMap<QString, QString> &args)
 {
 	qDebug() << "Draw TestFilter";
+	throw Exception("Test Exception");
 }
 
-void TestFilter::Finalize()
+QString TestFilter::GetName() const
 {
-	qDebug() << "Finalize TestFilter";
+	return "Test Filter";
 }

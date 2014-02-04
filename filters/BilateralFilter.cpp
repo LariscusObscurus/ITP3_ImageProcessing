@@ -1,12 +1,12 @@
 // BilateralFilter.cpp
 
-#include "BilateralFilter.h"
-#include "../Conversion.h"
-#include "../Exception.h"
+#include "BilateralFilter.hpp"
+#include "../Conversion.hpp"
+#include "../Exception.hpp"
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-
-void BilateralFilter::Initialize() { }
+#include <QMap>
+#include <QImage>
 
 void BilateralFilter::Draw(QImage &image, const QMap<QString, QString> &args)
 {
@@ -28,8 +28,6 @@ void BilateralFilter::Draw(QImage &image, const QMap<QString, QString> &args)
 	cv::bilateralFilter(mat.clone(), mat, d, sigmaColor, sigmaSpace);
 	image = MatToQimage(mat);
 }
-
-void BilateralFilter::Finalize() { }
 
 void BilateralFilter::Arguments(const QMap<QString, QString> &args, int &d, double &sigmaColor, double &sigmaSpace)
 {
@@ -58,6 +56,11 @@ void BilateralFilter::Arguments(const QMap<QString, QString> &args, int &d, doub
 			throw FormatException("couldn't convert \"SigmaSpace\" argument for bilateral filter");
 		}
 	}
+}
+
+QString BilateralFilter::GetName() const
+{
+	return "Bilateral Filter";
 }
 
 cv::Mat BilateralFilter::QimageRgb32ToMat24(QImage &img)

@@ -1,4 +1,4 @@
-#include "sizedialogue.h"
+#include "sizedialogue.hpp"
 #include "ui_sizedialogue.h"
 
 SizeDialogue::SizeDialogue(QWidget *parent) :

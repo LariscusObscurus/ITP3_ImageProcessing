@@ -1,13 +1,13 @@
 // Canny.cpp
 
-#include "Canny.h"
-#include "../Conversion.h"
-#include "../Exception.h"
-#include "Blur.h"
+#include "Canny.hpp"
+#include "../Conversion.hpp"
+#include "../Exception.hpp"
+#include "Blur.hpp"
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-
-void Canny::Initialize() { }
+#include <QMap>
+#include <QImage>
 
 void Canny::Draw(QImage &image, const QMap<QString, QString> &args)
 {
@@ -20,8 +20,6 @@ void Canny::Draw(QImage &image, const QMap<QString, QString> &args)
 	cv::Canny(mat.clone(), mat, threshold, threshold * 3, ksize);
 	image = MatToQimage(mat);
 }
-
-void Canny::Finalize() { }
 
 void Canny::Arguments(const QMap<QString, QString>& args, int& ksize, int& threshold)
 {
@@ -49,4 +47,9 @@ void Canny::Arguments(const QMap<QString, QString>& args, int& ksize, int& thres
 			throw ArgumentException("\"Threshold\" argument for gaussian blur must be positive");
 		}
 	}
+}
+
+QString Canny::GetName() const
+{
+	return "Canny";
 }

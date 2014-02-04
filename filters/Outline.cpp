@@ -1,12 +1,12 @@
 // Outline.cpp
 
-#include "Outline.h"
-#include "../Exception.h"
-#include "../Conversion.h"
+#include "Outline.hpp"
+#include "../Exception.hpp"
+#include "../Conversion.hpp"
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-
-void Outline::Initialize() { }
+#include <QMap>
+#include <QImage>
 
 void Outline::Draw(QImage &image, const QMap<QString, QString> &args)
 {
@@ -19,8 +19,6 @@ void Outline::Draw(QImage &image, const QMap<QString, QString> &args)
 	cv::morphologyEx(mat.clone(), mat, op, kernel);
 	image = MatToQimage(mat);
 }
-
-void Outline::Finalize() { }
 
 void Outline::Arguments(const QMap<QString, QString> &args, int &shape, int &ksize)
 {
@@ -50,4 +48,9 @@ void Outline::Arguments(const QMap<QString, QString> &args, int &shape, int &ksi
 		}
 		ksize = 2 * ksize + 1;
 	}
+}
+
+QString Outline::GetName() const
+{
+	return "Edge";
 }

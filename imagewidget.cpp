@@ -1,34 +1,43 @@
 #include <QPainter>
-#include "imagewidget.h"
-#include"IOperation.h"
+#include <QDebug>
+#include "imagewidget.hpp"
+#include "IOperation.hpp"
+#include "Utility.hpp"
+#include "Exception.hpp"
 
 ImageWidget::ImageWidget(QWidget *parent) :
 	QWidget(parent),
 	m_penColor(Qt::black),
 	m_drawing(false),
 	m_undoBuffer(20),
+	m_redoBuffer(20),
 	m_pen(m_penColor, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin),
 	m_penWidth(2),
 	m_penStyle(solid),
-	m_fileName("")
+	m_fileName(""),
+	m_imageChanged(""),
+	m_fileNameNoPath("")
 {
 	setAttribute(Qt::WA_StaticContents);
-
 }
 
 bool ImageWidget::openImage(const QString &fileName)
 {
 	QImage loadedImage;
+
 	if(!loadedImage.load(fileName)) {
 		return false;
 	}
+
 	QSize imageSize = loadedImage.size();
-	this->resize(imageSize);
+	resize(imageSize);
 	loadedImage.convertToFormat(QImage::Format_ARGB32);
 	m_image = m_original = loadedImage;
 	m_fileName = fileName;
+	m_fileNameNoPath = ExtractFileName(fileName);
 	drawImage();
 	update();
+
 	return true;
 }
 
@@ -41,11 +50,13 @@ bool ImageWidget::saveImage()
 		ext = splitedFile.last();
 	}
 
+	m_imageChanged = "";
 	return (m_image.save(m_fileName, ext.toLatin1()));
 }
 
 bool ImageWidget::saveImage(const QString &fileName, const char *fileFormat)
 {
+	m_imageChanged = "";
 	return (m_image.save(fileName, fileFormat));
 }
 
@@ -70,11 +81,11 @@ void ImageWidget::setPenStyle(PenStyle style)
 	m_penStyle = style;
 }
 
-void ImageWidget::applyFilter(IOperation& filter)
+void ImageWidget::applyFilter(IOperation* filter)
 {
 	m_undoBuffer.push(m_image.copy());
 	QMap<QString, QString> arg;
-	filter.Draw(m_image, arg);
+	filter->Draw(m_image, arg);
 	update();
 
 }
@@ -82,9 +93,13 @@ void ImageWidget::applyFilter(IOperation& filter)
 bool ImageWidget::undo()
 {
 	QImage old = m_undoBuffer.pop();
-	if(old.isNull()) {
+
+	if (!old.isNull()) {
+		m_redoBuffer.push(m_image.copy());
+	} else {
 		return false;
 	}
+
 	m_image = old;
 	update();
 	return true;
@@ -92,7 +107,34 @@ bool ImageWidget::undo()
 
 bool ImageWidget::redo()
 {
-	return false;
+	QImage redo = m_redoBuffer.pop();
+
+	if (redo.isNull()) {
+		return false;
+	}
+
+	m_undoBuffer.push(m_image.copy());
+	m_image = redo;
+	update();
+	return true;
+}
+
+void ImageWidget::undoHistory()
+{
+	m_redoBuffer.push(m_image.copy());
+
+	while (true) {
+		QImage current = m_undoBuffer.pop();
+
+		if (!current.isNull()) {
+			m_redoBuffer.push(current.copy());
+		} else {
+			m_image = m_redoBuffer.pop();
+			break;
+		}
+	}
+
+	update();
 }
 
 void ImageWidget::resetImage()
@@ -108,11 +150,19 @@ void ImageWidget::clearImage()
 	update();
 }
 
+QString ImageWidget::getFileName() const
+{
+	return m_fileNameNoPath + m_imageChanged;
+}
+
 void ImageWidget::mousePressEvent(QMouseEvent *event)
 {
-	m_undoBuffer.push(m_image.copy());
+
 	if (event->button() == Qt::LeftButton) {
+		m_imageChanged = "*";
+		m_undoBuffer.push(m_image.copy());
 		m_lastPoint = event->pos();
+		m_redoBuffer.clear();
 		m_drawing = true;
 	}
 }

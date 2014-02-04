@@ -1,17 +1,15 @@
-// GaussianBlur.h
+// GaussianBlur.hpp
 
 #ifndef GAUSSIANBLUR_H
 #define GAUSSIANBLUR_H
 
-#include "../IOperation.h"
+#include "../IOperation.hpp"
 
 class GaussianBlur : public IOperation
 {
 public:
 	GaussianBlur() { }
 	virtual ~GaussianBlur() throw() { }
-	//! keine funktion
-	virtual void Initialize();
 	//! zeichnet "gaussian blur"
 	/*!
 	 * \b Argumente:
@@ -25,8 +23,7 @@ public:
 	 * - ArgumentException
 	 */
 	virtual void Draw(QImage &image, const QMap<QString, QString> &args);
-	//! keine funktion
-	virtual void Finalize();
+	virtual QString GetName() const;
 private:
 	void Arguments(const QMap<QString, QString> &args, int& ksize, double& sigma);
 };
