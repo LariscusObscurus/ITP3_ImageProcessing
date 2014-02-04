@@ -26,7 +26,6 @@
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
 #include "ueberdialog.hpp"
-#include "imagewidget.hpp"
 #include "filters/BilateralFilter.hpp"
 #include "filters/Blur.hpp"
 #include "filters/Dilation.hpp"
@@ -39,23 +38,44 @@
 #include "filters/Canny.hpp"
 #include "Exception.hpp"
 #include "Utility.hpp"
+#include "InputManager.hpp"
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow),
-	mDia(new SizeDialogue)
+	mDia(new SizeDialogue),
+	mInputManager(new InputManager()),
+	mDummyImage(new ImageWidget())
 {
 	ui->setupUi(this);
-	//connect(ui->actionClose, SIGNAL(triggered()), this, SLOT(close()));
 	setWindowTitle("Image Processing");
+
 	ui->ColorPickerFront->setColor(Qt::black);
 	ui->ColorPickerBack->setColor(Qt::white);
+
+	// Mouse Tracking standardmäßig deaktivieren
+	setMouseTracking(false);
+
+	connectSignals();
 }
 
 MainWindow::~MainWindow()
 {
+	delete mDummyImage;
+	delete mInputManager;
 	delete mDia;
 	delete ui;
+}
+
+void MainWindow::connectSignals()
+{
+	// DummyImage
+	connect(ui->ColorPickerFront, SIGNAL(colorChanged(QColor)), mDummyImage, SLOT(setPenColor(QColor)));
+	connect(this, SIGNAL(toolChanged(Tool)), mDummyImage, SLOT(toolChanged(Tool)));
+	connect(mDia, SIGNAL(sizeChanged(int)), mDummyImage, SLOT(setPenWidth(int)));
+
+	// close
+	//connect(ui->actionClose, SIGNAL(triggered()), this, SLOT(close()));
 }
 
 void MainWindow::on_actionOpen_triggered()
@@ -112,6 +132,7 @@ void MainWindow::openImage(const QString &fileName)
 
 		// schließlich Signalhandler setzen
 		connect(ui->ColorPickerFront, SIGNAL(colorChanged(QColor)), img, SLOT(setPenColor(QColor)));
+		connect(this, SIGNAL(toolChanged(Tool)), img, SLOT(toolChanged(Tool)));
 		connect(mDia, SIGNAL(sizeChanged(int)), img, SLOT(setPenWidth(int)));
 		img->setPenColor(ui->ColorPickerFront->getColor());
 	}
@@ -220,12 +241,72 @@ void MainWindow::on_actionResetImage_triggered()
 
 void MainWindow::on_btnPencil_clicked()
 {
-	ImageWidget* img = getImageWidget();
+	emit toolChanged(Tool::Pencil);
+}
 
-	if (img) {
-		img->setPenStyle(ImageWidget::solid);
-		ui->statusbar->showMessage("Pencil selected", 2000);
-	}
+void MainWindow::on_btnBrush_clicked()
+{
+	emit toolChanged(Tool::Brush);
+}
+
+void MainWindow::on_btnEraser_clicked()
+{
+	emit toolChanged(Tool::Eraser);
+}
+
+void MainWindow::on_btnMagicWand_clicked()
+{
+	emit toolChanged(Tool::MagicWand);
+}
+
+void MainWindow::on_btnMagnifier_clicked()
+{
+	emit toolChanged(Tool::Magnifiere);
+}
+
+void MainWindow::on_btnFloodFill_clicked()
+{
+	emit toolChanged(Tool::FloodFill);
+}
+
+void MainWindow::on_btnCrop_clicked()
+{
+	emit toolChanged(Tool::Crop);
+}
+
+void MainWindow::on_btnStamp_clicked()
+{
+	emit toolChanged(Tool::Stamp);
+}
+
+void MainWindow::on_btnGeometry_clicked()
+{
+	emit toolChanged(Tool::Geometry);
+}
+
+void MainWindow::on_btnText_clicked()
+{
+	emit toolChanged(Tool::Text);
+}
+
+void MainWindow::on_btnSprayCan_clicked()
+{
+	emit toolChanged(Tool::SprayCan);
+}
+
+void MainWindow::on_btnInk_clicked()
+{
+	emit toolChanged(Tool::Ink);
+}
+
+void MainWindow::on_btnAirbrush_clicked()
+{
+	emit toolChanged(Tool::Airbrush);
+}
+
+void MainWindow::on_btnEyedropper_clicked()
+{
+	emit toolChanged(Tool::EyeDropper);
 }
 
 void MainWindow::on_actionBrushSize_triggered()
@@ -274,6 +355,62 @@ void MainWindow::applyFilter(IOperation* operation)
 	}
 
 	delete operation;
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *e)
+{
+	// Basis Event
+	QMainWindow::keyPressEvent(e);
+	// Eventlogik
+	mInputManager->KeyPressEvent(e);
+}
+
+void MainWindow::keyReleasedEvent(QKeyEvent *e)
+{
+	// Basis Event
+	QMainWindow::keyReleaseEvent(e);
+	// Eventlogik
+	mInputManager->KeyReleaseEvent(e);
+}
+
+void MainWindow::mousePressEvent(QMouseEvent *e)
+{
+	// Basis Event
+	QMainWindow::mousePressEvent(e);
+	// Eventlogik
+	mInputManager->MousePressEvent(e);
+}
+
+void MainWindow::mouseReleaseEvent(QMouseEvent *e)
+{
+	// Basis Event
+	QMainWindow::mouseReleaseEvent(e);
+	// Eventlogik
+	mInputManager->MouseReleaseEvent(e);
+}
+
+void MainWindow::mouseDoubleClickEvent(QMouseEvent *e)
+{
+	// Basis Event
+	QMainWindow::mouseDoubleClickEvent(e);
+	// Eventlogik
+	mInputManager->MouseDoubleClickEvent(e);
+}
+
+void MainWindow::mouseMoveEvent(QMouseEvent *e)
+{
+	// Basis Event
+	QMainWindow::mouseMoveEvent(e);
+	// Eventlogik
+	mInputManager->MouseMoveEvent(e);
+}
+
+void MainWindow::wheelEvent(QWheelEvent *e)
+{
+	// Basis Event
+	QMainWindow::wheelEvent(e);
+	// Eventlogik
+	mInputManager->MouseWheelEvent(e);
 }
 
 void MainWindow::on_actionBlur_triggered()

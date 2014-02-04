@@ -10,13 +10,13 @@
     <x>0</x>
     <y>0</y>
     <width>640</width>
-    <height>620</height>
+    <height>640</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>640</width>
-    <height>620</height>
+    <height>640</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -1075,12 +1075,12 @@ QTabBar::tab:!selected {
      <string>Color</string>
     </property>
     <addaction name="actionGrayscale"/>
-    <addaction name="actionBalance"/>
+    <addaction name="actionColorize"/>
     <addaction name="actionSaturation"/>
     <addaction name="actionBrightness"/>
     <addaction name="actionContrast"/>
     <addaction name="actionDisaturate"/>
-    <addaction name="actionColorize"/>
+    <addaction name="actionBalance"/>
     <addaction name="actionHistogram"/>
     <addaction name="actionInvertColor"/>
    </widget>
@@ -1306,9 +1306,9 @@ QTabBar::tab:!selected {
     <string>Grayscale</string>
    </property>
   </action>
-  <action name="actionBalance">
+  <action name="actionColorize">
    <property name="text">
-    <string>Balance</string>
+    <string>Colorize</string>
    </property>
   </action>
   <action name="actionSaturation">
@@ -1331,9 +1331,9 @@ QTabBar::tab:!selected {
     <string>Disaturate</string>
    </property>
   </action>
-  <action name="actionColorize">
+  <action name="actionBalance">
    <property name="text">
-    <string>Colorize</string>
+    <string>Balance</string>
    </property>
   </action>
   <action name="actionHistogram">

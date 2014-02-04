@@ -13,7 +13,7 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-	mainwindow.cpp \
+    mainwindow.cpp \
     ueberdialog.cpp \
     Conversion.cpp \
     imagewidget.cpp \
@@ -30,7 +30,8 @@ SOURCES += main.cpp\
     filters/Outline.cpp \
     filters/Sobel.cpp \
     filters/TestFilter.cpp \
-    Utility.cpp
+    Utility.cpp \
+    InputManager.cpp
 
 HEADERS  += \
     colordisplaywidget.hpp \
@@ -53,7 +54,8 @@ HEADERS  += \
     filters/Outline.hpp \
     filters/Sobel.hpp \
     filters/TestFilter.hpp \
-    Utility.hpp
+    Utility.hpp \
+    InputManager.hpp
 
 FORMS    += mainwindow.ui \
     ueberdialog.ui \

@@ -26,6 +26,7 @@
 #include <QString>
 #include <QAction>
 #include "sizedialogue.hpp"
+#include "imagewidget.hpp"
 
 namespace Ui {
 class MainWindow;
@@ -36,6 +37,7 @@ class QHash;
 class IOperation;
 class ImageWidget;
 class Exception;
+class InputManager;
 
 class MainWindow : public QMainWindow
 {
@@ -44,6 +46,9 @@ class MainWindow : public QMainWindow
 public:
 	explicit MainWindow(QWidget *parent = 0);
 	~MainWindow();
+
+signals:
+	void toolChanged(Tool);
 
 private slots:
 	void on_actionOpen_triggered();
@@ -61,6 +66,32 @@ private slots:
 	void on_actionResetImage_triggered();
 
 	void on_btnPencil_clicked();
+
+	void on_btnBrush_clicked();
+
+	void on_btnEraser_clicked();
+
+	void on_btnMagicWand_clicked();
+
+	void on_btnMagnifier_clicked();
+
+	void on_btnFloodFill_clicked();
+
+	void on_btnCrop_clicked();
+
+	void on_btnStamp_clicked();
+
+	void on_btnGeometry_clicked();
+
+	void on_btnText_clicked();
+
+	void on_btnSprayCan_clicked();
+
+	void on_btnInk_clicked();
+
+	void on_btnAirbrush_clicked();
+
+	void on_btnEyedropper_clicked();
 
 	void on_actionBrushSize_triggered();
 
@@ -92,15 +123,27 @@ private slots:
 
 	void on_actionGrayscale_triggered();
 
+protected:
+	virtual void keyPressEvent(QKeyEvent*);
+	virtual void keyReleasedEvent(QKeyEvent*);
+	virtual void mousePressEvent(QMouseEvent*);
+	virtual void mouseReleaseEvent(QMouseEvent*);
+	virtual void mouseDoubleClickEvent(QMouseEvent*);
+	virtual void mouseMoveEvent(QMouseEvent*);
+	virtual void wheelEvent(QWheelEvent*);
+
 private:
 	void openImage(const QString& fileName);
 	void showError(const Exception &e);
 	void applyFilter(IOperation *operation);
 	ImageWidget* getImageWidget() const;
+	void connectSignals();
 
+	// Felder
 	Ui::MainWindow *ui;
 	SizeDialogue *mDia;
-	QHash<QString, IOperation*> mFilters;
+	InputManager* mInputManager;
+	ImageWidget* mDummyImage;
 };
 
 #endif // MAINWINDOW_H

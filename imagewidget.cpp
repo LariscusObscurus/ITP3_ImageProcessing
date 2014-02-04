@@ -18,6 +18,7 @@
 
 #include <QPainter>
 #include <QDebug>
+#include <QMessageBox>
 #include "imagewidget.hpp"
 #include "IOperation.hpp"
 #include "Utility.hpp"
@@ -31,7 +32,7 @@ ImageWidget::ImageWidget(QWidget *parent) :
 	m_redoBuffer(20),
 	m_pen(m_penColor, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin),
 	m_penWidth(2),
-	m_penStyle(solid),
+	m_tool(Tool::Pencil),
 	m_fileName("")
 {
 	setAttribute(Qt::WA_StaticContents);
@@ -89,9 +90,16 @@ void ImageWidget::setPenWidth(int width)
 	m_penWidth = width;
 }
 
-void ImageWidget::setPenStyle(PenStyle style)
+void ImageWidget::toolChanged(Tool tool)
 {
-	m_penStyle = style;
+	switch (tool) {
+	case Tool::Pencil:
+		m_tool = tool;
+		break;
+	default:
+		QMessageBox::critical(0, "Error", "Tool is not yet implemented.");
+		break;
+	}
 }
 
 void ImageWidget::applyFilter(IOperation* filter)
@@ -221,23 +229,17 @@ void ImageWidget::drawLineTo(const QPoint &endPoint)
 	painter.setRenderHint(QPainter::HighQualityAntialiasing);
 	painter.setPen(m_pen);
 
-	switch (m_penStyle) {
-	case solid:
+	switch (m_tool) {
+	case Tool::Pencil:
 		m_pen.setWidth(m_penWidth);
 		painter.drawLine(m_lastPoint, endPoint);
 		ok = true;
 		break;
-	case dots:
-		m_pen.setWidth(1);
-		QPoint vectAB = m_lastPoint - endPoint;
-		if((pow(vectAB.x(), 2.0) + pow(vectAB.y(),2.0)) >= 100) {
-			painter.drawEllipse(endPoint, m_penWidth, m_penWidth);
-			ok = true;
-		}
+	default:
 		break;
 	}
-	if(ok)  {
-		int rad = (0) + m_penWidth;
+
+	if (ok) {
 		update();
 		m_lastPoint = endPoint;
 	}

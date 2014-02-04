@@ -25,6 +25,23 @@
 #include <QString>
 #include "ringbuffer.hpp"
 
+enum class Tool {
+	Pencil,
+	Brush,
+	Airbrush,
+	SprayCan,
+	FloodFill,
+	Eraser,
+	Crop,
+	Stamp,
+	Text,
+	Geometry,
+	MagicWand,
+	Magnifiere,
+	EyeDropper,
+	Ink
+};
+
 class IOperation;
 
 class ImageWidget : public QWidget
@@ -45,17 +62,12 @@ public:
 
 	QColor getPenColor() const;
 
-	enum PenStyle {
-		solid,
-		dots
-	};
-
 signals:
 
 public slots:
 	void setPenColor(const QColor& newColor);
 	void setPenWidth(int width);
-	void setPenStyle(PenStyle style);
+	void toolChanged(Tool);
 
 protected:
 	virtual void mousePressEvent(QMouseEvent *);
@@ -78,7 +90,7 @@ private:
 	RingBuffer<QImage> m_undoBuffer;
 	RingBuffer<QImage> m_redoBuffer;
 	QPen m_pen;
-	PenStyle m_penStyle;
+	Tool m_tool;
 
 	QString m_fileName;
 };
