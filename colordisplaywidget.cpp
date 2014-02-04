@@ -20,19 +20,18 @@
 #include <QColorDialog>
 #include <QStyleOption>
 #include <QPainter>
+#include <QPaintEvent>
 #include "colordisplaywidget.hpp"
 
 ColorDisplayWidget::ColorDisplayWidget(QWidget *parent) :
 	QWidget(parent),
 	m_selectedColor(Qt::black)
 {
-	drawColor();
 }
 
 void ColorDisplayWidget::setColor(QColor color)
 {
 	m_selectedColor = color;
-	drawColor();
 }
 
 const QColor ColorDisplayWidget::getColor()
@@ -40,37 +39,35 @@ const QColor ColorDisplayWidget::getColor()
 	return m_selectedColor;
 }
 
-void ColorDisplayWidget::mousePressEvent(QMouseEvent *)
+void ColorDisplayWidget::mousePressEvent(QMouseEvent *e)
 {
-	setStyleSheet("");
+	// Basis Event
+	QWidget::mousePressEvent(e);
+
+	// Eventlogik
 	QColorDialog colDia;
-	QColor color =  colDia.getColor(Qt::white,this,tr("Choose Color"),QColorDialog::ShowAlphaChannel);
+	QColor color =  colDia.getColor(Qt::white, this, tr("Choose Color"), QColorDialog::ShowAlphaChannel);
 
 	if(color.isValid()) {
 		m_selectedColor = color;
-		drawColor();
 		emit colorChanged(m_selectedColor);
 	} else {
-		drawColor();
 		emit colorChanged(m_selectedColor);
 	}
 }
 
-void ColorDisplayWidget::paintEvent(QPaintEvent *)
+void ColorDisplayWidget::paintEvent(QPaintEvent *e)
 {
-	QStyleOption option;
-	QPainter painter(this);
-	option.init(this);
-	style()->drawPrimitive(QStyle::PE_Widget, &option, &painter, this);
-}
+	// Basis Event
+	QWidget::paintEvent(e);
 
-void ColorDisplayWidget::drawColor()
-{
-	setStyleSheet(QString("border: 1px solid rgb(%1, %2, %3); background-color: rgb(%4, %5, %6);").arg(
-			      QString::number(255 - m_selectedColor.red()),
-			      QString::number(255 - m_selectedColor.green()),
-			      QString::number(255 - m_selectedColor.blue()),
-			      QString::number(m_selectedColor.red()),
-			      QString::number(m_selectedColor.green()),
-			      QString::number(m_selectedColor.blue())));
+	// Eventlogik
+	QPainter painter(this);
+
+	painter.setPen(QColor(
+			       255 - m_selectedColor.red(),
+			       255 - m_selectedColor.green(),
+			       255 - m_selectedColor.blue()));
+	painter.setBrush(QBrush(m_selectedColor));
+	painter.drawRect(0, 0, width()-1, height()-1);
 }

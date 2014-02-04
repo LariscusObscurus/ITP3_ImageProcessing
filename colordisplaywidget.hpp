@@ -36,7 +36,7 @@ signals:
 	void colorChanged(QColor color);
 
 private:
-	void drawColor();
+
 	QColor m_selectedColor;
 
 };

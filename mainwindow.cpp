@@ -240,7 +240,7 @@ void MainWindow::on_imagetab_currentChanged(int)
 	ImageWidget* img = getImageWidget();
 
 	if (img) {
-		setWindowTitle(img->getFileName());
+		setWindowTitle(ExtractFileName(img->getFileName()));
 	} else {
 		setWindowTitle("Image Processing");
 	}

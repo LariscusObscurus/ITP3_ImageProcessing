@@ -31,7 +31,7 @@
 	 color: #007acc;
  }
 
- QMainWindow {
+QMainWindow {
 	background: #424242;
 }
 /*Desing MenuBar*/
@@ -81,7 +81,11 @@
      background-color: #007acc;
  }
 
-</string>
+QToolTip {
+	color: d8d8d8;
+	background-color: 2e2e2e;
+	border: 1px solid d8d8d8;
+}</string>
   </property>
   <property name="animated">
    <bool>true</bool>
@@ -176,9 +180,6 @@
           <bold>true</bold>
          </font>
         </property>
-        <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
         <property name="styleSheet">
          <string notr="true">#Brush {
 	color: #D8D8D8;
@@ -253,10 +254,6 @@
        </property>
        <property name="toolTip">
         <string>Front Color</string>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">border: 1px solid #fff;
-background-color: #000;</string>
        </property>
       </widget>
       <widget class="QPushButton" name="btnBrush">
@@ -849,10 +846,6 @@ background-color: #000;</string>
        <property name="toolTip">
         <string>Back Color</string>
        </property>
-       <property name="styleSheet">
-        <string notr="true">border: 1px solid #000;
-background-color: #fff;</string>
-       </property>
       </widget>
       <widget class="QLabel" name="Palette">
        <property name="geometry">
@@ -933,8 +926,6 @@ QTabWidget::pane {
 	 border: 1px solid #2E2E2E;
 }
 
-
-
 QTabBar::tab {
 	background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
 	stop: 0 #a6a6a6, stop: 0.08 #7f7f7f,
@@ -943,27 +934,29 @@ QTabBar::tab {
 	border: none;
 	border: 1px solid #2E2E2E;
 	color: #D8D8D8;
-	/*min-width: 8ex;*/
+	min-width: 8ex;
 	border-top-left-radius: 2.5px;
 	border-top-right-radius: 2.5px;
 	padding: 2px 10px;
-	width: 160px;
 	alignment: left
 }
-	QTabBar::tab:selected, QTabBar::tab:hover {
+
+QTabBar::tab:selected, QTabBar::tab:hover {
 	background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
 	stop: 0 #2E9AFE, stop: 0.08 #0174DF,
 	stop: 0.39999 #0080FF, stop: 0.4 #045FB4,
 	stop: 0.9 #084B8A, stop: 1 #0B243B)
 }
+
 QTabBar::tab:selected {
 	background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
 	stop: 0 #2E9AFE, stop: 0.08 #0174DF,
 	stop: 0.39999 #0080FF, stop: 0.4 #045FB4,
 	stop: 0.9 #084B8A, stop: 1 #0B243B)
 }
+
 QTabBar::tab:!selected {
-margin-top: 3px; /* make non-selected tabs look smaller */
+	margin-top: 3px; /* make non-selected tabs look smaller */
 }</string>
          </property>
          <property name="currentIndex">
