@@ -32,13 +32,22 @@ public:
 protected:
 	virtual void mousePressEvent(QMouseEvent *);
 	virtual void paintEvent(QPaintEvent *);
+
 signals:
 	void colorChanged(QColor color);
+	void activated();
+
+public slots:
+	void background();
+	void foreground();
 
 private:
+	void drawActive();
+	void drawInactive();
+	void drawLines(QPainter&, QColor, QColor, QColor, QColor);
 
 	QColor m_selectedColor;
-
+	bool m_active;
 };
 
 #endif // COLORDISPLAYWIDGET_H

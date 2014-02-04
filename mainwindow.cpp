@@ -52,6 +52,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 	ui->ColorPickerFront->setColor(Qt::black);
 	ui->ColorPickerBack->setColor(Qt::white);
+	ui->ColorPickerFront->foreground();
+	ui->ColorPickerBack->background();
 
 	// Mouse Tracking standardmäßig deaktivieren
 	setMouseTracking(false);
@@ -73,6 +75,10 @@ void MainWindow::connectSignals()
 	connect(ui->ColorPickerFront, SIGNAL(colorChanged(QColor)), mDummyImage, SLOT(setPenColor(QColor)));
 	connect(this, SIGNAL(toolChanged(Tool)), mDummyImage, SLOT(toolChanged(Tool)));
 	connect(mDia, SIGNAL(sizeChanged(int)), mDummyImage, SLOT(setPenWidth(int)));
+
+	// Vor- und Hintergrundfarbe
+	connect(ui->ColorPickerFront, SIGNAL(activated()), ui->ColorPickerBack, SLOT(background()));
+	connect(ui->ColorPickerBack, SIGNAL(activated()), ui->ColorPickerFront, SLOT(background()));
 
 	// close
 	//connect(ui->actionClose, SIGNAL(triggered()), this, SLOT(close()));

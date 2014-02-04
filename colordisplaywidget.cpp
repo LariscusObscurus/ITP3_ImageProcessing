@@ -21,11 +21,13 @@
 #include <QStyleOption>
 #include <QPainter>
 #include <QPaintEvent>
+#include <QVector>
 #include "colordisplaywidget.hpp"
 
 ColorDisplayWidget::ColorDisplayWidget(QWidget *parent) :
 	QWidget(parent),
-	m_selectedColor(Qt::black)
+	m_selectedColor(Qt::black),
+	m_active(false)
 {
 }
 
@@ -45,14 +47,17 @@ void ColorDisplayWidget::mousePressEvent(QMouseEvent *e)
 	QWidget::mousePressEvent(e);
 
 	// Eventlogik
-	QColorDialog colDia;
-	QColor color =  colDia.getColor(Qt::white, this, tr("Choose Color"), QColorDialog::ShowAlphaChannel);
+	if (e->button() == Qt::LeftButton) {
+		emit activated();
+		m_active = true;
+		QColor color =  QColorDialog::getColor(m_selectedColor, this, tr("Choose a color"), QColorDialog::ShowAlphaChannel);
 
-	if(color.isValid()) {
-		m_selectedColor = color;
-		emit colorChanged(m_selectedColor);
-	} else {
-		emit colorChanged(m_selectedColor);
+		if(color.isValid()) {
+			m_selectedColor = color;
+			emit colorChanged(m_selectedColor);
+		} else {
+			emit colorChanged(m_selectedColor);
+		}
 	}
 }
 
@@ -62,12 +67,69 @@ void ColorDisplayWidget::paintEvent(QPaintEvent *e)
 	QWidget::paintEvent(e);
 
 	// Eventlogik
-	QPainter painter(this);
+	if (m_active) {
+		drawActive();
+	} else {
+		drawInactive();
+	}
+}
 
-	painter.setPen(QColor(
-			       255 - m_selectedColor.red(),
-			       255 - m_selectedColor.green(),
-			       255 - m_selectedColor.blue()));
+void ColorDisplayWidget::drawActive()
+{
+	QPainter painter(this);
 	painter.setBrush(QBrush(m_selectedColor));
-	painter.drawRect(0, 0, width()-1, height()-1);
+	// Zeichne ausgewählte Farbe
+	painter.drawRect(0, 0, width(), height());
+	// Zeichne Außenlinien
+	drawLines(painter,
+		QColor(32, 32, 32),
+		QColor(16, 16, 16),
+		QColor(128, 128, 128),
+		QColor(96, 96, 96));
+}
+
+void ColorDisplayWidget::drawInactive()
+{
+	QPainter painter(this);
+	painter.setBrush(QBrush(m_selectedColor));
+	// Zeichne ausgewählte Farbe
+	painter.drawRect(0, 0, width(), height());
+	// Zeichne Außenlinien
+	drawLines(painter,
+		QColor(192, 192, 192), // Außen
+		QColor(142, 142, 142), // Innen
+		QColor(32, 32, 32), // Außen
+		QColor(96, 96, 96)); // Innen
+}
+
+void ColorDisplayWidget::drawLines(QPainter &painter, QColor c1, QColor c2, QColor c3, QColor c4)
+{
+	int x = 0, y = 0;
+	// Zeichne linke obere Ecke
+	painter.setPen(c1);
+	painter.drawLine(x, y, width(), 0); // obere Außenlinie
+	painter.drawLine(x, y, 0, height()); // linke Außenlinie
+	painter.setPen(c2);
+	painter.drawLine(x+1, y+1, width(), 1); // obere Innenlinie
+	painter.drawLine(x+1, y+1, 1, height()); // linke Innenlinie
+	// Setze neue Werte
+	x = width() - 1;
+	y = height() - 1;
+	// Zeichne rechte untere Ecke
+	painter.setPen(c3);
+	painter.drawLine(x, y, x, 0); // rechte Außenlinie
+	painter.drawLine(x, y, 0, y); // untere Außenlinie
+	painter.setPen(c4);
+	painter.drawLine(x-1, y-1, x-1, 1); // rechte Innenlinie
+	painter.drawLine(x-1, y-1, 1, y-1); // untere Innenlinie
+}
+
+void ColorDisplayWidget::background()
+{
+	m_active = false;
+}
+
+void ColorDisplayWidget::foreground()
+{
+	m_active = true;
 }
