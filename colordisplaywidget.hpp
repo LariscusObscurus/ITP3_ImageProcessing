@@ -30,7 +30,8 @@ public:
 	const QColor getColor();
 
 protected:
-	void mousePressEvent(QMouseEvent *);
+	virtual void mousePressEvent(QMouseEvent *);
+	virtual void paintEvent(QPaintEvent *);
 signals:
 	void colorChanged(QColor color);
 

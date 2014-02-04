@@ -48,6 +48,8 @@ MainWindow::MainWindow(QWidget *parent) :
 	ui->setupUi(this);
 	//connect(ui->actionClose, SIGNAL(triggered()), this, SLOT(close()));
 	setWindowTitle("Image Processing");
+	ui->ColorPickerFront->setColor(Qt::black);
+	ui->ColorPickerBack->setColor(Qt::white);
 }
 
 MainWindow::~MainWindow()
@@ -109,9 +111,9 @@ void MainWindow::openImage(const QString &fileName)
 		ui->imagetab->setCurrentIndex(index);
 
 		// schließlich Signalhandler setzen
-		connect(ui->ColorPicker, SIGNAL(colorChanged(QColor)), img, SLOT(setPenColor(QColor)));
+		connect(ui->ColorPickerFront, SIGNAL(colorChanged(QColor)), img, SLOT(setPenColor(QColor)));
 		connect(mDia, SIGNAL(sizeChanged(int)), img, SLOT(setPenWidth(int)));
-		img->setPenColor(ui->ColorPicker->getColor());
+		img->setPenColor(ui->ColorPickerFront->getColor());
 	}
 }
 

@@ -18,6 +18,8 @@
 
 #include <QPalette>
 #include <QColorDialog>
+#include <QStyleOption>
+#include <QPainter>
 #include "colordisplaywidget.hpp"
 
 ColorDisplayWidget::ColorDisplayWidget(QWidget *parent) :
@@ -40,21 +42,35 @@ const QColor ColorDisplayWidget::getColor()
 
 void ColorDisplayWidget::mousePressEvent(QMouseEvent *)
 {
+	setStyleSheet("");
 	QColorDialog colDia;
-	QColor color =  colDia.getColor(Qt::white,this,tr("Farbe auswählen"),QColorDialog::ShowAlphaChannel);
+	QColor color =  colDia.getColor(Qt::white,this,tr("Choose Color"),QColorDialog::ShowAlphaChannel);
 
 	if(color.isValid()) {
 		m_selectedColor = color;
 		drawColor();
 		emit colorChanged(m_selectedColor);
+	} else {
+		drawColor();
+		emit colorChanged(m_selectedColor);
 	}
+}
+
+void ColorDisplayWidget::paintEvent(QPaintEvent *)
+{
+	QStyleOption option;
+	QPainter painter(this);
+	option.init(this);
+	style()->drawPrimitive(QStyle::PE_Widget, &option, &painter, this);
 }
 
 void ColorDisplayWidget::drawColor()
 {
-	QPalette pal(palette());
-	pal.setColor(QPalette::Background,m_selectedColor);
-	this->setAutoFillBackground(true);
-	this->setPalette(pal);
-	this->show();
+	setStyleSheet(QString("border: 1px solid rgb(%1, %2, %3); background-color: rgb(%4, %5, %6);").arg(
+			      QString::number(255 - m_selectedColor.red()),
+			      QString::number(255 - m_selectedColor.green()),
+			      QString::number(255 - m_selectedColor.blue()),
+			      QString::number(m_selectedColor.red()),
+			      QString::number(m_selectedColor.green()),
+			      QString::number(m_selectedColor.blue())));
 }
