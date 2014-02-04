@@ -26,8 +26,8 @@ class ColorDisplayWidget : public QWidget
 	Q_OBJECT
 public:
 	explicit ColorDisplayWidget(QWidget *parent = 0);
-	void setColor(QColor color);
-	const QColor getColor();
+	void setColor(const QColor &color);
+	const QColor& getColor();
 
 protected:
 	virtual void mousePressEvent(QMouseEvent *);

@@ -847,10 +847,10 @@ QToolTip {
         <string>Back Color</string>
        </property>
       </widget>
-      <widget class="QLabel" name="Palette">
+      <widget class="QPushButton" name="btnPalette">
        <property name="geometry">
         <rect>
-         <x>50</x>
+         <x>47</x>
          <y>460</y>
          <width>46</width>
          <height>46</height>
@@ -862,14 +862,30 @@ QToolTip {
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+	border: 1px solid #d8d8d8;
+	border-radius: 4px;
+	background: #383838;
+ }
+
+ QPushButton:pressed {
+      border: 1px solid #007acc;
+      background-color: #52524f;
+ }</string>
+       </property>
        <property name="text">
         <string/>
        </property>
-       <property name="pixmap">
-        <pixmap resource="Icons.qrc">:/Images/icons/Palette-icon.png</pixmap>
+       <property name="icon">
+        <iconset resource="Icons.qrc">
+         <normaloff>:/Images/icons/Palette-icon.png</normaloff>:/Images/icons/Palette-icon.png</iconset>
        </property>
-       <property name="scaledContents">
-        <bool>true</bool>
+       <property name="iconSize">
+        <size>
+         <width>42</width>
+         <height>42</height>
+        </size>
        </property>
       </widget>
       <zorder>ColorPickerBack</zorder>
@@ -889,7 +905,7 @@ QToolTip {
       <zorder>btnInk</zorder>
       <zorder>btnAirbrush</zorder>
       <zorder>btnEyedropper</zorder>
-      <zorder>Palette</zorder>
+      <zorder>btnPalette</zorder>
      </widget>
     </item>
     <item>

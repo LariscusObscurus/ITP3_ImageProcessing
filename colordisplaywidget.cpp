@@ -31,12 +31,14 @@ ColorDisplayWidget::ColorDisplayWidget(QWidget *parent) :
 {
 }
 
-void ColorDisplayWidget::setColor(QColor color)
+void ColorDisplayWidget::setColor(const QColor& color)
 {
+	emit colorChanged(color);
 	m_selectedColor = color;
+	update();
 }
 
-const QColor ColorDisplayWidget::getColor()
+const QColor &ColorDisplayWidget::getColor()
 {
 	return m_selectedColor;
 }

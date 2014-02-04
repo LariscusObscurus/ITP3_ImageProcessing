@@ -315,6 +315,13 @@ void MainWindow::on_btnEyedropper_clicked()
 	emit toolChanged(Tool::EyeDropper);
 }
 
+void MainWindow::on_btnPalette_clicked()
+{
+	QColor swap = ui->ColorPickerFront->getColor();
+	ui->ColorPickerFront->setColor(ui->ColorPickerBack->getColor());
+	ui->ColorPickerBack->setColor(swap);
+}
+
 void MainWindow::on_actionBrushSize_triggered()
 {
 	mDia->setModal(true);

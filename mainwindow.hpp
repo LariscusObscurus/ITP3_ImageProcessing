@@ -93,6 +93,8 @@ private slots:
 
 	void on_btnEyedropper_clicked();
 
+	void on_btnPalette_clicked();
+
 	void on_actionBrushSize_triggered();
 
 	void on_imagetab_currentChanged(int);
