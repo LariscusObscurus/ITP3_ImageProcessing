@@ -42,10 +42,10 @@ public:
 	 * - FormatException
 	 * - ArgumentException
 	 */
-	virtual void Draw(QImage &image, const QMap<QString, QString> &args);
+	virtual QImage Draw(const QImage& img, const QHash<QString, QString>& args);
 	virtual QString GetName() const;
 private:
-	void Arguments(const QMap<QString, QString>& args, int &shape, int &ksize);
+	void Arguments(const QHash<QString, QString>& args, int &shape, int &ksize);
 };
 
 #endif // EROSION_H

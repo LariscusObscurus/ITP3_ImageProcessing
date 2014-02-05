@@ -23,31 +23,22 @@
 #include "../Exception.hpp"
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-#include <QMap>
+#include <QHash>
 #include <QImage>
 
-void BilateralFilter::Draw(QImage &image, const QMap<QString, QString> &args)
+QImage BilateralFilter::Draw(const QImage &image, const QHash<QString, QString>& args)
 {
-	cv::Mat mat;
 	int d = 9;
 	double sigmaColor = 150;
 	double sigmaSpace = 150;
-
-	// convert image if necessary
-	if (image.format() == QImage::Format_RGB32 || image.format() == QImage::Format_ARGB32) {
-		mat = QimageRgb32ToMat24(image);
-	} else if (image.format() == QImage::Format_RGB888 || image.format() == QImage::Format_Indexed8) {
-		mat = QimageToMat(image);
-	} else {
-		throw ArgumentException("for bilateral filter only 1-channel or 3-channel images are valid");
-	}
+	cv::Mat mat = QImageRgb32ToMat24(image);
 
 	Arguments(args, d, sigmaColor, sigmaSpace);
 	cv::bilateralFilter(mat.clone(), mat, d, sigmaColor, sigmaSpace);
-	image = MatToQimage(mat);
+	return MatToQImage(mat);
 }
 
-void BilateralFilter::Arguments(const QMap<QString, QString> &args, int &d, double &sigmaColor, double &sigmaSpace)
+void BilateralFilter::Arguments(const QHash<QString, QString> &args, int &d, double &sigmaColor, double &sigmaSpace)
 {
 	bool ok = false;
 	auto it = args.find("Diameter");
@@ -79,9 +70,4 @@ void BilateralFilter::Arguments(const QMap<QString, QString> &args, int &d, doub
 QString BilateralFilter::GetName() const
 {
 	return "Bilateral Filter";
-}
-
-cv::Mat BilateralFilter::QimageRgb32ToMat24(QImage &img)
-{
-	return QimageToMat(img.convertToFormat(QImage::Format_RGB888));
 }

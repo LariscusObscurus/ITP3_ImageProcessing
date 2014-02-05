@@ -46,11 +46,10 @@ public:
 	 * - FormatException
 	 * - ArgumentException
 	 */
-	virtual void Draw(QImage &image, const QMap<QString, QString> &args);
+	virtual QImage Draw(const QImage& img, const QHash<QString, QString>& args);
 	virtual QString GetName() const;
 private:
-	void Arguments(const QMap<QString, QString> &args, int& d, double& sigmaColor, double& sigmaSpace);
-	cv::Mat QimageRgb32ToMat24(QImage& img);
+	void Arguments(const QHash<QString, QString> &args, int& d, double& sigmaColor, double& sigmaSpace);
 };
 
 #endif // BILATERALFILTER_H

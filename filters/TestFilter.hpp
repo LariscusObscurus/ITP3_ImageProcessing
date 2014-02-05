@@ -26,6 +26,6 @@ class TestFilter : public IOperation
 public:
 	TestFilter() { }
 	virtual ~TestFilter() throw() { }
-	virtual void Draw(QImage& image, const QMap<QString, QString>& args);
+	virtual QImage Draw(const QImage& img, const QHash<QString, QString>& args);
 	virtual QString GetName() const;
 };

@@ -1,6 +1,6 @@
-// Grayscale.hpp
+// FloodFill.hpp
 
-/* © 2013 David Wolf
+/* © 2014 David Wolf
  *
  * This file is part of ImageProcessing.
  *
@@ -18,19 +18,26 @@
  * along with ImageProcessing.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GRAYSCALE_H
-#define GRAYSCALE_H
+#ifndef FLOOD_HPP
+#define FLOOD_HPP
 
 #include "../IOperation.hpp"
+namespace cv {
+	template <typename T>
+	class Scalar_;
+	template <typename T>
+	class Point_;
+}
 
-class Grayscale : public IOperation
+class Flood : public IOperation
 {
 public:
-	Grayscale() { }
-	virtual ~Grayscale() throw() { }
-	//! Konvertiert die RGB-Werte des Bildes in 8-Bit Graufstufen
+	Flood() { }
+	virtual ~Flood() throw() { }
 	virtual QImage Draw(const QImage& img, const QHash<QString, QString>& args);
 	virtual QString GetName() const;
+private:
+	void Arguments(const QHash<QString, QString>& args, cv::Point_<int>&, cv::Scalar_<double>&);
 };
 
-#endif // GRAYSCALE_H
+#endif

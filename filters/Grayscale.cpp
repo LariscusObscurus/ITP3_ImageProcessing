@@ -23,14 +23,14 @@
 #include "../Conversion.hpp"
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-#include <QMap>
+#include <QHash>
 #include <QImage>
 
-void Grayscale::Draw(QImage &image, const QMap<QString, QString> &args)
+QImage Grayscale::Draw(const QImage &image, const QHash<QString, QString>& args)
 {
-	cv::Mat mat = QimageToMat(image);
+	cv::Mat mat = QImageToMat(image);
 	cv::cvtColor(mat.clone(), mat, CV_BGR2GRAY);
-	image = MatToQimage(mat);
+	return MatToQImage(mat);
 }
 
 QString Grayscale::GetName() const

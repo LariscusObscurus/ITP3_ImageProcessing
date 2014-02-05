@@ -1,6 +1,6 @@
-// Grayscale.hpp
+// IOperation.hpp
 
-/* © 2013 David Wolf
+/* © 2014 David Wolf
  *
  * This file is part of ImageProcessing.
  *
@@ -18,19 +18,15 @@
  * along with ImageProcessing.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GRAYSCALE_H
-#define GRAYSCALE_H
+#ifndef IDISPOSABLE_HPP
+#define IDISPOSABLE_HPP
 
-#include "../IOperation.hpp"
-
-class Grayscale : public IOperation
+class IDisposable
 {
 public:
-	Grayscale() { }
-	virtual ~Grayscale() throw() { }
-	//! Konvertiert die RGB-Werte des Bildes in 8-Bit Graufstufen
-	virtual QImage Draw(const QImage& img, const QHash<QString, QString>& args);
-	virtual QString GetName() const;
+	virtual ~IDisposable() throw() { }
+	virtual void Dispose() = 0;
+	virtual bool IsDisposed() const = 0;
 };
 
-#endif // GRAYSCALE_H
+#endif // IDISPOSABLE_HPP

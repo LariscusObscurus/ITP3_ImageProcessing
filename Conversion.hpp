@@ -38,13 +38,19 @@
  * \param mat Matrixobjekt aus OpenCV
  * \return Ein valides QImage-Objekt
  */
-QImage MatToQimage(const cv::Mat& mat);
+QImage MatToQImage(const cv::Mat& mat);
 //! Konvertiert QImage zu cv::Mat
 /*!
  * \param img Bildobjekt aus Qt
  * \return Eine valide OpenCV-Matrix
  */
-cv::Mat QimageToMat(const QImage& img);
+cv::Mat QImageToMat(const QImage& img);
+//! Konvertiert QImage mit ARGB32 oder RGB32 zu einer cv::Mat mit drei Channel
+/*!
+ * \param img Bildobjekt aus Qt
+ * \return Eine valide OpenCV-Matrix
+ */
+cv::Mat QImageRgb32ToMat24(const QImage &img);
 
 
 #endif // CONVERSION_H

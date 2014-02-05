@@ -23,13 +23,13 @@
 #include "../Exception.hpp"
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-#include <QMap>
+#include <QHash>
 #include <QImage>
 
-void Blur::Draw(QImage &image, const QMap<QString, QString> &args)
+QImage Blur::Draw(const QImage &image, const QHash<QString, QString>& args)
 {
 	int ksize = 3;
-	cv::Mat mat = QimageToMat(image);
+	cv::Mat mat = QImageToMat(image);
 	// Name des Argumentes steht noch nicht fest
 	auto it = args.find("KernelSize");
 
@@ -43,7 +43,7 @@ void Blur::Draw(QImage &image, const QMap<QString, QString> &args)
 		ksize = 2 * ksize + 1;
 	}
 	cv::blur(mat.clone(), mat, cv::Size(ksize, ksize));
-	image = MatToQimage(mat);
+	return MatToQImage(mat);
 }
 
 QString Blur::GetName() const

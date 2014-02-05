@@ -21,10 +21,10 @@
 #include "TestFilter.hpp"
 #include "../Exception.hpp"
 #include <QDebug>
-#include <QMap>
+#include <QHash>
 #include <QImage>
 
-void TestFilter::Draw(QImage &image, const QMap<QString, QString> &args)
+QImage TestFilter::Draw(const QImage &img, const QHash<QString, QString>& args)
 {
 	qDebug() << "Draw TestFilter";
 	throw Exception("Test Exception");

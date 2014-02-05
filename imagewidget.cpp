@@ -23,11 +23,15 @@
 #include "IOperation.hpp"
 #include "Utility.hpp"
 #include "Exception.hpp"
+#include "tools/Pencil.hpp"
+#include "tools/Flood.hpp"
+
+QHash<Tool, IOperation*> ImageWidget::s_tools;
 
 ImageWidget::ImageWidget(QWidget *parent) :
 	QWidget(parent),
 	m_penColor(Qt::black),
-	m_drawing(false),
+	m_changed(false),
 	m_undoBuffer(20),
 	m_redoBuffer(20),
 	m_pen(m_penColor, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin),
@@ -36,6 +40,15 @@ ImageWidget::ImageWidget(QWidget *parent) :
 	m_fileName("")
 {
 	setAttribute(Qt::WA_StaticContents);
+
+	if (s_tools.isEmpty()) {
+		s_tools[Tool::Pencil] = new Pencil();
+		s_tools[Tool::FloodFill] = new Flood();
+	}
+}
+
+ImageWidget::~ImageWidget() throw()
+{
 }
 
 bool ImageWidget::openImage(const QString &fileName)
@@ -66,12 +79,23 @@ bool ImageWidget::saveImage()
 		ext = splitedFile.last();
 	}
 
-	return (m_image.save(m_fileName, ext.toLatin1()));
+	if (m_image.save(m_fileName, ext.toLatin1())) {
+		m_changed = false;
+		return true;
+	}
+
+	return false;
 }
 
 bool ImageWidget::saveImage(const QString &fileName, const char *fileFormat)
 {
-	return (m_image.save(fileName, fileFormat));
+	if (m_image.save(fileName, fileFormat)) {
+		m_fileName = fileName;
+		m_changed = false;
+		return true;
+	}
+
+	return false;
 }
 
 QColor ImageWidget::getPenColor() const
@@ -92,21 +116,14 @@ void ImageWidget::setPenWidth(int width)
 
 void ImageWidget::toolChanged(Tool tool)
 {
-	switch (tool) {
-	case Tool::Pencil:
-		m_tool = tool;
-		break;
-	default:
-		QMessageBox::information(0, "Information", "Tool is not yet implemented.");
-		break;
-	}
+	m_tool = tool;
 }
 
 void ImageWidget::applyFilter(IOperation* filter)
 {
 	m_undoBuffer.push(m_image.copy());
-	QMap<QString, QString> arg;
-	filter->Draw(m_image, arg);
+	QHash<QString, QString> arg;
+	m_image = filter->Draw(m_image, arg);
 	update();
 
 }
@@ -171,6 +188,11 @@ void ImageWidget::clearImage()
 	update();
 }
 
+bool ImageWidget::isChanged() const
+{
+	return m_changed;
+}
+
 QString ImageWidget::getFileName() const
 {
 	return m_fileName;
@@ -178,27 +200,25 @@ QString ImageWidget::getFileName() const
 
 void ImageWidget::mousePressEvent(QMouseEvent *event)
 {
-
 	if (event->button() == Qt::LeftButton) {
 		m_undoBuffer.push(m_image.copy());
 		m_lastPoint = event->pos();
 		m_redoBuffer.clear();
-		m_drawing = true;
+		m_changed = true;
 	}
 }
 
 void ImageWidget::mouseMoveEvent(QMouseEvent *event)
 {
-	if ((event->buttons() & Qt::LeftButton) && m_drawing) {
-		drawLineTo(event->pos());
+	if ((event->buttons() & Qt::LeftButton)) {
+		draw(event->pos());
 	}
 }
 
 void ImageWidget::mouseReleaseEvent(QMouseEvent *event)
 {
-	if (event->button() == Qt::LeftButton && m_drawing) {
-		drawLineTo(event->pos());
-		m_drawing = false;
+	if (event->button() == Qt::LeftButton) {
+		draw(event->pos());
 	}
 }
 
@@ -214,33 +234,84 @@ void ImageWidget::paintEvent(QPaintEvent *event)
 	painter.drawImage(dirtyRect, m_image, dirtyRect);
 }
 
+void ImageWidget::clearTools()
+{
+	for (auto& it : s_tools) {
+		delete it;
+	}
+}
+
 void ImageWidget::drawImage()
 {
 	QPainter painter(&m_image);
 	painter.drawImage(QPoint(0,0), m_image);
 }
 
-void ImageWidget::drawLineTo(const QPoint &endPoint)
+void ImageWidget::draw(const QPoint &endPoint)
 {
-	bool ok = false;
-
-	QPainter painter(&m_image);
-	painter.setBrush(QBrush(m_penColor));
-	painter.setRenderHint(QPainter::HighQualityAntialiasing);
-	painter.setPen(m_pen);
-
+#ifdef QT_DEBUG
+	try {
+#endif
 	switch (m_tool) {
 	case Tool::Pencil:
-		m_pen.setWidth(m_penWidth);
-		painter.drawLine(m_lastPoint, endPoint);
-		ok = true;
+		drawPencil(endPoint);
+		break;
+	case Tool::FloodFill:
+		drawFloodFill(endPoint);
 		break;
 	default:
+		QMessageBox::information(0, "Information", "Tool is not yet implemented.");
 		break;
 	}
 
-	if (ok) {
-		update();
-		m_lastPoint = endPoint;
+	update();
+	m_lastPoint = endPoint;
+#ifdef QT_DEBUG
+	} catch (Exception& e) {
+		QMessageBox::critical(0, "Error", e.Message());
+	}
+#endif
+}
+
+void ImageWidget::drawPencil(const QPoint &endPoint)
+{
+	QImage img;
+	QHash<QString, QString> args;
+	IOperation* o = s_tools[Tool::Pencil];
+
+	// Setze notwendige Argumente
+	args["X1"] = QString::number(m_lastPoint.x());
+	args["Y1"] = QString::number(m_lastPoint.y());
+	args["X2"] = QString::number(endPoint.x());
+	args["Y2"] = QString::number(endPoint.y());
+	args["Size"] = QString::number(m_penWidth);
+	args["Red"] = QString::number(m_penColor.red());
+	args["Green"] = QString::number(m_penColor.green());
+	args["Blue"] = QString::number(m_penColor.blue());
+
+	img = o->Draw(m_image, args);
+
+	if (img.format() == QImage::Format_RGB888) {
+		m_image = img.convertToFormat(QImage::Format_ARGB32);
+	}
+}
+
+void ImageWidget::drawFloodFill(const QPoint &endPoint)
+{
+	QImage img;
+	QHash<QString, QString> args;
+	IOperation* o = s_tools[Tool::FloodFill];
+
+	// Setze notwendige Argumente
+	args["X"] = QString::number(endPoint.x());
+	args["Y"] = QString::number(endPoint.y());
+	args["Red"] = QString::number(m_penColor.red());
+	args["Green"] = QString::number(m_penColor.green());
+	args["Blue"] = QString::number(m_penColor.blue());
+
+	img = o->Draw(m_image, args);
+
+	if (img.format() == QImage::Format_RGB888) {
+		m_image = img.convertToFormat(QImage::Format_ARGB32);
 	}
 }

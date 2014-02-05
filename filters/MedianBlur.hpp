@@ -38,7 +38,7 @@ public:
 	 * - FormatException
 	 * - ArgumentException
 	 */
-	virtual void Draw(QImage &image, const QMap<QString, QString> &args);
+	virtual QImage Draw(const QImage& img, const QHash<QString, QString>& args);
 	virtual QString GetName() const;
 };
 

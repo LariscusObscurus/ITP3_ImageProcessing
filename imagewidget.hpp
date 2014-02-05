@@ -19,29 +19,17 @@
 #ifndef IMAGEWIDGET_H
 #define IMAGEWIDGET_H
 
+// headers
 #include <QWidget>
 #include <QtGui>
 #include <QImage>
 #include <QString>
+#include <QHash>
+#include <new>
 #include "ringbuffer.hpp"
+#include "Tool.hpp"
 
-enum class Tool {
-	Pencil,
-	Brush,
-	Airbrush,
-	SprayCan,
-	FloodFill,
-	Eraser,
-	Crop,
-	Stamp,
-	Text,
-	Geometry,
-	MagicWand,
-	Magnifiere,
-	EyeDropper,
-	Ink
-};
-
+// classes
 class IOperation;
 
 class ImageWidget : public QWidget
@@ -49,6 +37,8 @@ class ImageWidget : public QWidget
 	Q_OBJECT
 public:
 	explicit ImageWidget(QWidget *parent = 0);
+	virtual ~ImageWidget() throw();
+
 	bool openImage(const QString& fileName);
 	bool saveImage();
 	bool saveImage(const QString& fileName, const char *fileFormat);
@@ -58,9 +48,10 @@ public:
 	void undoHistory();
 	void resetImage();
 	void clearImage();
+	bool isChanged() const;
 	QString getFileName() const;
-
 	QColor getPenColor() const;
+	void clearTools();
 
 signals:
 
@@ -78,14 +69,17 @@ protected:
 
 private:
 	void drawImage();
-	void drawLineTo(const QPoint &endPoint);
+
+	void draw(const QPoint &endPoint);
+	void drawPencil(const QPoint&);
+	void drawFloodFill(const QPoint&);
 
 	QImage m_image;
 	QImage m_original;
 	QColor m_penColor;
 	int m_penWidth;
 
-	bool m_drawing;
+	bool m_changed;
 	QPoint m_lastPoint;
 	RingBuffer<QImage> m_undoBuffer;
 	RingBuffer<QImage> m_redoBuffer;
@@ -93,6 +87,9 @@ private:
 	Tool m_tool;
 
 	QString m_fileName;
+
+	// Klassenvariablen
+	static QHash<Tool, IOperation*> s_tools;
 };
 
 #endif // IMAGEWIDGET_H

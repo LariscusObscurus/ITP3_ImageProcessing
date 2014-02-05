@@ -863,7 +863,7 @@ QToolTip {
         </sizepolicy>
        </property>
        <property name="toolTip">
-        <string>Switch colors</string>
+        <string>Switch Colors</string>
        </property>
        <property name="styleSheet">
         <string notr="true">QPushButton {

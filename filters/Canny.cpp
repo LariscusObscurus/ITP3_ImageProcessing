@@ -24,22 +24,22 @@
 #include "Blur.hpp"
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-#include <QMap>
+#include <QHash>
 #include <QImage>
 
-void Canny::Draw(QImage &image, const QMap<QString, QString> &args)
+QImage Canny::Draw(const QImage &image, const QHash<QString, QString>& args)
 {
 	Blur f;
 	int ksize = 3;
 	int threshold = 100;
 	f.Draw(image, args);
-	cv::Mat mat = QimageToMat(image);
+	cv::Mat mat = QImageToMat(image);
 	Arguments(args, ksize, threshold);
 	cv::Canny(mat.clone(), mat, threshold, threshold * 3, ksize);
-	image = MatToQimage(mat);
+	return MatToQImage(mat);
 }
 
-void Canny::Arguments(const QMap<QString, QString>& args, int& ksize, int& threshold)
+void Canny::Arguments(const QHash<QString, QString>& args, int& ksize, int& threshold)
 {
 	bool ok = false;
 	auto it = args.find("KernelSize");

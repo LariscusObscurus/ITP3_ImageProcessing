@@ -1,6 +1,6 @@
-// Grayscale.hpp
+// FloodFill.cpp
 
-/* © 2013 David Wolf
+/* © 2014 David Wolf
  *
  * This file is part of ImageProcessing.
  *
@@ -18,19 +18,32 @@
  * along with ImageProcessing.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GRAYSCALE_H
-#define GRAYSCALE_H
+#include "Brush.hpp"
+#include "../Conversion.hpp"
+#include "../Exception.hpp"
+#include <opencv2/core/core.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <QImage>
+#include <QColor>
+#include <QPoint>
 
-#include "../IOperation.hpp"
-
-class Grayscale : public IOperation
+QImage Brush::Draw(const QImage &img, const QHash<QString, QString>& args)
 {
-public:
-	Grayscale() { }
-	virtual ~Grayscale() throw() { }
-	//! Konvertiert die RGB-Werte des Bildes in 8-Bit Graufstufen
-	virtual QImage Draw(const QImage& img, const QHash<QString, QString>& args);
-	virtual QString GetName() const;
-};
+	/*
+	cv::Mat mat = QImageToMat(img);
+	cv::Point seedPoint;
+	cv::Scalar color(c.blue(), c.green(), c.red());
 
-#endif // GRAYSCALE_H
+	seedPoint.x = end.x();
+	seedPoint.y = end.y();
+
+	cv::floodFill(mat, seedPoint, color);
+	img = MatToQImage(mat);
+	*/
+	return img;
+}
+
+QString Brush::GetName() const
+{
+	return "Brush";
+}

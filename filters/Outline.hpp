@@ -38,10 +38,10 @@ public:
 	 *	-- Ellipse: Das Strukturelement hat eine elliptische Anordnung
 	 *	-- Cross: Das Strukturelement hat eine Kreuzanordnung
 	 */
-	virtual void Draw(QImage &image, const QMap<QString, QString> &args);
+	virtual QImage Draw(const QImage& img, const QHash<QString, QString>& args);
 	virtual QString GetName() const;
 private:
-	void Arguments(const QMap<QString, QString>& args, int &shape, int &size);
+	void Arguments(const QHash<QString, QString>& args, int &shape, int &size);
 };
 
 #endif // OUTLINE_H

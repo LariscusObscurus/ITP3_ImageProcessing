@@ -24,6 +24,7 @@
 #include <QScrollArea>
 #include <QMessageBox>
 #include "mainwindow.hpp"
+#include "imagewidget.hpp"
 #include "ui_mainwindow.h"
 #include "ueberdialog.hpp"
 #include "filters/BilateralFilter.hpp"
@@ -63,6 +64,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+	mDummyImage->clearTools();
 	delete mDummyImage;
 	delete mInputManager;
 	delete mDia;

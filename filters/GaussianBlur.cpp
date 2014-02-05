@@ -23,20 +23,20 @@
 #include "../Exception.hpp"
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-#include <QMap>
+#include <QHash>
 #include <QImage>
 
-void GaussianBlur::Draw(QImage &image, const QMap<QString, QString> &args)
+QImage GaussianBlur::Draw(const QImage &image, const QHash<QString, QString>& args)
 {
 	double sigma = 0;
 	int ksize = 3;
 	Arguments(args, ksize, sigma);
-	cv::Mat mat = QimageToMat(image);
+	cv::Mat mat = QImageToMat(image);
 	cv::GaussianBlur(mat.clone(), mat, cv::Size(ksize, ksize), sigma);
-	image = MatToQimage(mat);
+	return MatToQImage(mat);
 }
 
-void GaussianBlur::Arguments(const QMap<QString, QString> &args, int &ksize, double &sigma)
+void GaussianBlur::Arguments(const QHash<QString, QString> &args, int &ksize, double &sigma)
 {
 	// Name der Argumente steht noch nicht fest
 	bool ok = false;

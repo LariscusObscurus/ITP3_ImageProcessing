@@ -1,6 +1,6 @@
-// Grayscale.hpp
+// Tool.hpp
 
-/* © 2013 David Wolf
+/* © 2014 David Wolf
  *
  * This file is part of ImageProcessing.
  *
@@ -18,19 +18,31 @@
  * along with ImageProcessing.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GRAYSCALE_H
-#define GRAYSCALE_H
+#ifndef TOOL_HPP
+#define TOOL_HPP
 
-#include "../IOperation.hpp"
+#include <QtGlobal>
 
-class Grayscale : public IOperation
-{
-public:
-	Grayscale() { }
-	virtual ~Grayscale() throw() { }
-	//! Konvertiert die RGB-Werte des Bildes in 8-Bit Graufstufen
-	virtual QImage Draw(const QImage& img, const QHash<QString, QString>& args);
-	virtual QString GetName() const;
+enum class Tool {
+	Pencil,
+	Brush,
+	Airbrush,
+	SprayCan,
+	FloodFill,
+	Eraser,
+	Crop,
+	Stamp,
+	Text,
+	Geometry,
+	MagicWand,
+	Magnifiere,
+	EyeDropper,
+	Ink
 };
 
-#endif // GRAYSCALE_H
+static inline uint qHash(Tool key, uint = 0)
+{
+	return static_cast<uint>(key);
+}
+
+#endif // TOOL_HPP

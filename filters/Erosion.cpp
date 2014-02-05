@@ -23,21 +23,21 @@
 #include "../Conversion.hpp"
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-#include <QMap>
+#include <QHash>
 #include <QImage>
 
-void Erosion::Draw(QImage &image, const QMap<QString, QString> &args)
+QImage Erosion::Draw(const QImage &image, const QHash<QString, QString>& args)
 {
 	int shape = cv::MORPH_RECT;
 	int ksize = 2;
 	Arguments(args, shape, ksize);
-	cv::Mat mat = QimageToMat(image);
+	cv::Mat mat = QImageToMat(image);
 	cv::Mat kernel = cv::getStructuringElement(shape, cv::Size(ksize, ksize));
 	cv::erode(mat.clone(), mat, kernel);
-	image = MatToQimage(mat);
+	return MatToQImage(mat);
 }
 
-void Erosion::Arguments(const QMap<QString, QString> &args, int& shape, int& ksize)
+void Erosion::Arguments(const QHash<QString, QString> &args, int& shape, int& ksize)
 {
 	auto it = args.find("Shape");
 

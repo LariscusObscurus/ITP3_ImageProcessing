@@ -31,10 +31,10 @@ public:
 	//!
 	/*!
 	 */
-	virtual void Draw(QImage &image, const QMap<QString, QString> &args);
+	virtual QImage Draw(const QImage& img, const QHash<QString, QString>& args);
 	virtual QString GetName() const;
 private:
-	void SetupOperation(QImage &image, QMap<QString, QString> args, int ksize);
+	void SetupOperation(const QImage &image, QHash<QString, QString> args, int ksize);
 };
 
 #endif // EDGEDETECTION_H

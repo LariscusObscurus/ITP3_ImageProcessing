@@ -26,7 +26,7 @@
 #include <QString>
 #include <QAction>
 #include "sizedialogue.hpp"
-#include "imagewidget.hpp"
+#include "Tool.hpp"
 
 namespace Ui {
 class MainWindow;

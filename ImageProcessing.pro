@@ -31,7 +31,10 @@ SOURCES += main.cpp\
     filters/Sobel.cpp \
     filters/TestFilter.cpp \
     Utility.cpp \
-    InputManager.cpp
+    InputManager.cpp \
+    tools/Pencil.cpp \
+    tools/Brush.cpp \
+    tools/Flood.cpp
 
 HEADERS  += \
     colordisplaywidget.hpp \
@@ -55,7 +58,12 @@ HEADERS  += \
     filters/Sobel.hpp \
     filters/TestFilter.hpp \
     Utility.hpp \
-    InputManager.hpp
+    InputManager.hpp \
+    tools/Pencil.hpp \
+    Tool.hpp \
+    IDisposable.hpp \
+    tools/Brush.hpp \
+    tools/Flood.hpp
 
 FORMS    += mainwindow.ui \
     ueberdialog.ui \
