@@ -53,7 +53,7 @@ signals:
 private slots:
 	void on_actionOpen_triggered();
 
-	//void on_actionClose_triggered();
+	void on_actionClose_triggered();
 
 	void on_actionAbout_triggered();
 
@@ -124,6 +124,60 @@ private slots:
 	void on_actionErosion_triggered();
 
 	void on_actionGrayscale_triggered();
+
+	void on_actionColorize_triggered();
+
+	void on_actionSaturation_triggered();
+
+	void on_actionBrightness_triggered();
+
+	void on_actionContrast_triggered();
+
+	void on_actionDisaturate_triggered();
+
+	void on_actionBalance_triggered();
+
+	void on_actionHistogram_triggered();
+
+	void on_actionInvertColor_triggered();
+
+	void on_actionEyedropper_triggered();
+
+	void on_actionText_triggered();
+
+	void on_actionAll_triggered();
+
+	void on_actionNone_triggered();
+
+	void on_actionInvertSelect_triggered();
+
+	void on_actionByColor_triggered();
+
+	void on_actionMagicWand_triggered();
+
+	void on_actionGrowth_triggered();
+
+	void on_actionShrink_triggered();
+
+	void on_actionNew_triggered();
+
+	void on_actionCopy_triggered();
+
+	void on_actionPaste_triggered();
+
+	void on_actionHelp_triggered();
+
+	void on_actionCut_triggered();
+
+	void on_actionCloseAll_triggered();
+
+	void on_actionQuit_triggered();
+
+	void on_actionCartoon_triggered();
+
+	void on_actionOilify_triggered();
+
+	void on_actionZoom_triggered();
 
 protected:
 	virtual void keyPressEvent(QKeyEvent*);

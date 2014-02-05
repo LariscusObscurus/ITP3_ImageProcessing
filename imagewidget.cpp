@@ -97,7 +97,7 @@ void ImageWidget::toolChanged(Tool tool)
 		m_tool = tool;
 		break;
 	default:
-		QMessageBox::critical(0, "Error", "Tool is not yet implemented.");
+		QMessageBox::information(0, "Information", "Tool is not yet implemented.");
 		break;
 	}
 }

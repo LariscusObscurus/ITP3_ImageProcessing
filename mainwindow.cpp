@@ -84,6 +84,94 @@ void MainWindow::connectSignals()
 	//connect(ui->actionClose, SIGNAL(triggered()), this, SLOT(close()));
 }
 
+ImageWidget* MainWindow::getImageWidget() const
+{
+	QWidget* widget = ui->imagetab->currentWidget();
+
+	if (widget) {
+		QScrollArea* area = qobject_cast<QScrollArea*>(widget);
+		return qobject_cast<ImageWidget*>(area->widget());
+	} else {
+		return nullptr;
+	}
+}
+
+void MainWindow::showError(const Exception &e)
+{
+	QMessageBox::critical(0, "Error", e.Message());
+}
+
+void MainWindow::applyFilter(IOperation* operation)
+{
+	try {
+		ImageWidget* img = getImageWidget();
+
+		if (img) {
+			img->applyFilter(operation);
+		}
+	} catch (Exception& e) {
+		showError(e);
+	}
+
+	delete operation;
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *e)
+{
+	// Basis Event
+	QMainWindow::keyPressEvent(e);
+	// Eventlogik
+	mInputManager->KeyPressEvent(e);
+}
+
+void MainWindow::keyReleasedEvent(QKeyEvent *e)
+{
+	// Basis Event
+	QMainWindow::keyReleaseEvent(e);
+	// Eventlogik
+	mInputManager->KeyReleaseEvent(e);
+}
+
+void MainWindow::mousePressEvent(QMouseEvent *e)
+{
+	// Basis Event
+	QMainWindow::mousePressEvent(e);
+	// Eventlogik
+	mInputManager->MousePressEvent(e);
+}
+
+void MainWindow::mouseReleaseEvent(QMouseEvent *e)
+{
+	// Basis Event
+	QMainWindow::mouseReleaseEvent(e);
+	// Eventlogik
+	mInputManager->MouseReleaseEvent(e);
+}
+
+void MainWindow::mouseDoubleClickEvent(QMouseEvent *e)
+{
+	// Basis Event
+	QMainWindow::mouseDoubleClickEvent(e);
+	// Eventlogik
+	mInputManager->MouseDoubleClickEvent(e);
+}
+
+void MainWindow::mouseMoveEvent(QMouseEvent *e)
+{
+	// Basis Event
+	QMainWindow::mouseMoveEvent(e);
+	// Eventlogik
+	mInputManager->MouseMoveEvent(e);
+}
+
+void MainWindow::wheelEvent(QWheelEvent *e)
+{
+	// Basis Event
+	QMainWindow::wheelEvent(e);
+	// Eventlogik
+	mInputManager->MouseWheelEvent(e);
+}
+
 void MainWindow::on_actionOpen_triggered()
 {
 	ui->statusbar->showMessage("Open File",2000);
@@ -117,6 +205,11 @@ void MainWindow::on_actionOpen_triggered()
 	openImage(fileName);
 }
 
+void MainWindow::on_actionNew_triggered()
+{
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+}
+
 void MainWindow::openImage(const QString &fileName)
 {
 	QScrollArea* area = new QScrollArea();
@@ -144,24 +237,21 @@ void MainWindow::openImage(const QString &fileName)
 	}
 }
 
-ImageWidget* MainWindow::getImageWidget() const
-{
-	QWidget* widget = ui->imagetab->currentWidget();
-
-	if (widget) {
-		QScrollArea* area = qobject_cast<QScrollArea*>(widget);
-		return qobject_cast<ImageWidget*>(area->widget());
-	} else {
-		return nullptr;
-	}
-}
-
-/*
 void MainWindow::on_actionClose_triggered()
 {
-	ui->statusbar->showMessage("Quit Image Processing",2000);
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+	//ui->statusbar->showMessage("Quit Image Processing",2000);
 }
-*/
+
+void MainWindow::on_actionCloseAll_triggered()
+{
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+}
+
+void MainWindow::on_actionQuit_triggered()
+{
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+}
 
 void MainWindow::on_actionAbout_triggered()
 {
@@ -350,82 +440,6 @@ void MainWindow::on_imagetab_tabCloseRequested(int index)
 	}
 }
 
-void MainWindow::showError(const Exception &e)
-{
-	QMessageBox::critical(0, "Error", e.Message());
-}
-
-void MainWindow::applyFilter(IOperation* operation)
-{
-	try {
-		ImageWidget* img = getImageWidget();
-
-		if (img) {
-			img->applyFilter(operation);
-		}
-	} catch (Exception& e) {
-		showError(e);
-	}
-
-	delete operation;
-}
-
-void MainWindow::keyPressEvent(QKeyEvent *e)
-{
-	// Basis Event
-	QMainWindow::keyPressEvent(e);
-	// Eventlogik
-	mInputManager->KeyPressEvent(e);
-}
-
-void MainWindow::keyReleasedEvent(QKeyEvent *e)
-{
-	// Basis Event
-	QMainWindow::keyReleaseEvent(e);
-	// Eventlogik
-	mInputManager->KeyReleaseEvent(e);
-}
-
-void MainWindow::mousePressEvent(QMouseEvent *e)
-{
-	// Basis Event
-	QMainWindow::mousePressEvent(e);
-	// Eventlogik
-	mInputManager->MousePressEvent(e);
-}
-
-void MainWindow::mouseReleaseEvent(QMouseEvent *e)
-{
-	// Basis Event
-	QMainWindow::mouseReleaseEvent(e);
-	// Eventlogik
-	mInputManager->MouseReleaseEvent(e);
-}
-
-void MainWindow::mouseDoubleClickEvent(QMouseEvent *e)
-{
-	// Basis Event
-	QMainWindow::mouseDoubleClickEvent(e);
-	// Eventlogik
-	mInputManager->MouseDoubleClickEvent(e);
-}
-
-void MainWindow::mouseMoveEvent(QMouseEvent *e)
-{
-	// Basis Event
-	QMainWindow::mouseMoveEvent(e);
-	// Eventlogik
-	mInputManager->MouseMoveEvent(e);
-}
-
-void MainWindow::wheelEvent(QWheelEvent *e)
-{
-	// Basis Event
-	QMainWindow::wheelEvent(e);
-	// Eventlogik
-	mInputManager->MouseWheelEvent(e);
-}
-
 void MainWindow::on_actionBlur_triggered()
 {
 	applyFilter(new Blur());
@@ -471,7 +485,127 @@ void MainWindow::on_actionErosion_triggered()
 	applyFilter(new Erosion());
 }
 
+void MainWindow::on_actionCartoon_triggered()
+{
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+}
+
+void MainWindow::on_actionOilify_triggered()
+{
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+}
+
 void MainWindow::on_actionGrayscale_triggered()
 {
 	applyFilter(new Grayscale());
+}
+
+void MainWindow::on_actionColorize_triggered()
+{
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+}
+
+void MainWindow::on_actionSaturation_triggered()
+{
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+}
+
+void MainWindow::on_actionBrightness_triggered()
+{
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+}
+
+void MainWindow::on_actionContrast_triggered()
+{
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+}
+
+void MainWindow::on_actionDisaturate_triggered()
+{
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+}
+
+void MainWindow::on_actionBalance_triggered()
+{
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+}
+
+void MainWindow::on_actionHistogram_triggered()
+{
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+}
+
+void MainWindow::on_actionInvertColor_triggered()
+{
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+}
+
+void MainWindow::on_actionZoom_triggered()
+{
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+}
+
+void MainWindow::on_actionEyedropper_triggered()
+{
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+}
+
+void MainWindow::on_actionText_triggered()
+{
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+}
+
+void MainWindow::on_actionAll_triggered()
+{
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+}
+
+void MainWindow::on_actionNone_triggered()
+{
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+}
+
+void MainWindow::on_actionInvertSelect_triggered()
+{
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+}
+
+void MainWindow::on_actionByColor_triggered()
+{
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+}
+
+void MainWindow::on_actionMagicWand_triggered()
+{
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+}
+
+void MainWindow::on_actionGrowth_triggered()
+{
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+}
+
+void MainWindow::on_actionShrink_triggered()
+{
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+}
+
+void MainWindow::on_actionCopy_triggered()
+{
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+}
+
+void MainWindow::on_actionPaste_triggered()
+{
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+}
+
+void MainWindow::on_actionCut_triggered()
+{
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+}
+
+void MainWindow::on_actionHelp_triggered()
+{
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
 }

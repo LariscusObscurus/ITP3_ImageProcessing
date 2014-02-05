@@ -862,6 +862,9 @@ QToolTip {
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="toolTip">
+        <string>Switch colors</string>
+       </property>
        <property name="styleSheet">
         <string notr="true">QPushButton {
 	border: 1px solid #d8d8d8;
@@ -1021,7 +1024,7 @@ QTabBar::tab:!selected {
     <addaction name="actionSaveAs"/>
     <addaction name="separator"/>
     <addaction name="actionClose"/>
-    <addaction name="actionClose_All"/>
+    <addaction name="actionCloseAll"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuBearbeiten">
@@ -1115,8 +1118,8 @@ QTabBar::tab:!selected {
     <addaction name="actionAll"/>
     <addaction name="actionNone"/>
     <addaction name="actionInvertSelect"/>
-    <addaction name="actionRectangle"/>
-    <addaction name="actionMagic_Wand"/>
+    <addaction name="actionByColor"/>
+    <addaction name="actionMagicWand"/>
     <addaction name="separator"/>
     <addaction name="actionGrowth"/>
     <addaction name="actionShrink"/>
@@ -1241,7 +1244,7 @@ QTabBar::tab:!selected {
     <string>Ctrl+B</string>
    </property>
   </action>
-  <action name="actionClose_All">
+  <action name="actionCloseAll">
    <property name="text">
     <string>Close All</string>
    </property>
@@ -1392,12 +1395,12 @@ QTabBar::tab:!selected {
     <string>Invert</string>
    </property>
   </action>
-  <action name="actionRectangle">
+  <action name="actionByColor">
    <property name="text">
     <string>By Color</string>
    </property>
   </action>
-  <action name="actionMagic_Wand">
+  <action name="actionMagicWand">
    <property name="text">
     <string>Magic Wand</string>
    </property>
