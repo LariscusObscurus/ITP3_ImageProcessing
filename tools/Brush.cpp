@@ -1,4 +1,4 @@
-// FloodFill.cpp
+// Brush.cpp
 
 /* © 2014 David Wolf
  *
@@ -29,18 +29,15 @@
 
 QImage Brush::Draw(const QImage &img, const QHash<QString, QString>& args)
 {
-	/*
 	cv::Mat mat = QImageToMat(img);
-	cv::Point seedPoint;
-	cv::Scalar color(c.blue(), c.green(), c.red());
+	cv::Point pt1, pt2;
+	cv::Scalar color;
+	int size;
 
-	seedPoint.x = end.x();
-	seedPoint.y = end.y();
+	Arguments(args, pt1, pt2, color, size);
 
-	cv::floodFill(mat, seedPoint, color);
-	img = MatToQImage(mat);
-	*/
-	return img;
+	cv::line(mat, pt1, pt2, color, size, CV_AA);
+	return MatToQImage(mat);
 }
 
 QString Brush::GetName() const

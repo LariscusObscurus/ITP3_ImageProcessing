@@ -1,4 +1,4 @@
-// Pencil.cpp
+// BasicBrush.hpp
 
 /* © 2014 David Wolf
  *
@@ -18,30 +18,23 @@
  * along with ImageProcessing.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Pencil.hpp"
-#include "../Conversion.hpp"
-#include "../Exception.hpp"
-#include <opencv2/core/core.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <QImage>
-#include <QColor>
-#include <QPoint>
-#include <QHash>
+#ifndef BASICBRUSH_HPP
+#define BASICBRUSH_HPP
 
-QImage Pencil::Draw(const QImage &img, const QHash<QString, QString> &args)
-{
-	cv::Mat mat = QImageToMat(img);
-	cv::Point pt1, pt2;
-	cv::Scalar color;
-	int size;
-
-	Arguments(args, pt1, pt2, color, size);
-
-	cv::line(mat, pt1, pt2, color, size, CV_AA);
-	return MatToQImage(mat);
+#include "../IOperation.hpp"
+namespace cv {
+	template <typename T>
+	class Scalar_;
+	template <typename T>
+	class Point_;
 }
 
-QString Pencil::GetName() const
+class BasicBrush : public IOperation
 {
-	return "Pencil";
-}
+public:
+	virtual ~BasicBrush() throw() { }
+protected:
+	void Arguments(const QHash<QString, QString>& args, cv::Point_<int>&, cv::Point_<int>&, cv::Scalar_<double>&, int&);
+};
+
+#endif

@@ -1,4 +1,4 @@
-// FloodFill.hpp
+// Brush.hpp
 
 /* © 2014 David Wolf
  *
@@ -21,9 +21,9 @@
 #ifndef BRUSH_HPP
 #define BRUSH_HPP
 
-#include "../IOperation.hpp"
+#include "BasicBrush.hpp"
 
-class Brush : public IOperation
+class Brush : public BasicBrush
 {
 public:
 	Brush() { }

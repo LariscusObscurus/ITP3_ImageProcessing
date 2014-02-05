@@ -71,7 +71,8 @@ private:
 	void drawImage();
 
 	void draw(const QPoint &endPoint);
-	void drawPencil(const QPoint&);
+	void drawBasicBrush(Tool tool, const QPoint&);
+	void drawGeneric(IOperation *o, const QHash<QString,QString>&);
 	void drawFloodFill(const QPoint&);
 
 	QImage m_image;

@@ -1,4 +1,4 @@
-// FloodFill.hpp
+// Flood.hpp
 
 /* © 2014 David Wolf
  *

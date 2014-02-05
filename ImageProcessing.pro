@@ -34,7 +34,8 @@ SOURCES += main.cpp\
     InputManager.cpp \
     tools/Pencil.cpp \
     tools/Brush.cpp \
-    tools/Flood.cpp
+    tools/Flood.cpp \
+    tools/BasicBrush.cpp
 
 HEADERS  += \
     colordisplaywidget.hpp \
@@ -63,7 +64,8 @@ HEADERS  += \
     Tool.hpp \
     IDisposable.hpp \
     tools/Brush.hpp \
-    tools/Flood.hpp
+    tools/Flood.hpp \
+    tools/BasicBrush.hpp
 
 FORMS    += mainwindow.ui \
     ueberdialog.ui \

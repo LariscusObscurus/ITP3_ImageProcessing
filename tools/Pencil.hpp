@@ -21,23 +21,15 @@
 #ifndef PENCIL_HPP
 #define PENCIL_HPP
 
-#include "../IOperation.hpp"
-namespace cv {
-	template <typename T>
-	class Scalar_;
-	template <typename T>
-	class Point_;
-}
+#include "BasicBrush.hpp"
 
-class Pencil : public IOperation
+class Pencil : public BasicBrush
 {
 public:
 	Pencil() { }
 	virtual ~Pencil() throw() { }
 	virtual QImage Draw(const QImage& img, const QHash<QString, QString>& args);
 	virtual QString GetName() const;
-private:
-	void Arguments(const QHash<QString, QString>& args, cv::Point_<int>&, cv::Point_<int>&, cv::Scalar_<double>&, int&);
 };
 
 #endif

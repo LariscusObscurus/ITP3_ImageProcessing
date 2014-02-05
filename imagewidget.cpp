@@ -254,7 +254,7 @@ void ImageWidget::draw(const QPoint &endPoint)
 #endif
 	switch (m_tool) {
 	case Tool::Pencil:
-		drawPencil(endPoint);
+		drawBasicBrush(Tool::Pencil, endPoint);
 		break;
 	case Tool::FloodFill:
 		drawFloodFill(endPoint);
@@ -273,11 +273,9 @@ void ImageWidget::draw(const QPoint &endPoint)
 #endif
 }
 
-void ImageWidget::drawPencil(const QPoint &endPoint)
+void ImageWidget::drawBasicBrush(Tool tool, const QPoint &endPoint)
 {
-	QImage img;
 	QHash<QString, QString> args;
-	IOperation* o = s_tools[Tool::Pencil];
 
 	// Setze notwendige Argumente
 	args["X1"] = QString::number(m_lastPoint.x());
@@ -288,6 +286,13 @@ void ImageWidget::drawPencil(const QPoint &endPoint)
 	args["Red"] = QString::number(m_penColor.red());
 	args["Green"] = QString::number(m_penColor.green());
 	args["Blue"] = QString::number(m_penColor.blue());
+
+	drawGeneric(s_tools[tool], args);
+}
+
+void ImageWidget::drawGeneric(IOperation* o, const QHash<QString, QString> &args)
+{
+	QImage img;
 
 	img = o->Draw(m_image, args);
 

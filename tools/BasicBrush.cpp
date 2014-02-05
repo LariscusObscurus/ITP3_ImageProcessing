@@ -1,4 +1,4 @@
-// Flood.cpp
+// BasicBrush.cpp
 
 /* © 2014 David Wolf
  *
@@ -18,7 +18,7 @@
  * along with ImageProcessing.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Flood.hpp"
+#include "BasicBrush.hpp"
 #include "../Conversion.hpp"
 #include "../Exception.hpp"
 #include <opencv2/core/core.hpp>
@@ -28,44 +28,45 @@
 #include <QPoint>
 #include <QHash>
 
-QImage Flood::Draw(const QImage &img, const QHash<QString, QString>& args)
-{
-	cv::Mat mat;
-	cv::Point seedPoint;
-	cv::Scalar color;
-
-	// Konvertiere Bild in ein valides Format
-	mat = QImageRgb32ToMat24(img);
-
-	Arguments(args, seedPoint, color);
-
-	cv::floodFill(mat, seedPoint, color);
-	return MatToQImage(mat);
-}
-
-QString Flood::GetName() const
-{
-	return "FloodFill";
-}
-
-void Flood::Arguments(const QHash<QString, QString> &args, cv::Point& pt, cv::Scalar& color)
+void BasicBrush::Arguments(const QHash<QString, QString> &args, cv::Point& pt1, cv::Point& pt2, cv::Scalar& color, int& size)
 {
 	bool ok = false;
 	int r, g, b;
 	QHash<QString, QString>::const_iterator it;
 
-	// x
-	if ((it = args.find("X")) != args.end()) {
-		pt.x = it.value().toInt(&ok);
+	// x1
+	if ((it = args.find("X1")) != args.end()) {
+		pt1.x = it.value().toInt(&ok);
 		if (!ok) {
-			throw FormatException("couldn't convert \"X\" argument for pencil tool");
+			throw FormatException("couldn't convert \"X1\" argument for pencil tool");
 		}
 	}
-	// y
-	if ((it = args.find("Y")) != args.end()) {
-		pt.y = it.value().toInt(&ok);
+	// y1
+	if ((it = args.find("Y1")) != args.end()) {
+		pt1.y = it.value().toInt(&ok);
 		if (!ok) {
-			throw FormatException("couldn't convert \"Y\" argument for pencil tool");
+			throw FormatException("couldn't convert \"Y1\" argument for pencil tool");
+		}
+	}
+	// x2
+	if ((it = args.find("X2")) != args.end()) {
+		pt2.x = it.value().toInt(&ok);
+		if (!ok) {
+			throw FormatException("couldn't convert \"X2\" argument for pencil tool");
+		}
+	}
+	// y2
+	if ((it = args.find("Y2")) != args.end()) {
+		pt2.y = it.value().toInt(&ok);
+		if (!ok) {
+			throw FormatException("couldn't convert \"Y2\" argument for pencil tool");
+		}
+	}
+	// size
+	if ((it = args.find("Size")) != args.end()) {
+		size = it.value().toInt(&ok);
+		if (!ok) {
+			throw FormatException("couldn't convert \"Size\" argument for pencil tool");
 		}
 	}
 	// red
