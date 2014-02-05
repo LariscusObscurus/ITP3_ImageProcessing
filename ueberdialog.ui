@@ -56,7 +56,7 @@ QLabel {
    <item>
     <widget class="QLabel" name="label_2">
      <property name="text">
-      <string>Version 0.2.0</string>
+      <string>Version 0.5.0</string>
      </property>
     </widget>
    </item>
@@ -74,7 +74,7 @@ QLabel {
       </font>
      </property>
      <property name="text">
-      <string>Im Rahmen dieses ITP3 Projektes  wurde eine Bildbearbeitungssoftware entwickelt. Mitglieder: Tom Schalbar, Leonhardt Schwarz, David Wolf und Florian Würrer © 2013</string>
+      <string>This program is a fork from Tom_Wuerrers_BlackWolf. The purpose to learn GUI programming with image processing</string>
      </property>
      <property name="scaledContents">
       <bool>false</bool>

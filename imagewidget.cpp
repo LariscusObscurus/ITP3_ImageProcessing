@@ -273,6 +273,15 @@ void ImageWidget::draw(const QPoint &endPoint)
 #endif
 }
 
+void ImageWidget::drawGeneric(IOperation* o, const QHash<QString, QString> &args)
+{
+	QImage img = o->Draw(m_image, args);
+
+	if (img.format() == QImage::Format_RGB888) {
+		m_image = img.convertToFormat(QImage::Format_ARGB32);
+	}
+}
+
 void ImageWidget::drawBasicBrush(Tool tool, const QPoint &endPoint)
 {
 	QHash<QString, QString> args;
@@ -288,17 +297,6 @@ void ImageWidget::drawBasicBrush(Tool tool, const QPoint &endPoint)
 	args["Blue"] = QString::number(m_penColor.blue());
 
 	drawGeneric(s_tools[tool], args);
-}
-
-void ImageWidget::drawGeneric(IOperation* o, const QHash<QString, QString> &args)
-{
-	QImage img;
-
-	img = o->Draw(m_image, args);
-
-	if (img.format() == QImage::Format_RGB888) {
-		m_image = img.convertToFormat(QImage::Format_ARGB32);
-	}
 }
 
 void ImageWidget::drawFloodFill(const QPoint &endPoint)
