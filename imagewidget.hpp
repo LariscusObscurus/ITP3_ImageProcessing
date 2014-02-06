@@ -27,7 +27,6 @@
 #include <QHash>
 #include <new>
 #include "ringbuffer.hpp"
-#include "Tool.hpp"
 
 // classes
 class IOperation;
@@ -39,58 +38,46 @@ public:
 	explicit ImageWidget(QWidget *parent = 0);
 	virtual ~ImageWidget() throw();
 
-	bool openImage(const QString& fileName);
-	bool saveImage();
-	bool saveImage(const QString& fileName, const char *fileFormat);
-	void applyFilter(IOperation* filter);
-	bool undo();
-	bool redo();
-	void undoHistory();
-	void resetImage();
-	void clearImage();
-	bool isChanged() const;
-	QString getFileName() const;
-	QColor getPenColor() const;
-	void clearTools();
+	bool OpenImage(const QString& fileName);
+	bool SaveImage();
+	bool SaveImage(const QString& fileName, const char *fileFormat);
+	bool Undo();
+	bool Redo();
+	void UndoHistory();
+	void ResetImage();
+	bool IsChanged() const;
+	QString GetFileName() const;
 
 signals:
 
 public slots:
-	void setPenColor(const QColor& newColor);
-	void setPenWidth(int width);
-	void toolChanged(Tool);
+	void Operation(IOperation*, const QHash<QString,QString>&, bool liveImage = false);
+	void Arguments(const QHash<QString,QString>&);
 
 protected:
-	virtual void mousePressEvent(QMouseEvent *);
-	virtual void mouseMoveEvent(QMouseEvent *);
-	virtual void mouseReleaseEvent(QMouseEvent *);
+	virtual void mousePressEvent(QMouseEvent*);
+	virtual void mouseReleaseEvent(QMouseEvent*);
+	virtual void mouseMoveEvent(QMouseEvent*);
+	virtual void wheelEvent(QWheelEvent*);
 	virtual void resizeEvent(QResizeEvent *event);
 	virtual void paintEvent(QPaintEvent *);
 
 private:
-	void drawImage();
+	void Draw();
 
-	void draw(const QPoint &endPoint);
-	void drawBasicBrush(Tool tool, const QPoint&);
-	void drawGeneric(IOperation *o, const QHash<QString,QString>&);
-	void drawFloodFill(const QPoint&);
+	QImage mImage;
+	QImage mOriginal;
+	QImage mLiveImage;
 
-	QImage m_image;
-	QImage m_original;
-	QColor m_penColor;
-	int m_penWidth;
+	bool mChanged;
+	RingBuffer<QImage> mUndoBuffer;
+	RingBuffer<QImage> mRedoBuffer;
 
-	bool m_changed;
-	QPoint m_lastPoint;
-	RingBuffer<QImage> m_undoBuffer;
-	RingBuffer<QImage> m_redoBuffer;
-	QPen m_pen;
-	Tool m_tool;
-
-	QString m_fileName;
-
-	// Klassenvariablen
-	static QHash<Tool, IOperation*> s_tools;
+	QString mFileName;
+	IOperation* mOperation;
+	QHash<QString, QString> mArgs;
+	bool mDraw;
+	bool mLive;
 };
 
 #endif // IMAGEWIDGET_H

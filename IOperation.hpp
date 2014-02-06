@@ -28,16 +28,13 @@ class QImage;
 
 // headers
 #include <QString>
-#include "IDisposable.hpp"
 
 //! Schnittstelle für Bildoperationen
-class IOperation : public IDisposable
+class IOperation
 {
 public:
 	//! Default destructor
 	virtual ~IOperation() throw() { }
-	//! Initialisiert die Bildoperation. (falls Speicher angelegt werden muss)
-	virtual void Initialize() { }
 	//! Führt die Bildoperation aus
 	/*!
 	 * Zeichnet die Bilddaten anhande der Operation um.
@@ -46,12 +43,6 @@ public:
 	 * \param args Die Argumente für die Bildbearbeitung
 	 */
 	virtual QImage Draw(const QImage& img, const QHash<QString, QString>& args) = 0;
-	//! Beendet die Bildoperation. (falls Speicher freigegeben werden muss)
-	virtual void Dispose() { }
-	//! Überprüft ob die Bildoperation freigegeben wurde
-	virtual bool IsDisposed() const { return true; }
-	//! Liest den Namen der Bildoperation
-	virtual QString GetName() const { return ""; }
 };
 
 #endif // IOPERATION_H

@@ -19,23 +19,22 @@ SOURCES += main.cpp\
     imagewidget.cpp \
     colordisplaywidget.cpp \
     sizedialogue.cpp \
-    filters/BilateralFilter.cpp \
-    filters/Blur.cpp \
-    filters/Canny.cpp \
-    filters/Dilation.cpp \
-    filters/Erosion.cpp \
-    filters/GaussianBlur.cpp \
-    filters/Grayscale.cpp \
-    filters/MedianBlur.cpp \
-    filters/Outline.cpp \
-    filters/Sobel.cpp \
-    filters/TestFilter.cpp \
     Utility.cpp \
-    InputManager.cpp \
-    tools/Pencil.cpp \
-    tools/Brush.cpp \
-    tools/Flood.cpp \
-    tools/BasicBrush.cpp
+    color/Grayscale.cpp \
+    filter/BilateralFilter.cpp \
+    filter/Blur.cpp \
+    filter/Canny.cpp \
+    filter/Dilation.cpp \
+    filter/Erosion.cpp \
+    filter/GaussianBlur.cpp \
+    filter/MedianBlur.cpp \
+    filter/Outline.cpp \
+    filter/Sobel.cpp \
+    filter/TestFilter.cpp \
+    tool/Brush.cpp \
+    tool/Flood.cpp \
+    tool/Pencil.cpp \
+    tool/BasicTool.cpp
 
 HEADERS  += \
     colordisplaywidget.hpp \
@@ -47,25 +46,22 @@ HEADERS  += \
     ringbuffer.hpp \
     sizedialogue.hpp \
     ueberdialog.hpp \
-    filters/BilateralFilter.hpp \
-    filters/Blur.hpp \
-    filters/Canny.hpp \
-    filters/Dilation.hpp \
-    filters/Erosion.hpp \
-    filters/GaussianBlur.hpp \
-    filters/Grayscale.hpp \
-    filters/MedianBlur.hpp \
-    filters/Outline.hpp \
-    filters/Sobel.hpp \
-    filters/TestFilter.hpp \
     Utility.hpp \
-    InputManager.hpp \
-    tools/Pencil.hpp \
-    Tool.hpp \
-    IDisposable.hpp \
-    tools/Brush.hpp \
-    tools/Flood.hpp \
-    tools/BasicBrush.hpp
+    color/Grayscale.hpp \
+    filter/BilateralFilter.hpp \
+    filter/Blur.hpp \
+    filter/Canny.hpp \
+    filter/Dilation.hpp \
+    filter/Erosion.hpp \
+    filter/GaussianBlur.hpp \
+    filter/MedianBlur.hpp \
+    filter/Outline.hpp \
+    filter/Sobel.hpp \
+    filter/TestFilter.hpp \
+    tool/Brush.hpp \
+    tool/Flood.hpp \
+    tool/Pencil.hpp \
+    tool/BasicTool.hpp
 
 FORMS    += mainwindow.ui \
     ueberdialog.ui \

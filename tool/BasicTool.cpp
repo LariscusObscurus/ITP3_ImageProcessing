@@ -18,7 +18,7 @@
  * along with ImageProcessing.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "BasicBrush.hpp"
+#include "BasicTool.hpp"
 #include "../Conversion.hpp"
 #include "../Exception.hpp"
 #include <opencv2/core/core.hpp>
@@ -27,68 +27,63 @@
 #include <QColor>
 #include <QPoint>
 #include <QHash>
+#include <QDebug>
 
-void BasicBrush::Arguments(const QHash<QString, QString> &args, cv::Point& pt1, cv::Point& pt2, cv::Scalar& color, int& size)
+void BasicTool::Arguments(const QHash<QString, QString> &args, cv::Point& pt, cv::Scalar& color, int& size)
 {
 	bool ok = false;
-	int r, g, b;
+	int r, g, b, a;
 	QHash<QString, QString>::const_iterator it;
 
-	// x1
-	if ((it = args.find("X1")) != args.end()) {
-		pt1.x = it.value().toInt(&ok);
+	// x
+	if ((it = args.find("X")) != args.end()) {
+		pt.x = it.value().toInt(&ok);
 		if (!ok) {
-			throw FormatException("couldn't convert \"X1\" argument for pencil tool");
+			throw FormatException("couldn't convert \"X\" argument for tool");
 		}
 	}
-	// y1
-	if ((it = args.find("Y1")) != args.end()) {
-		pt1.y = it.value().toInt(&ok);
+	// y
+	if ((it = args.find("Y")) != args.end()) {
+		pt.y = it.value().toInt(&ok);
 		if (!ok) {
-			throw FormatException("couldn't convert \"Y1\" argument for pencil tool");
-		}
-	}
-	// x2
-	if ((it = args.find("X2")) != args.end()) {
-		pt2.x = it.value().toInt(&ok);
-		if (!ok) {
-			throw FormatException("couldn't convert \"X2\" argument for pencil tool");
-		}
-	}
-	// y2
-	if ((it = args.find("Y2")) != args.end()) {
-		pt2.y = it.value().toInt(&ok);
-		if (!ok) {
-			throw FormatException("couldn't convert \"Y2\" argument for pencil tool");
+			throw FormatException("couldn't convert \"Y\" argument for tool");
 		}
 	}
 	// size
 	if ((it = args.find("Size")) != args.end()) {
 		size = it.value().toInt(&ok);
 		if (!ok) {
-			throw FormatException("couldn't convert \"Size\" argument for pencil tool");
+			throw FormatException("couldn't convert \"Size\" argument for tool");
 		}
 	}
 	// red
 	if ((it = args.find("Red")) != args.end()) {
 		r = it.value().toInt(&ok);
 		if (!ok) {
-			throw FormatException("couldn't convert \"Red\" argument for pencil tool");
+			throw FormatException("couldn't convert \"Red\" argument for tool");
 		}
 	}
 	// green
 	if ((it = args.find("Green")) != args.end()) {
 		g = it.value().toInt(&ok);
 		if (!ok) {
-			throw FormatException("couldn't convert \"Green\" argument for pencil tool");
+			throw FormatException("couldn't convert \"Green\" argument for tool");
 		}
 	}
 	// blue
 	if ((it = args.find("Blue")) != args.end()) {
 		b = it.value().toInt(&ok);
 		if (!ok) {
-			throw FormatException("couldn't convert \"Blue\" argument for pencil tool");
+			throw FormatException("couldn't convert \"Blue\" argument for tool");
 		}
 	}
-	color = CV_RGB(r, g, b);
+	// alpha
+	if ((it = args.find("Alpha")) != args.end()) {
+		a = it.value().toInt(&ok);
+		if (!ok) {
+			throw FormatException("couldn't convert \"Blue\" argument for tool");
+		}
+	}
+
+	color = cv::Scalar(b, g, r, a);
 }

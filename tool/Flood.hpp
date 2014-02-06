@@ -1,4 +1,4 @@
-// Tool.hpp
+// Flood.hpp
 
 /* © 2014 David Wolf
  *
@@ -18,31 +18,18 @@
  * along with ImageProcessing.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef TOOL_HPP
-#define TOOL_HPP
+#ifndef FLOOD_HPP
+#define FLOOD_HPP
 
-#include <QtGlobal>
+#include "BasicTool.hpp"
 
-enum class Tool {
-	Pencil,
-	Brush,
-	Airbrush,
-	SprayCan,
-	FloodFill,
-	Eraser,
-	Crop,
-	Stamp,
-	Text,
-	Geometry,
-	MagicWand,
-	Magnifiere,
-	EyeDropper,
-	Ink
+class Flood : public BasicTool
+{
+public:
+	Flood() { }
+	virtual ~Flood() throw() { }
+	virtual QImage Draw(const QImage& img, const QHash<QString, QString>& args);
+	virtual QString GetName() const;
 };
 
-static inline uint qHash(Tool key, uint = 0)
-{
-	return static_cast<uint>(key);
-}
-
-#endif // TOOL_HPP
+#endif

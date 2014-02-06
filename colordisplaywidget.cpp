@@ -33,8 +33,8 @@ ColorDisplayWidget::ColorDisplayWidget(QWidget *parent) :
 
 void ColorDisplayWidget::setColor(const QColor& color)
 {
-	emit colorChanged(color);
 	m_selectedColor = color;
+	emit colorChanged();
 	update();
 }
 
@@ -56,9 +56,7 @@ void ColorDisplayWidget::mousePressEvent(QMouseEvent *e)
 
 		if(color.isValid()) {
 			m_selectedColor = color;
-			emit colorChanged(m_selectedColor);
-		} else {
-			emit colorChanged(m_selectedColor);
+			emit colorChanged();
 		}
 	}
 }

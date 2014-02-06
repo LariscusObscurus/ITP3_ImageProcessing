@@ -21,7 +21,6 @@
 #include "Sobel.hpp"
 #include "../Conversion.hpp"
 #include "../Exception.hpp"
-#include "Grayscale.hpp"
 #include "GaussianBlur.hpp"
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -50,7 +49,6 @@ void Sobel::SetupOperation(const QImage& image, QHash<QString, QString> args, in
 {
 	bool ok = false;
 	GaussianBlur gauss;
-	//Grayscale gray;
 
 	if (args.find("KernelSize") == args.end()) {
 		args["KernelSize"] = QString().setNum(ksize);
@@ -64,7 +62,6 @@ void Sobel::SetupOperation(const QImage& image, QHash<QString, QString> args, in
 		}
 	}
 	gauss.Draw(image, args);
-	//gray.Draw(image, args);
 }
 
 QString Sobel::GetName() const

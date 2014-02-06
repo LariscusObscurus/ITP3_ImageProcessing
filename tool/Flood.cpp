@@ -33,11 +33,12 @@ QImage Flood::Draw(const QImage &img, const QHash<QString, QString>& args)
 	cv::Mat mat;
 	cv::Point seedPoint;
 	cv::Scalar color;
+	int size;
 
 	// Konvertiere Bild in ein valides Format
 	mat = QImageRgb32ToMat24(img);
 
-	Arguments(args, seedPoint, color);
+	Arguments(args, seedPoint, color, size);
 
 	cv::floodFill(mat, seedPoint, color);
 	return MatToQImage(mat);
@@ -46,48 +47,4 @@ QImage Flood::Draw(const QImage &img, const QHash<QString, QString>& args)
 QString Flood::GetName() const
 {
 	return "FloodFill";
-}
-
-void Flood::Arguments(const QHash<QString, QString> &args, cv::Point& pt, cv::Scalar& color)
-{
-	bool ok = false;
-	int r, g, b;
-	QHash<QString, QString>::const_iterator it;
-
-	// x
-	if ((it = args.find("X")) != args.end()) {
-		pt.x = it.value().toInt(&ok);
-		if (!ok) {
-			throw FormatException("couldn't convert \"X\" argument for pencil tool");
-		}
-	}
-	// y
-	if ((it = args.find("Y")) != args.end()) {
-		pt.y = it.value().toInt(&ok);
-		if (!ok) {
-			throw FormatException("couldn't convert \"Y\" argument for pencil tool");
-		}
-	}
-	// red
-	if ((it = args.find("Red")) != args.end()) {
-		r = it.value().toInt(&ok);
-		if (!ok) {
-			throw FormatException("couldn't convert \"Red\" argument for pencil tool");
-		}
-	}
-	// green
-	if ((it = args.find("Green")) != args.end()) {
-		g = it.value().toInt(&ok);
-		if (!ok) {
-			throw FormatException("couldn't convert \"Green\" argument for pencil tool");
-		}
-	}
-	// blue
-	if ((it = args.find("Blue")) != args.end()) {
-		b = it.value().toInt(&ok);
-		if (!ok) {
-			throw FormatException("couldn't convert \"Blue\" argument for pencil tool");
-		}
-	}
-	color = CV_RGB(r, g, b);
 }

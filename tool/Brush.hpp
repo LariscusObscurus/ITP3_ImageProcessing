@@ -1,4 +1,4 @@
-// Brush.cpp
+// Brush.hpp
 
 /* © 2014 David Wolf
  *
@@ -18,29 +18,18 @@
  * along with ImageProcessing.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Brush.hpp"
-#include "../Conversion.hpp"
-#include "../Exception.hpp"
-#include <opencv2/core/core.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <QImage>
-#include <QColor>
-#include <QPoint>
+#ifndef BRUSH_HPP
+#define BRUSH_HPP
 
-QImage Brush::Draw(const QImage &img, const QHash<QString, QString>& args)
+#include "BasicTool.hpp"
+
+class Brush : public BasicTool
 {
-	cv::Mat mat = QImageToMat(img);
-	cv::Point pt1, pt2;
-	cv::Scalar color;
-	int size;
+public:
+	Brush() { }
+	virtual ~Brush() throw() { }
+	virtual QImage Draw(const QImage& img, const QHash<QString, QString>& args);
+	virtual QString GetName() const;
+};
 
-	Arguments(args, pt1, pt2, color, size);
-
-	cv::line(mat, pt1, pt2, color, size, CV_AA);
-	return MatToQImage(mat);
-}
-
-QString Brush::GetName() const
-{
-	return "Brush";
-}
+#endif

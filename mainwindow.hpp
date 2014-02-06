@@ -26,7 +26,6 @@
 #include <QString>
 #include <QAction>
 #include "sizedialogue.hpp"
-#include "Tool.hpp"
 
 namespace Ui {
 class MainWindow;
@@ -37,7 +36,6 @@ class QHash;
 class IOperation;
 class ImageWidget;
 class Exception;
-class InputManager;
 
 class MainWindow : public QMainWindow
 {
@@ -48,9 +46,13 @@ public:
 	~MainWindow();
 
 signals:
-	void toolChanged(Tool);
+	void Operation(IOperation*,const QHash<QString,QString>&);
+	void Operation(IOperation*,const QHash<QString,QString>&,bool);
 
 private slots:
+	void SizeChanged(int);
+	void ColorChanged();
+
 	void on_actionOpen_triggered();
 
 	void on_actionClose_triggered();
@@ -79,15 +81,11 @@ private slots:
 
 	void on_btnCrop_clicked();
 
-	void on_btnStamp_clicked();
-
 	void on_btnGeometry_clicked();
 
 	void on_btnText_clicked();
 
 	void on_btnSprayCan_clicked();
-
-	void on_btnInk_clicked();
 
 	void on_btnAirbrush_clicked();
 
@@ -191,15 +189,18 @@ protected:
 private:
 	void openImage(const QString& fileName);
 	void showError(const Exception &e);
-	void applyFilter(IOperation *operation);
 	ImageWidget* getImageWidget() const;
+	void createOperations();
+	void clearOperations();
 	void connectSignals();
+	QHash<QString,QString> GetArgs() const;
 
 	// Felder
 	Ui::MainWindow *ui;
-	SizeDialogue *mDia;
-	InputManager* mInputManager;
-	ImageWidget* mDummyImage;
+	SizeDialogue *mSizeDialog;
+	QHash<QString, IOperation*> mOperations;
+	int mSize;
+	IOperation* mOperation;
 };
 
 #endif // MAINWINDOW_H

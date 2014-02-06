@@ -23,35 +23,25 @@
 #include "IOperation.hpp"
 #include "Utility.hpp"
 #include "Exception.hpp"
-#include "tools/Pencil.hpp"
-#include "tools/Flood.hpp"
-
-QHash<Tool, IOperation*> ImageWidget::s_tools;
 
 ImageWidget::ImageWidget(QWidget *parent) :
 	QWidget(parent),
-	m_penColor(Qt::black),
-	m_changed(false),
-	m_undoBuffer(20),
-	m_redoBuffer(20),
-	m_pen(m_penColor, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin),
-	m_penWidth(2),
-	m_tool(Tool::Pencil),
-	m_fileName("")
+	mChanged(false),
+	mUndoBuffer(20),
+	mRedoBuffer(20),
+	mFileName(""),
+	mOperation(nullptr),
+	mDraw(false),
+	mLive(false)
 {
 	setAttribute(Qt::WA_StaticContents);
-
-	if (s_tools.isEmpty()) {
-		s_tools[Tool::Pencil] = new Pencil();
-		s_tools[Tool::FloodFill] = new Flood();
-	}
 }
 
 ImageWidget::~ImageWidget() throw()
 {
 }
 
-bool ImageWidget::openImage(const QString &fileName)
+bool ImageWidget::OpenImage(const QString &fileName)
 {
 	QImage loadedImage;
 
@@ -62,112 +52,82 @@ bool ImageWidget::openImage(const QString &fileName)
 	QSize imageSize = loadedImage.size();
 	resize(imageSize);
 	loadedImage.convertToFormat(QImage::Format_ARGB32);
-	m_image = m_original = loadedImage;
-	m_fileName = fileName;
-	drawImage();
+	mOriginal = loadedImage.copy();
+	mImage = loadedImage;
+	mFileName = fileName;
 	update();
 
 	return true;
 }
 
-bool ImageWidget::saveImage()
+bool ImageWidget::SaveImage()
 {
-	QStringList splitedFile = m_fileName.split(".");
+	QStringList splitedFile = mFileName.split(".");
 	QString ext;
 
 	if (!splitedFile.isEmpty()) {
 		ext = splitedFile.last();
 	}
 
-	if (m_image.save(m_fileName, ext.toLatin1())) {
-		m_changed = false;
+	if (mImage.save(mFileName, ext.toLatin1())) {
+		mChanged = false;
 		return true;
 	}
 
 	return false;
 }
 
-bool ImageWidget::saveImage(const QString &fileName, const char *fileFormat)
+bool ImageWidget::SaveImage(const QString &fileName, const char *fileFormat)
 {
-	if (m_image.save(fileName, fileFormat)) {
-		m_fileName = fileName;
-		m_changed = false;
+	if (mImage.save(fileName, fileFormat)) {
+		mFileName = fileName;
+		mChanged = false;
 		return true;
 	}
 
 	return false;
 }
 
-QColor ImageWidget::getPenColor() const
+bool ImageWidget::Undo()
 {
-	return m_penColor;
-}
-
-void ImageWidget::setPenColor(const QColor &newColor)
-{
-	m_penColor = newColor;
-	m_pen.setColor(m_penColor);
-}
-
-void ImageWidget::setPenWidth(int width)
-{
-	m_penWidth = width;
-}
-
-void ImageWidget::toolChanged(Tool tool)
-{
-	m_tool = tool;
-}
-
-void ImageWidget::applyFilter(IOperation* filter)
-{
-	m_undoBuffer.push(m_image.copy());
-	QHash<QString, QString> arg;
-	m_image = filter->Draw(m_image, arg);
-	update();
-
-}
-
-bool ImageWidget::undo()
-{
-	QImage old = m_undoBuffer.pop();
+	QImage old = mUndoBuffer.pop();
 
 	if (!old.isNull()) {
-		m_redoBuffer.push(m_image.copy());
+		mRedoBuffer.push(mImage.copy());
 	} else {
 		return false;
 	}
 
-	m_image = old;
+	mImage = old;
 	update();
 	return true;
 }
 
-bool ImageWidget::redo()
+bool ImageWidget::Redo()
 {
-	QImage redo = m_redoBuffer.pop();
+	QImage redo = mRedoBuffer.pop();
 
 	if (redo.isNull()) {
 		return false;
 	}
 
-	m_undoBuffer.push(m_image.copy());
-	m_image = redo;
+	mUndoBuffer.push(mImage.copy());
+	mImage = redo;
 	update();
 	return true;
 }
 
-void ImageWidget::undoHistory()
+void ImageWidget::UndoHistory()
 {
-	m_redoBuffer.push(m_image.copy());
+	mRedoBuffer.push(mImage.copy());
 
 	while (true) {
-		QImage current = m_undoBuffer.pop();
+		QImage current = mUndoBuffer.pop();
 
 		if (!current.isNull()) {
-			m_redoBuffer.push(current.copy());
+			mRedoBuffer.push(current.copy());
 		} else {
-			m_image = m_redoBuffer.pop();
+			mImage = mRedoBuffer.pop();
 			break;
 		}
 	}
@@ -175,51 +135,101 @@ void ImageWidget::undoHistory()
 	update();
 }
 
-void ImageWidget::resetImage()
+void ImageWidget::ResetImage()
 {
-	m_undoBuffer.push(m_image.copy());
-	m_image = m_original;
+	mUndoBuffer.push(mImage.copy());
+	mImage = mOriginal.copy();
 	update();
 }
 
-void ImageWidget::clearImage()
+bool ImageWidget::IsChanged() const
 {
-	m_image.fill(Qt::white);
+	return mChanged;
+}
+
+QString ImageWidget::GetFileName() const
+{
+	return mFileName;
+}
+
+void ImageWidget::Operation(IOperation *o, const QHash<QString, QString> &args, bool liveImage)
+{
+	mOperation = o;
+	mArgs = args;
+	mLive = liveImage;
+}
+
+void ImageWidget::Arguments(const QHash<QString, QString> &args)
+{
+	if (mLive) {
+		mArgs = args;
+	}
+}
+
+void ImageWidget::Draw()
+{
+	QImage img;
+
+	mRedoBuffer.clear();
+	img = mOperation->Draw(mImage, mArgs);
+
+	if (img.format() == QImage::Format_RGB888) {
+		mImage = img;
+		mImage.convertToFormat(QImage::Format_ARGB32);
+	}
+
 	update();
-}
-
-bool ImageWidget::isChanged() const
-{
-	return m_changed;
-}
-
-QString ImageWidget::getFileName() const
-{
-	return m_fileName;
 }
 
 void ImageWidget::mousePressEvent(QMouseEvent *event)
 {
-	if (event->button() == Qt::LeftButton) {
-		m_undoBuffer.push(m_image.copy());
-		m_lastPoint = event->pos();
-		m_redoBuffer.clear();
-		m_changed = true;
-	}
-}
+	QWidget::mousePressEvent(event);
 
-void ImageWidget::mouseMoveEvent(QMouseEvent *event)
-{
-	if ((event->buttons() & Qt::LeftButton)) {
-		draw(event->pos());
+	// Eventlogik
+	if (event->button() == Qt::LeftButton) {
+		// Speicher jetzige Position
+		QPoint pos = event->pos();
+		mArgs["X"] = QString::number(pos.x());
+		mArgs["Y"] = QString::number(pos.y());
+		// Speicher altes Bild
+		mUndoBuffer.push(mImage.copy());
+		mChanged = true;
+		// Erlaube Zeichnen
+		mDraw = true;
+		// Zeichne neues Bild
+		Draw();
 	}
 }
 
 void ImageWidget::mouseReleaseEvent(QMouseEvent *event)
 {
+	QWidget::mouseReleaseEvent(event);
+
+	// Eventlogik
 	if (event->button() == Qt::LeftButton) {
-		draw(event->pos());
+		mDraw = false;
 	}
+}
+
+void ImageWidget::mouseMoveEvent(QMouseEvent *event)
+{
+	QWidget::mouseMoveEvent(event);
+
+	// Eventlogik
+	if (mDraw && mOperation) {
+		QPoint pos = event->pos();
+		mArgs["X"] = QString::number(pos.x());
+		mArgs["Y"] = QString::number(pos.y());
+
+		if (!mLive) {
+			Draw();
+		}
+	}
+}
+
+void ImageWidget::wheelEvent(QWheelEvent *event)
+{
+	QWidget::wheelEvent(event);
 }
 
 void ImageWidget::resizeEvent(QResizeEvent *event)
@@ -229,92 +239,14 @@ void ImageWidget::resizeEvent(QResizeEvent *event)
 
 void ImageWidget::paintEvent(QPaintEvent *event)
 {
+	QWidget::paintEvent(event);
 	QPainter painter(this);
 	QRect dirtyRect = event->rect();
-	painter.drawImage(dirtyRect, m_image, dirtyRect);
-}
 
-void ImageWidget::clearTools()
-{
-	for (auto& it : s_tools) {
-		delete it;
-	}
-}
-
-void ImageWidget::drawImage()
-{
-	QPainter painter(&m_image);
-	painter.drawImage(QPoint(0,0), m_image);
-}
-
-void ImageWidget::draw(const QPoint &endPoint)
-{
-#ifdef QT_DEBUG
-	try {
-#endif
-	switch (m_tool) {
-	case Tool::Pencil:
-		drawBasicBrush(Tool::Pencil, endPoint);
-		break;
-	case Tool::FloodFill:
-		drawFloodFill(endPoint);
-		break;
-	default:
-		QMessageBox::information(0, "Information", "Tool is not yet implemented.");
-		break;
-	}
-
-	update();
-	m_lastPoint = endPoint;
-#ifdef QT_DEBUG
-	} catch (Exception& e) {
-		QMessageBox::critical(0, "Error", e.Message());
-	}
-#endif
-}
-
-void ImageWidget::drawGeneric(IOperation* o, const QHash<QString, QString> &args)
-{
-	QImage img = o->Draw(m_image, args);
-
-	if (img.format() == QImage::Format_RGB888) {
-		m_image = img.convertToFormat(QImage::Format_ARGB32);
-	}
-}
-
-void ImageWidget::drawBasicBrush(Tool tool, const QPoint &endPoint)
-{
-	QHash<QString, QString> args;
-
-	// Setze notwendige Argumente
-	args["X1"] = QString::number(m_lastPoint.x());
-	args["Y1"] = QString::number(m_lastPoint.y());
-	args["X2"] = QString::number(endPoint.x());
-	args["Y2"] = QString::number(endPoint.y());
-	args["Size"] = QString::number(m_penWidth);
-	args["Red"] = QString::number(m_penColor.red());
-	args["Green"] = QString::number(m_penColor.green());
-	args["Blue"] = QString::number(m_penColor.blue());
-
-	drawGeneric(s_tools[tool], args);
-}
-
-void ImageWidget::drawFloodFill(const QPoint &endPoint)
-{
-	QImage img;
-	QHash<QString, QString> args;
-	IOperation* o = s_tools[Tool::FloodFill];
-
-	// Setze notwendige Argumente
-	args["X"] = QString::number(endPoint.x());
-	args["Y"] = QString::number(endPoint.y());
-	args["Red"] = QString::number(m_penColor.red());
-	args["Green"] = QString::number(m_penColor.green());
-	args["Blue"] = QString::number(m_penColor.blue());
-
-	img = o->Draw(m_image, args);
-
-	if (img.format() == QImage::Format_RGB888) {
-		m_image = img.convertToFormat(QImage::Format_ARGB32);
+	if (mLive) {
+		mLiveImage = mOperation->Draw(mImage.copy(), mArgs);
+		painter.drawImage(dirtyRect, mLiveImage, dirtyRect);
+	} else {
+		painter.drawImage(dirtyRect, mImage, dirtyRect);
 	}
 }

@@ -1,4 +1,4 @@
-// Pencil.hpp
+// BasicBrush.hpp
 
 /* © 2014 David Wolf
  *
@@ -18,18 +18,23 @@
  * along with ImageProcessing.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef PENCIL_HPP
-#define PENCIL_HPP
+#ifndef BASICTOOL_HPP
+#define BASICTOOL_HPP
 
-#include "BasicBrush.hpp"
+#include "../IOperation.hpp"
+namespace cv {
+	template <typename T>
+	class Scalar_;
+	template <typename T>
+	class Point_;
+}
 
-class Pencil : public BasicBrush
+class BasicTool : public IOperation
 {
 public:
-	Pencil() { }
-	virtual ~Pencil() throw() { }
-	virtual QImage Draw(const QImage& img, const QHash<QString, QString>& args);
-	virtual QString GetName() const;
+	virtual ~BasicTool() throw() { }
+protected:
+	void Arguments(const QHash<QString, QString>& args, cv::Point_<int>&, cv::Scalar_<double>&, int&);
 };
 
 #endif

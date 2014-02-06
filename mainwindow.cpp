@@ -27,26 +27,28 @@
 #include "imagewidget.hpp"
 #include "ui_mainwindow.h"
 #include "ueberdialog.hpp"
-#include "filters/BilateralFilter.hpp"
-#include "filters/Blur.hpp"
-#include "filters/Dilation.hpp"
-#include "filters/Erosion.hpp"
-#include "filters/GaussianBlur.hpp"
-#include "filters/Grayscale.hpp"
-#include "filters/MedianBlur.hpp"
-#include "filters/Outline.hpp"
-#include "filters/Sobel.hpp"
-#include "filters/Canny.hpp"
+#include "filter/BilateralFilter.hpp"
+#include "filter/Blur.hpp"
+#include "filter/Dilation.hpp"
+#include "filter/Erosion.hpp"
+#include "filter/GaussianBlur.hpp"
+#include "filter/MedianBlur.hpp"
+#include "filter/Outline.hpp"
+#include "filter/Sobel.hpp"
+#include "filter/Canny.hpp"
+#include "color/Grayscale.hpp"
+#include "tool/Pencil.hpp"
+#include "tool/Flood.hpp"
+#include "tool/Brush.hpp"
 #include "Exception.hpp"
 #include "Utility.hpp"
-#include "InputManager.hpp"
 
 MainWindow::MainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::MainWindow),
-	mDia(new SizeDialogue),
-	mInputManager(new InputManager()),
-	mDummyImage(new ImageWidget())
+	mSizeDialog(new SizeDialogue),
+	mSize(1),
+	mOperation(nullptr)
 {
 	ui->setupUi(this);
 	setWindowTitle("Image Processing");
@@ -59,31 +61,74 @@ MainWindow::MainWindow(QWidget *parent) :
 	// Mouse Tracking standardmäßig deaktivieren
 	setMouseTracking(false);
 
+	// Erzeuge alle Operationen
+	createOperations();
+
 	connectSignals();
 }
 
 MainWindow::~MainWindow()
 {
-	mDummyImage->clearTools();
-	delete mDummyImage;
-	delete mInputManager;
-	delete mDia;
+	clearOperations();
+	delete mSizeDialog;
 	delete ui;
+}
+
+void MainWindow::createOperations()
+{
+	try {
+		// Filter
+		mOperations["BilateralFilter"] = new BilateralFilter();
+		mOperations["Blur"] = new Blur();
+		mOperations["Canny"] = new Canny();
+		mOperations["Dilation"] = new Dilation();
+		mOperations["Erosion"] = new Erosion();
+		mOperations["GaussianBlur"] = new GaussianBlur();
+		mOperations["MedianBlur"] = new MedianBlur();
+		mOperations["Outline"] = new Outline();
+		mOperations["Sobel"] = new Sobel();
+
+		// Color
+		mOperations["Grayscale"] = new Grayscale();
+
+		// Tool
+		mOperations["Pencil"] = new Pencil();
+		mOperations["Brush"] = new Brush();
+		mOperations["FloodFill"] = new Flood();
+	} catch (const std::bad_alloc& e) {
+		clearOperations();
+		QMessageBox::critical(0, "Memory Error", e.what());
+	} catch (...) {
+		clearOperations();
+		QMessageBox::critical(0, "Unknown Error", "Unknown error occured");
+	}
+
+	// Setzte Bleistift als erstes Werkzeug
+	mOperation = mOperations["Pencil"];
 }
 
 void MainWindow::connectSignals()
 {
-	// DummyImage
-	connect(ui->ColorPickerFront, SIGNAL(colorChanged(QColor)), mDummyImage, SLOT(setPenColor(QColor)));
-	connect(this, SIGNAL(toolChanged(Tool)), mDummyImage, SLOT(toolChanged(Tool)));
-	connect(mDia, SIGNAL(sizeChanged(int)), mDummyImage, SLOT(setPenWidth(int)));
-
-	// Vor- und Hintergrundfarbe
+	// Hauptfarbe
 	connect(ui->ColorPickerFront, SIGNAL(activated()), ui->ColorPickerBack, SLOT(background()));
+	connect(ui->ColorPickerFront, SIGNAL(colorChanged()), this, SLOT(ColorChanged()));
+	// Sekundärfarbe
 	connect(ui->ColorPickerBack, SIGNAL(activated()), ui->ColorPickerFront, SLOT(background()));
+
+	// Werkzeuggröße
+	connect(mSizeDialog, SIGNAL(sizeChanged(int)), this, SLOT(SizeChanged(int)));
 
 	// close
 	//connect(ui->actionClose, SIGNAL(triggered()), this, SLOT(close()));
+}
+
+void MainWindow::clearOperations()
+{
+	for (auto& it : mOperations) {
+		if (it) {
+			delete it;
+		}
+	}
 }
 
 ImageWidget* MainWindow::getImageWidget() const
@@ -98,127 +143,13 @@ ImageWidget* MainWindow::getImageWidget() const
 	}
 }
 
-void MainWindow::showError(const Exception &e)
-{
-	QMessageBox::critical(0, "Error", e.Message());
-}
-
-void MainWindow::applyFilter(IOperation* operation)
-{
-	try {
-		ImageWidget* img = getImageWidget();
-
-		if (img) {
-			img->applyFilter(operation);
-		}
-	} catch (Exception& e) {
-		showError(e);
-	}
-
-	delete operation;
-}
-
-void MainWindow::keyPressEvent(QKeyEvent *e)
-{
-	// Basis Event
-	QMainWindow::keyPressEvent(e);
-	// Eventlogik
-	mInputManager->KeyPressEvent(e);
-}
-
-void MainWindow::keyReleasedEvent(QKeyEvent *e)
-{
-	// Basis Event
-	QMainWindow::keyReleaseEvent(e);
-	// Eventlogik
-	mInputManager->KeyReleaseEvent(e);
-}
-
-void MainWindow::mousePressEvent(QMouseEvent *e)
-{
-	// Basis Event
-	QMainWindow::mousePressEvent(e);
-	// Eventlogik
-	mInputManager->MousePressEvent(e);
-}
-
-void MainWindow::mouseReleaseEvent(QMouseEvent *e)
-{
-	// Basis Event
-	QMainWindow::mouseReleaseEvent(e);
-	// Eventlogik
-	mInputManager->MouseReleaseEvent(e);
-}
-
-void MainWindow::mouseDoubleClickEvent(QMouseEvent *e)
-{
-	// Basis Event
-	QMainWindow::mouseDoubleClickEvent(e);
-	// Eventlogik
-	mInputManager->MouseDoubleClickEvent(e);
-}
-
-void MainWindow::mouseMoveEvent(QMouseEvent *e)
-{
-	// Basis Event
-	QMainWindow::mouseMoveEvent(e);
-	// Eventlogik
-	mInputManager->MouseMoveEvent(e);
-}
-
-void MainWindow::wheelEvent(QWheelEvent *e)
-{
-	// Basis Event
-	QMainWindow::wheelEvent(e);
-	// Eventlogik
-	mInputManager->MouseWheelEvent(e);
-}
-
-void MainWindow::on_actionOpen_triggered()
-{
-	ui->statusbar->showMessage("Open File",2000);
-	QString fileName = QFileDialog::getOpenFileName(
-				this,
-				tr("Open Image File"),
-				QDir::homePath(),
-				tr("Images (*.bmp *.png *.jpg *.jpeg *.ppm *.xbm *.xpm);;All Files (*)"));
-
-	if(fileName.isEmpty()) {
-		return;
-	}
-
-	// Überprüfe ob das Bild bereits offen ist
-	for (int i = 0; i < ui->imagetab->count(); i++) {
-		QWidget* widget = ui->imagetab->widget(i);
-
-		if (widget) {
-			QScrollArea* area = qobject_cast<QScrollArea*>(widget);
-			ImageWidget* img = qobject_cast<ImageWidget*>(area->widget());
-
-			// ist das Bild bereits geladen, dann änder zu den entsprechenden Tab
-			if (img && img->getFileName() == fileName) {
-				ui->imagetab->setCurrentIndex(i);
-				return;
-			}
-		}
-	}
-
-	// Falls das Bild noch nicht geladen wurde, dann lade es jetzt
-	openImage(fileName);
-}
-
-void MainWindow::on_actionNew_triggered()
-{
-	QMessageBox::information(this, "Information", "Action is not yet implemented.");
-}
-
 void MainWindow::openImage(const QString &fileName)
 {
 	QScrollArea* area = new QScrollArea();
 	ImageWidget* img = new ImageWidget();
 
 	// Nur les- und schreibbare Bildformate werden unterstützt
-	if (img->openImage(fileName)) {
+	if (img->OpenImage(fileName)) {
 		QString shortFileName = ExtractFileName(fileName);
 		shortFileName = shortFileName.mid(0, shortFileName.lastIndexOf('.'));
 
@@ -232,11 +163,115 @@ void MainWindow::openImage(const QString &fileName)
 		ui->imagetab->setCurrentIndex(index);
 
 		// schließlich Signalhandler setzen
-		connect(ui->ColorPickerFront, SIGNAL(colorChanged(QColor)), img, SLOT(setPenColor(QColor)));
-		connect(this, SIGNAL(toolChanged(Tool)), img, SLOT(toolChanged(Tool)));
-		connect(mDia, SIGNAL(sizeChanged(int)), img, SLOT(setPenWidth(int)));
-		img->setPenColor(ui->ColorPickerFront->getColor());
+		connect(this, SIGNAL(Operation(IOperation*,QHash<QString,QString>)), img, SLOT(Operation(IOperation*,QHash<QString,QString>)));
+		connect(this, SIGNAL(Operation(IOperation*,QHash<QString,QString>,bool)), img, SLOT(Operation(IOperation*,QHash<QString,QString>,bool)));
+		emit Operation(mOperation, GetArgs());
 	}
+}
+
+QHash<QString,QString> MainWindow::GetArgs() const
+{
+	QHash<QString, QString> args;
+	QColor color = ui->ColorPickerFront->getColor();
+
+	args["Size"] = QString::number(mSize);
+	args["Red"] = QString::number(color.red());
+	args["Green"] = QString::number(color.green());
+	args["Blue"] = QString::number(color.blue());
+	args["Alpha"] = QString::number(color.alpha());
+
+	return args;
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *e)
+{
+	// Basis Event
+	QMainWindow::keyPressEvent(e);
+}
+
+void MainWindow::keyReleasedEvent(QKeyEvent *e)
+{
+	// Basis Event
+	QMainWindow::keyReleaseEvent(e);
+}
+
+void MainWindow::mousePressEvent(QMouseEvent *e)
+{
+	// Basis Event
+	QMainWindow::mousePressEvent(e);
+}
+
+void MainWindow::mouseReleaseEvent(QMouseEvent *e)
+{
+	// Basis Event
+	QMainWindow::mouseReleaseEvent(e);
+}
+
+void MainWindow::mouseDoubleClickEvent(QMouseEvent *e)
+{
+	// Basis Event
+	QMainWindow::mouseDoubleClickEvent(e);
+}
+
+void MainWindow::mouseMoveEvent(QMouseEvent *e)
+{
+	// Basis Event
+	QMainWindow::mouseMoveEvent(e);
+}
+
+void MainWindow::wheelEvent(QWheelEvent *e)
+{
+	// Basis Event
+	QMainWindow::wheelEvent(e);
+}
+
+void MainWindow::SizeChanged(int value)
+{
+	mSize = value;
+	emit Operation(mOperation, GetArgs());
+}
+
+void MainWindow::ColorChanged()
+{
+	emit Operation(mOperation, GetArgs());
+}
+
+void MainWindow::on_actionNew_triggered()
+{
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+}
+
+void MainWindow::on_actionOpen_triggered()
+{
+	ui->statusbar->showMessage("Open File",2000);
+	QString fileName = QFileDialog::getOpenFileName(
+				this,
+				tr("Open Image File"),
+				QDir::homePath(),
+				tr("Images (*.bmp *.png *.jpg *.jpeg *.ppm *.xbm *.xpm);;All Files (*)"));
+
+	if (fileName.isEmpty()) {
+		return;
+	}
+
+	// Überprüfe ob das Bild bereits offen ist
+	for (int i = 0; i < ui->imagetab->count(); i++) {
+		QWidget* widget = ui->imagetab->widget(i);
+
+		if (widget) {
+			QScrollArea* area = qobject_cast<QScrollArea*>(widget);
+			ImageWidget* img = qobject_cast<ImageWidget*>(area->widget());
+
+			// ist das Bild bereits geladen, dann ändere zu den entsprechenden Tab
+			if (img && img->GetFileName() == fileName) {
+				ui->imagetab->setCurrentIndex(i);
+				return;
+			}
+		}
+	}
+
+	// Falls das Bild noch nicht geladen wurde, dann lade es jetzt
+	openImage(fileName);
 }
 
 void MainWindow::on_actionClose_triggered()
@@ -267,7 +302,7 @@ void MainWindow::on_actionSave_triggered()
 	ImageWidget* img = getImageWidget();
 
 	if (img) {
-		img->saveImage();
+		img->SaveImage();
 	}
 }
 
@@ -292,7 +327,7 @@ void MainWindow::on_actionSaveAs_triggered()
 		ImageWidget* img = getImageWidget();
 
 		if (img) {
-			img->saveImage(fileName, ext.toLatin1());
+			img->SaveImage(fileName, ext.toLatin1());
 		}
 	}
 }
@@ -303,7 +338,7 @@ void MainWindow::on_actionUndo_triggered()
 
 	if (img) {
 		ui->statusbar->showMessage("Undo", 2000);
-		img->undo();
+		img->Undo();
 	}
 }
 
@@ -313,7 +348,7 @@ void MainWindow::on_actionRedo_triggered()
 
 	if (img) {
 		ui->statusbar->showMessage("Redo", 2000);
-		img->redo();
+		img->Redo();
 	}
 }
 
@@ -323,7 +358,7 @@ void MainWindow::on_actionUndoHistory_triggered()
 
 	if (img) {
 		ui->statusbar->showMessage("Undo History", 2000);
-		img->undoHistory();
+		img->UndoHistory();
 	}
 }
 
@@ -333,78 +368,70 @@ void MainWindow::on_actionResetImage_triggered()
 
 	if (img) {
 		ui->statusbar->showMessage("Reset Image", 2000);
-		img->resetImage();
+		img->ResetImage();
 	}
 }
 
 void MainWindow::on_btnPencil_clicked()
 {
-	emit toolChanged(Tool::Pencil);
+	mOperation = mOperations["Pencil"];
+	emit Operation(mOperation, GetArgs());
 }
 
 void MainWindow::on_btnBrush_clicked()
 {
-	emit toolChanged(Tool::Brush);
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
 }
 
 void MainWindow::on_btnEraser_clicked()
 {
-	emit toolChanged(Tool::Eraser);
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
 }
 
 void MainWindow::on_btnMagicWand_clicked()
 {
-	emit toolChanged(Tool::MagicWand);
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
 }
 
 void MainWindow::on_btnMagnifier_clicked()
 {
-	emit toolChanged(Tool::Magnifiere);
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
 }
 
 void MainWindow::on_btnFloodFill_clicked()
 {
-	emit toolChanged(Tool::FloodFill);
+	mOperation = mOperations["FloodFill"];
+	emit Operation(mOperation, GetArgs());
 }
 
 void MainWindow::on_btnCrop_clicked()
 {
-	emit toolChanged(Tool::Crop);
-}
-
-void MainWindow::on_btnStamp_clicked()
-{
-	emit toolChanged(Tool::Stamp);
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
 }
 
 void MainWindow::on_btnGeometry_clicked()
 {
-	emit toolChanged(Tool::Geometry);
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
 }
 
 void MainWindow::on_btnText_clicked()
 {
-	emit toolChanged(Tool::Text);
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
 }
 
 void MainWindow::on_btnSprayCan_clicked()
 {
-	emit toolChanged(Tool::SprayCan);
-}
-
-void MainWindow::on_btnInk_clicked()
-{
-	emit toolChanged(Tool::Ink);
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
 }
 
 void MainWindow::on_btnAirbrush_clicked()
 {
-	emit toolChanged(Tool::Airbrush);
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
 }
 
 void MainWindow::on_btnEyedropper_clicked()
 {
-	emit toolChanged(Tool::EyeDropper);
+	QMessageBox::information(this, "Information", "Action is not yet implemented.");
 }
 
 void MainWindow::on_btnPalette_clicked()
@@ -412,12 +439,13 @@ void MainWindow::on_btnPalette_clicked()
 	QColor swap = ui->ColorPickerFront->getColor();
 	ui->ColorPickerFront->setColor(ui->ColorPickerBack->getColor());
 	ui->ColorPickerBack->setColor(swap);
+	emit Operation(mOperation, GetArgs());
 }
 
 void MainWindow::on_actionBrushSize_triggered()
 {
-	mDia->setModal(true);
-	mDia->exec();
+	mSizeDialog->setModal(true);
+	mSizeDialog->exec();
 	ui->statusbar->showMessage("Brush Size", 2000);
 }
 
@@ -426,7 +454,7 @@ void MainWindow::on_imagetab_currentChanged(int)
 	ImageWidget* img = getImageWidget();
 
 	if (img) {
-		setWindowTitle(ExtractFileName(img->getFileName()));
+		setWindowTitle(ExtractFileName(img->GetFileName()));
 	} else {
 		setWindowTitle("Image Processing");
 	}
@@ -444,47 +472,47 @@ void MainWindow::on_imagetab_tabCloseRequested(int index)
 
 void MainWindow::on_actionBlur_triggered()
 {
-	applyFilter(new Blur());
+	emit Operation(mOperations["Blur"], QHash<QString,QString>(), true);
 }
 
 void MainWindow::on_actionGaussianBlur_triggered()
 {
-	applyFilter(new GaussianBlur());
+	emit Operation(mOperations["GaussianBlur"], QHash<QString,QString>(), true);
 }
 
 void MainWindow::on_actionMedianBlur_triggered()
 {
-	applyFilter(new MedianBlur());
+	emit Operation(mOperations["MedianBlur"], QHash<QString,QString>(), true);
 }
 
 void MainWindow::on_actionBilateralFilter_triggered()
 {
-	applyFilter(new BilateralFilter());
+	emit Operation(mOperations["BilateralFilter"], QHash<QString,QString>(), true);
 }
 
 void MainWindow::on_actionEdge_triggered()
 {
-	applyFilter(new Outline());
+	emit Operation(mOperations["Outline"], QHash<QString,QString>(), true);
 }
 
 void MainWindow::on_actionCanny_triggered()
 {
-	applyFilter(new Canny());
+	emit Operation(mOperations["Canny"], QHash<QString,QString>(), true);
 }
 
 void MainWindow::on_actionSobel_triggered()
 {
-	applyFilter(new Sobel());
+	emit Operation(mOperations["Sobel"], QHash<QString,QString>(), true);
 }
 
 void MainWindow::on_actionDilation_triggered()
 {
-	applyFilter(new Dilation());
+	emit Operation(mOperations["Dilation"], QHash<QString,QString>(), true);
 }
 
 void MainWindow::on_actionErosion_triggered()
 {
-	applyFilter(new Erosion());
+	emit Operation(mOperations["Erosion"], QHash<QString,QString>(), true);
 }
 
 void MainWindow::on_actionCartoon_triggered()
@@ -499,7 +527,6 @@ void MainWindow::on_actionOilify_triggered()
 
 void MainWindow::on_actionGrayscale_triggered()
 {
-	applyFilter(new Grayscale());
 }
 
 void MainWindow::on_actionColorize_triggered()
