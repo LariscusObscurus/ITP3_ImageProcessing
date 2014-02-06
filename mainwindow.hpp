@@ -191,11 +191,13 @@ protected:
 private:
 	void OpenImage(const QString& fileName);
 	ImageWidget* GetImageWidget() const;
+	ImageWidget* GetImageWidget(int) const;
 	void CreateOperations();
 	void ClearOperations();
 	void ConnectSignals();
 	QHash<QString,QString> GetArgs() const;
 	void ApplySingleOperation(IOperation*, const QHash<QString, QString>&, OperationType);
+	bool CloseImage(ImageWidget*);
 
 	// Felder
 	Ui::MainWindow *ui;

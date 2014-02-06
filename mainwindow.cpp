@@ -140,9 +140,21 @@ ImageWidget* MainWindow::GetImageWidget() const
 	if (widget) {
 		QScrollArea* area = qobject_cast<QScrollArea*>(widget);
 		return qobject_cast<ImageWidget*>(area->widget());
-	} else {
-		return nullptr;
 	}
+
+	return nullptr;
+}
+
+ImageWidget* MainWindow::GetImageWidget(int index) const
+{
+	QWidget* widget = ui->imagetab->widget(index);
+
+	if (widget) {
+		QScrollArea* area = qobject_cast<QScrollArea*>(widget);
+		return qobject_cast<ImageWidget*>(area->widget());
+	}
+
+	return nullptr;
 }
 
 void MainWindow::OpenImage(const QString &fileName)
@@ -191,6 +203,29 @@ void MainWindow::ApplySingleOperation(IOperation *o, const QHash<QString,QString
 
 	if (img) {
 		img->Operation(o, args, t);
+	}
+}
+
+bool MainWindow::CloseImage(ImageWidget *img)
+{
+	if (img && img->IsChanged()) {
+		SavePopupDialog::Result result;
+		SavePopupDialog dialog(this, ParseFileName(img->GetFileName()));
+		dialog.setModal(true);
+		dialog.exec();
+		result = static_cast<SavePopupDialog::Result>(dialog.result());
+
+		switch (result) {
+		case SavePopupDialog::Result::Save:
+			img->SaveImage();
+			return true;
+		case SavePopupDialog::Result::Close:
+			return true;
+		case SavePopupDialog::Result::Cancel:
+			return false;
+		}
+	} else {
+		return true;
 	}
 }
 
@@ -268,12 +303,9 @@ void MainWindow::on_actionOpen_triggered()
 
 	// Überprüfe ob das Bild bereits offen ist
 	for (int i = 0; i < ui->imagetab->count(); i++) {
-		QWidget* widget = ui->imagetab->widget(i);
+		ImageWidget* img = GetImageWidget(i);
 
-		if (widget) {
-			QScrollArea* area = qobject_cast<QScrollArea*>(widget);
-			ImageWidget* img = qobject_cast<ImageWidget*>(area->widget());
-
+		if (img) {
 			// ist das Bild bereits geladen, dann ändere zu den entsprechenden Tab
 			if (img && img->GetFileName() == fileName) {
 				ui->imagetab->setCurrentIndex(i);
@@ -288,18 +320,46 @@ void MainWindow::on_actionOpen_triggered()
 
 void MainWindow::on_actionClose_triggered()
 {
-	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+	QWidget* widget = ui->imagetab->currentWidget();
+	ImageWidget* img = GetImageWidget();
+
+	if (CloseImage(img)) {
+		ui->statusbar->showMessage("Closed Image",2000);
+		ui->imagetab->removeTab(ui->imagetab->currentIndex());
+		widget->deleteLater();
+	} else {
+		ui->statusbar->showMessage("Canceled Closing",2000);
+	}
 }
 
 void MainWindow::on_actionCloseAll_triggered()
 {
-	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+	int count = ui->imagetab->count();
+	ui->imagetab->setCurrentIndex(0);
+
+	for (int i = 0; i < count; i++) {
+		QScrollArea* area = qobject_cast<QScrollArea*>(ui->imagetab->currentWidget());
+
+		if (area) {
+			ImageWidget* img = qobject_cast<ImageWidget*>(area->widget());
+
+			if (CloseImage(img)) {
+				ui->statusbar->showMessage("Closed Image",2000);
+				ui->imagetab->removeTab(ui->imagetab->currentIndex());
+				ui->imagetab->setCurrentIndex(0);
+				area->deleteLater();
+			} else {
+				ui->statusbar->showMessage("Canceled Closing",2000);
+			}
+		}
+	}
 }
 
 void MainWindow::on_actionQuit_triggered()
 {
-	QMessageBox::information(this, "Information", "Action is not yet implemented.");
-	//ui->statusbar->showMessage("Quit Image Processing",2000);
+	on_actionCloseAll_triggered();
+	ui->statusbar->showMessage("Quit Image Processing",2000);
+	close();
 }
 
 void MainWindow::on_actionAbout_triggered()
@@ -315,12 +375,12 @@ void MainWindow::on_actionSave_triggered()
 
 	if (img) {
 		img->SaveImage();
+		ui->statusbar->showMessage(QString("Saved").arg(ParseFileName(img->GetFileName())), 2000);
 	}
 }
 
 void MainWindow::on_actionSaveAs_triggered()
 {
-	ui->statusbar->showMessage("Save As", 2000);
 
 	// Nur les- und schreibbare Bildformate werden unterstützt
 	QString fileName = QFileDialog::getSaveFileName(
@@ -340,6 +400,7 @@ void MainWindow::on_actionSaveAs_triggered()
 
 		if (img) {
 			img->SaveImage(fileName, ext.toLatin1());
+			ui->statusbar->showMessage(QString("Saved as \"%1\"").arg(ParseFileName(fileName)), 2000);
 		}
 	}
 }
@@ -479,31 +540,8 @@ void MainWindow::on_imagetab_tabCloseRequested(int index)
 	if (widget) {
 		QScrollArea* area = qobject_cast<QScrollArea*>(widget);
 		ImageWidget* img = qobject_cast<ImageWidget*>(area->widget());
-		
-		if (img && img->IsChanged()) {
-			SavePopupDialog::Result result;
-			SavePopupDialog dialog(0, ParseFileName(img->GetFileName()));
-			dialog.setModal(true);
-			qDebug() << "exec";
-			dialog.exec();
-			qDebug() << "result";
-			result = static_cast<SavePopupDialog::Result>(dialog.result());
-			qDebug() << static_cast<int>(result);
 
-			switch (result) {
-			case SavePopupDialog::Result::Save:
-				ui->imagetab->removeTab(index);
-				img->SaveImage();
-				widget->deleteLater();
-				break;
-			case SavePopupDialog::Result::Close:
-				ui->imagetab->removeTab(index);
-				widget->deleteLater();
-				break;
-			case SavePopupDialog::Result::Cancel:
-				break;
-			}
-		} else {
+		if (CloseImage(img)) {
 			widget->deleteLater();
 		}
 	}
