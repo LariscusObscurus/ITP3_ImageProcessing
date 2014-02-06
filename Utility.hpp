@@ -23,6 +23,6 @@
 
 #include <QString>
 
-QString ExtractFileName(QString path);
+QString ParseFileName(QString path);
 
 #endif // UTILITY_HPP

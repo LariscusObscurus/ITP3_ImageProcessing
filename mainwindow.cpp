@@ -27,6 +27,7 @@
 #include "imagewidget.hpp"
 #include "ui_mainwindow.h"
 #include "ueberdialog.hpp"
+#include "SavePopupDialog.hpp"
 #include "filter/BilateralFilter.hpp"
 #include "filter/Blur.hpp"
 #include "filter/Dilation.hpp"
@@ -62,19 +63,19 @@ MainWindow::MainWindow(QWidget *parent) :
 	setMouseTracking(false);
 
 	// Erzeuge alle Operationen
-	createOperations();
+	CreateOperations();
 
-	connectSignals();
+	ConnectSignals();
 }
 
 MainWindow::~MainWindow()
 {
-	clearOperations();
+	ClearOperations();
 	delete mSizeDialog;
 	delete ui;
 }
 
-void MainWindow::createOperations()
+void MainWindow::CreateOperations()
 {
 	try {
 		// Filter
@@ -96,10 +97,10 @@ void MainWindow::createOperations()
 		mOperations["Brush"] = new Brush();
 		mOperations["FloodFill"] = new Flood();
 	} catch (const std::bad_alloc& e) {
-		clearOperations();
+		ClearOperations();
 		QMessageBox::critical(0, "Memory Error", e.what());
 	} catch (...) {
-		clearOperations();
+		ClearOperations();
 		QMessageBox::critical(0, "Unknown Error", "Unknown error occured");
 	}
 
@@ -107,13 +108,14 @@ void MainWindow::createOperations()
 	mOperation = mOperations["Pencil"];
 }
 
-void MainWindow::connectSignals()
+void MainWindow::ConnectSignals()
 {
 	// Hauptfarbe
 	connect(ui->ColorPickerFront, SIGNAL(activated()), ui->ColorPickerBack, SLOT(background()));
-	connect(ui->ColorPickerFront, SIGNAL(colorChanged()), this, SLOT(ColorChanged()));
+	connect(ui->ColorPickerFront, SIGNAL(colorChanged(QColor)), this, SLOT(ColorChanged(QColor)));
 	// Sekundärfarbe
 	connect(ui->ColorPickerBack, SIGNAL(activated()), ui->ColorPickerFront, SLOT(background()));
+	connect(ui->ColorPickerBack, SIGNAL(colorChanged(QColor)), this, SLOT(ColorChanged(QColor)));
 
 	// Werkzeuggröße
 	connect(mSizeDialog, SIGNAL(sizeChanged(int)), this, SLOT(SizeChanged(int)));
@@ -122,7 +124,7 @@ void MainWindow::connectSignals()
 	//connect(ui->actionClose, SIGNAL(triggered()), this, SLOT(close()));
 }
 
-void MainWindow::clearOperations()
+void MainWindow::ClearOperations()
 {
 	for (auto& it : mOperations) {
 		if (it) {
@@ -131,7 +133,7 @@ void MainWindow::clearOperations()
 	}
 }
 
-ImageWidget* MainWindow::getImageWidget() const
+ImageWidget* MainWindow::GetImageWidget() const
 {
 	QWidget* widget = ui->imagetab->currentWidget();
 
@@ -143,14 +145,14 @@ ImageWidget* MainWindow::getImageWidget() const
 	}
 }
 
-void MainWindow::openImage(const QString &fileName)
+void MainWindow::OpenImage(const QString &fileName)
 {
 	QScrollArea* area = new QScrollArea();
 	ImageWidget* img = new ImageWidget();
 
 	// Nur les- und schreibbare Bildformate werden unterstützt
 	if (img->OpenImage(fileName)) {
-		QString shortFileName = ExtractFileName(fileName);
+		QString shortFileName = ParseFileName(fileName);
 		shortFileName = shortFileName.mid(0, shortFileName.lastIndexOf('.'));
 
 		// Bild in die ScrollArea laden
@@ -163,8 +165,9 @@ void MainWindow::openImage(const QString &fileName)
 		ui->imagetab->setCurrentIndex(index);
 
 		// schließlich Signalhandler setzen
+		connect(this, SIGNAL(Arguments(QHash<QString,QString>)), img, SLOT(Arguments(QHash<QString,QString>)));
 		connect(this, SIGNAL(Operation(IOperation*,QHash<QString,QString>)), img, SLOT(Operation(IOperation*,QHash<QString,QString>)));
-		connect(this, SIGNAL(Operation(IOperation*,QHash<QString,QString>,bool)), img, SLOT(Operation(IOperation*,QHash<QString,QString>,bool)));
+		connect(this, SIGNAL(Operation(IOperation*,QHash<QString,QString>,OperationType)), img, SLOT(Operation(IOperation*,QHash<QString,QString>,OperationType)));
 		emit Operation(mOperation, GetArgs());
 	}
 }
@@ -172,15 +175,23 @@ void MainWindow::openImage(const QString &fileName)
 QHash<QString,QString> MainWindow::GetArgs() const
 {
 	QHash<QString, QString> args;
-	QColor color = ui->ColorPickerFront->getColor();
 
 	args["Size"] = QString::number(mSize);
-	args["Red"] = QString::number(color.red());
-	args["Green"] = QString::number(color.green());
-	args["Blue"] = QString::number(color.blue());
-	args["Alpha"] = QString::number(color.alpha());
+	args["Red"] = QString::number(mColor.red());
+	args["Green"] = QString::number(mColor.green());
+	args["Blue"] = QString::number(mColor.blue());
+	args["Alpha"] = QString::number(mColor.alpha());
 
 	return args;
+}
+
+void MainWindow::ApplySingleOperation(IOperation *o, const QHash<QString,QString>& args, OperationType t)
+{
+	ImageWidget* img = GetImageWidget();
+
+	if (img) {
+		img->Operation(o, args, t);
+	}
 }
 
 void MainWindow::keyPressEvent(QKeyEvent *e)
@@ -225,15 +236,16 @@ void MainWindow::wheelEvent(QWheelEvent *e)
 	QMainWindow::wheelEvent(e);
 }
 
-void MainWindow::SizeChanged(int value)
+void MainWindow::SizeChanged(int s)
 {
-	mSize = value;
-	emit Operation(mOperation, GetArgs());
+	mSize = s;
+	emit Arguments(GetArgs());
 }
 
-void MainWindow::ColorChanged()
+void MainWindow::ColorChanged(const QColor &c)
 {
-	emit Operation(mOperation, GetArgs());
+	mColor = c;
+	emit Arguments(GetArgs());
 }
 
 void MainWindow::on_actionNew_triggered()
@@ -271,13 +283,12 @@ void MainWindow::on_actionOpen_triggered()
 	}
 
 	// Falls das Bild noch nicht geladen wurde, dann lade es jetzt
-	openImage(fileName);
+	OpenImage(fileName);
 }
 
 void MainWindow::on_actionClose_triggered()
 {
 	QMessageBox::information(this, "Information", "Action is not yet implemented.");
-	//ui->statusbar->showMessage("Quit Image Processing",2000);
 }
 
 void MainWindow::on_actionCloseAll_triggered()
@@ -288,6 +299,7 @@ void MainWindow::on_actionCloseAll_triggered()
 void MainWindow::on_actionQuit_triggered()
 {
 	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+	//ui->statusbar->showMessage("Quit Image Processing",2000);
 }
 
 void MainWindow::on_actionAbout_triggered()
@@ -299,7 +311,7 @@ void MainWindow::on_actionAbout_triggered()
 
 void MainWindow::on_actionSave_triggered()
 {
-	ImageWidget* img = getImageWidget();
+	ImageWidget* img = GetImageWidget();
 
 	if (img) {
 		img->SaveImage();
@@ -324,7 +336,7 @@ void MainWindow::on_actionSaveAs_triggered()
 	}
 
 	if(!fileName.isEmpty()) {
-		ImageWidget* img = getImageWidget();
+		ImageWidget* img = GetImageWidget();
 
 		if (img) {
 			img->SaveImage(fileName, ext.toLatin1());
@@ -334,7 +346,7 @@ void MainWindow::on_actionSaveAs_triggered()
 
 void MainWindow::on_actionUndo_triggered()
 {
-	ImageWidget* img = getImageWidget();
+	ImageWidget* img = GetImageWidget();
 
 	if (img) {
 		ui->statusbar->showMessage("Undo", 2000);
@@ -344,7 +356,7 @@ void MainWindow::on_actionUndo_triggered()
 
 void MainWindow::on_actionRedo_triggered()
 {
-	ImageWidget* img = getImageWidget();
+	ImageWidget* img = GetImageWidget();
 
 	if (img) {
 		ui->statusbar->showMessage("Redo", 2000);
@@ -354,7 +366,7 @@ void MainWindow::on_actionRedo_triggered()
 
 void MainWindow::on_actionUndoHistory_triggered()
 {
-	ImageWidget* img = getImageWidget();
+	ImageWidget* img = GetImageWidget();
 
 	if (img) {
 		ui->statusbar->showMessage("Undo History", 2000);
@@ -364,7 +376,7 @@ void MainWindow::on_actionUndoHistory_triggered()
 
 void MainWindow::on_actionResetImage_triggered()
 {
-	ImageWidget* img = getImageWidget();
+	ImageWidget* img = GetImageWidget();
 
 	if (img) {
 		ui->statusbar->showMessage("Reset Image", 2000);
@@ -451,10 +463,10 @@ void MainWindow::on_actionBrushSize_triggered()
 
 void MainWindow::on_imagetab_currentChanged(int)
 {
-	ImageWidget* img = getImageWidget();
+	ImageWidget* img = GetImageWidget();
 
 	if (img) {
-		setWindowTitle(ExtractFileName(img->GetFileName()));
+		setWindowTitle(ParseFileName(img->GetFileName()));
 	} else {
 		setWindowTitle("Image Processing");
 	}
@@ -463,56 +475,83 @@ void MainWindow::on_imagetab_currentChanged(int)
 void MainWindow::on_imagetab_tabCloseRequested(int index)
 {
 	QWidget* widget = ui->imagetab->widget(index);
-	ui->imagetab->removeTab(index);
 
 	if (widget) {
-		widget->deleteLater();
+		QScrollArea* area = qobject_cast<QScrollArea*>(widget);
+		ImageWidget* img = qobject_cast<ImageWidget*>(area->widget());
+		
+		if (img && img->IsChanged()) {
+			SavePopupDialog::Result result;
+			SavePopupDialog dialog(0, ParseFileName(img->GetFileName()));
+			dialog.setModal(true);
+			qDebug() << "exec";
+			dialog.exec();
+			qDebug() << "result";
+			result = static_cast<SavePopupDialog::Result>(dialog.result());
+			qDebug() << static_cast<int>(result);
+
+			switch (result) {
+			case SavePopupDialog::Result::Save:
+				ui->imagetab->removeTab(index);
+				img->SaveImage();
+				widget->deleteLater();
+				break;
+			case SavePopupDialog::Result::Close:
+				ui->imagetab->removeTab(index);
+				widget->deleteLater();
+				break;
+			case SavePopupDialog::Result::Cancel:
+				break;
+			}
+		} else {
+			widget->deleteLater();
+		}
 	}
 }
 
 void MainWindow::on_actionBlur_triggered()
 {
-	emit Operation(mOperations["Blur"], QHash<QString,QString>(), true);
+	ApplySingleOperation(mOperations["Blur"], QHash<QString,QString>(), OperationType::Live);
 }
 
 void MainWindow::on_actionGaussianBlur_triggered()
 {
-	emit Operation(mOperations["GaussianBlur"], QHash<QString,QString>(), true);
+	ApplySingleOperation(mOperations["GaussianBlur"], QHash<QString,QString>(), OperationType::Live);
 }
 
 void MainWindow::on_actionMedianBlur_triggered()
 {
-	emit Operation(mOperations["MedianBlur"], QHash<QString,QString>(), true);
+	ApplySingleOperation(mOperations["MedianBlur"], QHash<QString,QString>(), OperationType::Live);
 }
 
 void MainWindow::on_actionBilateralFilter_triggered()
 {
-	emit Operation(mOperations["BilateralFilter"], QHash<QString,QString>(), true);
+	ApplySingleOperation(mOperations["BilateralFilter"], QHash<QString,QString>(), OperationType::Live);
 }
 
 void MainWindow::on_actionEdge_triggered()
 {
-	emit Operation(mOperations["Outline"], QHash<QString,QString>(), true);
+	ApplySingleOperation(mOperations["Edge"], QHash<QString,QString>(), OperationType::Live);
 }
 
 void MainWindow::on_actionCanny_triggered()
 {
-	emit Operation(mOperations["Canny"], QHash<QString,QString>(), true);
+	ApplySingleOperation(mOperations["Canny"], QHash<QString,QString>(), OperationType::Live);
 }
 
 void MainWindow::on_actionSobel_triggered()
 {
-	emit Operation(mOperations["Sobel"], QHash<QString,QString>(), true);
+	ApplySingleOperation(mOperations["Sobel"], QHash<QString,QString>(), OperationType::Live);
 }
 
 void MainWindow::on_actionDilation_triggered()
 {
-	emit Operation(mOperations["Dilation"], QHash<QString,QString>(), true);
+	ApplySingleOperation(mOperations["Dilation"], QHash<QString,QString>(), OperationType::Live);
 }
 
 void MainWindow::on_actionErosion_triggered()
 {
-	emit Operation(mOperations["Erosion"], QHash<QString,QString>(), true);
+	ApplySingleOperation(mOperations["Erosion"], QHash<QString,QString>(), OperationType::Live);
 }
 
 void MainWindow::on_actionCartoon_triggered()
@@ -527,6 +566,7 @@ void MainWindow::on_actionOilify_triggered()
 
 void MainWindow::on_actionGrayscale_triggered()
 {
+	ApplySingleOperation(mOperations["Grayscale"], QHash<QString,QString>(), OperationType::Immediately);
 }
 
 void MainWindow::on_actionColorize_triggered()

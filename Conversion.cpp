@@ -20,6 +20,7 @@
 
 #include "Conversion.hpp"
 #include "Exception.hpp"
+#include <QDebug>
 
 QImage::Format ConvertCvFormat(int format)
 {
@@ -47,7 +48,7 @@ QImage ConvertQ3(const cv::Mat& bgr)
 
 QImage ConvertQ1(const cv::Mat& gray)
 {
-	static QVector<QRgb>  sColorTable;
+	static QVector<QRgb> sColorTable;
 
 	if (sColorTable.isEmpty()) {
 		for (int i = 0; i < 256; i++) {
@@ -57,7 +58,7 @@ QImage ConvertQ1(const cv::Mat& gray)
 
 	QImage img(gray.data, gray.cols, gray.rows, gray.step, QImage::Format_Indexed8);
 	img.setColorTable(sColorTable);
-	return img;
+	return img.copy();
 }
 
 QImage MatToQImage(const cv::Mat& mat)

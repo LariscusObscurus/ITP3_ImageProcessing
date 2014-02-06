@@ -25,11 +25,12 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <QHash>
 #include <QImage>
+#include <QDebug>
 
 QImage Grayscale::Draw(const QImage &image, const QHash<QString, QString>& args)
 {
 	cv::Mat mat = QImageToMat(image);
-	cv::cvtColor(mat.clone(), mat, CV_BGR2GRAY);
+	cv::cvtColor(mat, mat, CV_BGR2GRAY);
 	return MatToQImage(mat);
 }
 

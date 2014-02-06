@@ -27,6 +27,7 @@
 #include <QHash>
 #include <new>
 #include "ringbuffer.hpp"
+#include "OperationType.hpp"
 
 // classes
 class IOperation;
@@ -51,7 +52,7 @@ public:
 signals:
 
 public slots:
-	void Operation(IOperation*, const QHash<QString,QString>&, bool liveImage = false);
+	void Operation(IOperation*, const QHash<QString,QString>&, OperationType type = OperationType::Auto);
 	void Arguments(const QHash<QString,QString>&);
 
 protected:
@@ -64,6 +65,7 @@ protected:
 
 private:
 	void Draw();
+	void Draw(IOperation*, const QHash<QString,QString>&);
 
 	QImage mImage;
 	QImage mOriginal;

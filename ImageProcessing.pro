@@ -34,7 +34,8 @@ SOURCES += main.cpp\
     tool/Brush.cpp \
     tool/Flood.cpp \
     tool/Pencil.cpp \
-    tool/BasicTool.cpp
+    tool/BasicTool.cpp \
+    SavePopupDialog.cpp
 
 HEADERS  += \
     colordisplaywidget.hpp \
@@ -61,11 +62,14 @@ HEADERS  += \
     tool/Brush.hpp \
     tool/Flood.hpp \
     tool/Pencil.hpp \
-    tool/BasicTool.hpp
+    tool/BasicTool.hpp \
+    OperationType.hpp \
+    SavePopupDialog.hpp
 
 FORMS    += mainwindow.ui \
     ueberdialog.ui \
-    sizedialogue.ui
+    sizedialogue.ui \
+    SavePopupDialog.ui
 
 RESOURCES += \
     Icons.qrc

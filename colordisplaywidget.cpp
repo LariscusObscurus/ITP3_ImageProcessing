@@ -22,6 +22,7 @@
 #include <QPainter>
 #include <QPaintEvent>
 #include <QVector>
+#include <QDebug>
 #include "colordisplaywidget.hpp"
 
 ColorDisplayWidget::ColorDisplayWidget(QWidget *parent) :
@@ -34,7 +35,11 @@ ColorDisplayWidget::ColorDisplayWidget(QWidget *parent) :
 void ColorDisplayWidget::setColor(const QColor& color)
 {
 	m_selectedColor = color;
-	emit colorChanged();
+
+	if (m_active) {
+		emit colorChanged(color);
+	}
+
 	update();
 }
 
@@ -56,7 +61,7 @@ void ColorDisplayWidget::mousePressEvent(QMouseEvent *e)
 
 		if(color.isValid()) {
 			m_selectedColor = color;
-			emit colorChanged();
+			emit colorChanged(color);
 		}
 	}
 }

@@ -51,9 +51,8 @@ bool ImageWidget::OpenImage(const QString &fileName)
 
 	QSize imageSize = loadedImage.size();
 	resize(imageSize);
-	loadedImage.convertToFormat(QImage::Format_ARGB32);
-	mOriginal = loadedImage.copy();
-	mImage = loadedImage;
+	mImage = loadedImage.convertToFormat(QImage::Format_ARGB32);
+	mOriginal = mImage.copy();
 	mFileName = fileName;
 	update();
 
@@ -152,30 +151,50 @@ QString ImageWidget::GetFileName() const
 	return mFileName;
 }
 
-void ImageWidget::Operation(IOperation *o, const QHash<QString, QString> &args, bool liveImage)
+void ImageWidget::Operation(IOperation *o, const QHash<QString, QString> &args, OperationType type)
 {
-	mOperation = o;
-	mArgs = args;
-	mLive = liveImage;
+	switch (type) {
+	case OperationType::Auto:
+		mOperation = o;
+		mArgs = args;
+		mLive = false;
+		break;
+	case OperationType::Live:
+		mOperation = o;
+		mArgs = args;
+		mLive = true;
+		break;
+	case OperationType::Immediately:
+		mLive = false;
+		Draw(o, args);
+		break;
+	}
 }
 
 void ImageWidget::Arguments(const QHash<QString, QString> &args)
 {
-	if (mLive) {
-		mArgs = args;
-	}
+	mArgs = args;
 }
 
 void ImageWidget::Draw()
 {
+	Draw(mOperation, mArgs);
+}
+
+void ImageWidget::Draw(IOperation* o, const QHash<QString,QString>& args)
+{
 	QImage img;
 
 	mRedoBuffer.clear();
-	img = mOperation->Draw(mImage, mArgs);
+	img = o->Draw(mImage, args);
 
-	if (img.format() == QImage::Format_RGB888) {
+	// Wurde der Speicher kopiert dann übernimm  den neuen Speicher
+	if (mImage.bits() != img.bits()) {
 		mImage = img;
-		mImage.convertToFormat(QImage::Format_ARGB32);
+
+		if (mImage.format() == QImage::Format_RGB32 || mImage.format() == QImage::Format_RGB888) {
+			mImage = mImage.convertToFormat(QImage::Format_ARGB32);
+		}
 	}
 
 	update();

@@ -65,6 +65,11 @@ public:
 	FileLoadException() : IOException() { }
 	FileLoadException(const QString& message) : IOException(message) { }
 };
+class FileSaveException : public virtual IOException {
+public:
+	FileSaveException() : IOException() { }
+	FileSaveException(const QString& message) : IOException(message) { }
+};
 class PathToLongException : public virtual IOException {
 public:
 	PathToLongException() : IOException() { }

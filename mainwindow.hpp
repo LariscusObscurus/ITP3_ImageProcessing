@@ -25,6 +25,7 @@
 #include <QMap>
 #include <QString>
 #include <QAction>
+#include "OperationType.hpp"
 #include "sizedialogue.hpp"
 
 namespace Ui {
@@ -46,12 +47,13 @@ public:
 	~MainWindow();
 
 signals:
+	void Arguments(const QHash<QString,QString>&);
 	void Operation(IOperation*,const QHash<QString,QString>&);
-	void Operation(IOperation*,const QHash<QString,QString>&,bool);
+	void Operation(IOperation*,const QHash<QString,QString>&,OperationType);
 
 private slots:
 	void SizeChanged(int);
-	void ColorChanged();
+	void ColorChanged(const QColor&);
 
 	void on_actionOpen_triggered();
 
@@ -187,13 +189,13 @@ protected:
 	virtual void wheelEvent(QWheelEvent*);
 
 private:
-	void openImage(const QString& fileName);
-	void showError(const Exception &e);
-	ImageWidget* getImageWidget() const;
-	void createOperations();
-	void clearOperations();
-	void connectSignals();
+	void OpenImage(const QString& fileName);
+	ImageWidget* GetImageWidget() const;
+	void CreateOperations();
+	void ClearOperations();
+	void ConnectSignals();
 	QHash<QString,QString> GetArgs() const;
+	void ApplySingleOperation(IOperation*, const QHash<QString, QString>&, OperationType);
 
 	// Felder
 	Ui::MainWindow *ui;
@@ -201,6 +203,7 @@ private:
 	QHash<QString, IOperation*> mOperations;
 	int mSize;
 	IOperation* mOperation;
+	QColor mColor;
 };
 
 #endif // MAINWINDOW_H

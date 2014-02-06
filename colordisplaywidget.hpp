@@ -34,7 +34,7 @@ protected:
 	virtual void paintEvent(QPaintEvent *);
 
 signals:
-	void colorChanged();
+	void colorChanged(const QColor&);
 	void activated();
 
 public slots:

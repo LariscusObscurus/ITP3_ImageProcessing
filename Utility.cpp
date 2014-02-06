@@ -20,7 +20,7 @@
 
 #include "Utility.hpp"
 
-QString ExtractFileName(QString path)
+QString ParseFileName(QString path)
 {
 	int index = -1;
 	path.replace('\\', '/');
