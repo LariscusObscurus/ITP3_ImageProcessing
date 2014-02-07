@@ -38,19 +38,16 @@ QImage::Format ConvertCvFormat(int format)
 
 QImage ConvertQ4(const cv::Mat& argb)
 {
-	qDebug() << "4";
 	return QImage(argb.data, argb.cols, argb.rows, argb.step, QImage::Format_ARGB32).copy();
 }
 
 QImage ConvertQ3(const cv::Mat& bgr)
 {
-	qDebug() << "3";
 	return QImage(bgr.data, bgr.cols, bgr.rows, bgr.step, QImage::Format_RGB888).rgbSwapped();
 }
 
 QImage ConvertQ1(const cv::Mat& gray)
 {
-	qDebug() << "1";
 	static QVector<QRgb> sColorTable;
 
 	if (sColorTable.isEmpty()) {
