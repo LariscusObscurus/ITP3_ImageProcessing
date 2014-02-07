@@ -35,7 +35,8 @@ SOURCES += main.cpp\
     tool/Flood.cpp \
     tool/Pencil.cpp \
     tool/BasicTool.cpp \
-    SavePopupDialog.cpp
+    SavePopupDialog.cpp \
+    LiveFilterDialog.cpp
 
 HEADERS  += \
     colordisplaywidget.hpp \
@@ -64,12 +65,14 @@ HEADERS  += \
     tool/Pencil.hpp \
     tool/BasicTool.hpp \
     OperationType.hpp \
-    SavePopupDialog.hpp
+    SavePopupDialog.hpp \
+    LiveFilterDialog.hpp
 
 FORMS    += mainwindow.ui \
     ueberdialog.ui \
     sizedialogue.ui \
-    SavePopupDialog.ui
+    SavePopupDialog.ui \
+    LiveFilterDialog.ui
 
 RESOURCES += \
     Icons.qrc

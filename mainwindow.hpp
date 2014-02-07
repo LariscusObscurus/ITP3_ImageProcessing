@@ -195,9 +195,10 @@ private:
 	void CreateOperations();
 	void ClearOperations();
 	void ConnectSignals();
-	QHash<QString,QString> GetArgs() const;
-	void ApplySingleOperation(IOperation*, const QHash<QString, QString>&, OperationType);
+	QHash<QString,QString>& GetArgs();
+	void ApplySingleOperation(IOperation*, OperationType);
 	bool CloseImage(ImageWidget*);
+	void LiveDialog(ImageWidget*);
 
 	// Felder
 	Ui::MainWindow *ui;
@@ -205,6 +206,7 @@ private:
 	QHash<QString, IOperation*> mOperations;
 	int mSize;
 	IOperation* mOperation;
+	QHash<QString, QString> mArgs;
 	QColor mColor;
 };
 

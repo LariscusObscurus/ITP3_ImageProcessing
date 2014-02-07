@@ -28,6 +28,7 @@
 #include "ui_mainwindow.h"
 #include "ueberdialog.hpp"
 #include "SavePopupDialog.hpp"
+#include "LiveFilterDialog.hpp"
 #include "filter/BilateralFilter.hpp"
 #include "filter/Blur.hpp"
 #include "filter/Dilation.hpp"
@@ -119,9 +120,6 @@ void MainWindow::ConnectSignals()
 
 	// Werkzeuggröße
 	connect(mSizeDialog, SIGNAL(sizeChanged(int)), this, SLOT(SizeChanged(int)));
-
-	// close
-	//connect(ui->actionClose, SIGNAL(triggered()), this, SLOT(close()));
 }
 
 void MainWindow::ClearOperations()
@@ -184,25 +182,29 @@ void MainWindow::OpenImage(const QString &fileName)
 	}
 }
 
-QHash<QString,QString> MainWindow::GetArgs() const
+QHash<QString, QString>& MainWindow::GetArgs()
 {
-	QHash<QString, QString> args;
+	mArgs["Value"] = QString::number(1);
+	mArgs["Size"] = QString::number(mSize);
+	mArgs["Red"] = QString::number(mColor.red());
+	mArgs["Green"] = QString::number(mColor.green());
+	mArgs["Blue"] = QString::number(mColor.blue());
+	mArgs["Alpha"] = QString::number(mColor.alpha());
 
-	args["Size"] = QString::number(mSize);
-	args["Red"] = QString::number(mColor.red());
-	args["Green"] = QString::number(mColor.green());
-	args["Blue"] = QString::number(mColor.blue());
-	args["Alpha"] = QString::number(mColor.alpha());
-
-	return args;
+	return mArgs;
 }
 
-void MainWindow::ApplySingleOperation(IOperation *o, const QHash<QString,QString>& args, OperationType t)
+void MainWindow::ApplySingleOperation(IOperation *o, OperationType t)
 {
 	ImageWidget* img = GetImageWidget();
 
 	if (img) {
-		img->Operation(o, args, t);
+		// Setze Bildfilter
+		img->Operation(o, GetArgs(), t);
+		// Erzeuge Live-Dialog
+		LiveDialog(img);
+		// Setze zurück auf vorherige Bildoperation
+		img->Operation(mOperation, GetArgs());
 	}
 }
 
@@ -217,15 +219,31 @@ bool MainWindow::CloseImage(ImageWidget *img)
 
 		switch (result) {
 		case SavePopupDialog::Result::Save:
-			img->SaveImage();
+			if (!img->SaveImage()) {
+				on_actionSaveAs_triggered();
+			}
 			return true;
 		case SavePopupDialog::Result::Close:
 			return true;
 		case SavePopupDialog::Result::Cancel:
 			return false;
 		}
+	}
+
+	return true;
+}
+
+void MainWindow::LiveDialog(ImageWidget* img)
+{
+	LiveFilterDialog dialog(mArgs, this);
+	connect(&dialog, SIGNAL(Arguments(QHash<QString,QString>)), img, SLOT(Arguments(QHash<QString,QString>)));
+	dialog.setModal(true);
+	dialog.exec();
+
+	if (dialog.result() == QMessageBox::Accepted) {
+		img->ApplyLiveImage();
 	} else {
-		return true;
+		img->DiscardLiveImage();
 	}
 }
 
@@ -549,47 +567,47 @@ void MainWindow::on_imagetab_tabCloseRequested(int index)
 
 void MainWindow::on_actionBlur_triggered()
 {
-	ApplySingleOperation(mOperations["Blur"], QHash<QString,QString>(), OperationType::Live);
+	ApplySingleOperation(mOperations["Blur"], OperationType::Live);
 }
 
 void MainWindow::on_actionGaussianBlur_triggered()
 {
-	ApplySingleOperation(mOperations["GaussianBlur"], QHash<QString,QString>(), OperationType::Live);
+	ApplySingleOperation(mOperations["GaussianBlur"], OperationType::Live);
 }
 
 void MainWindow::on_actionMedianBlur_triggered()
 {
-	ApplySingleOperation(mOperations["MedianBlur"], QHash<QString,QString>(), OperationType::Live);
+	ApplySingleOperation(mOperations["MedianBlur"], OperationType::Live);
 }
 
 void MainWindow::on_actionBilateralFilter_triggered()
 {
-	ApplySingleOperation(mOperations["BilateralFilter"], QHash<QString,QString>(), OperationType::Live);
+	ApplySingleOperation(mOperations["BilateralFilter"], OperationType::Live);
 }
 
 void MainWindow::on_actionEdge_triggered()
 {
-	ApplySingleOperation(mOperations["Edge"], QHash<QString,QString>(), OperationType::Live);
+	ApplySingleOperation(mOperations["Outline"], OperationType::Live);
 }
 
 void MainWindow::on_actionCanny_triggered()
 {
-	ApplySingleOperation(mOperations["Canny"], QHash<QString,QString>(), OperationType::Live);
+	ApplySingleOperation(mOperations["Canny"], OperationType::Live);
 }
 
 void MainWindow::on_actionSobel_triggered()
 {
-	ApplySingleOperation(mOperations["Sobel"], QHash<QString,QString>(), OperationType::Live);
+	ApplySingleOperation(mOperations["Sobel"], OperationType::Live);
 }
 
 void MainWindow::on_actionDilation_triggered()
 {
-	ApplySingleOperation(mOperations["Dilation"], QHash<QString,QString>(), OperationType::Live);
+	ApplySingleOperation(mOperations["Dilation"], OperationType::Live);
 }
 
 void MainWindow::on_actionErosion_triggered()
 {
-	ApplySingleOperation(mOperations["Erosion"], QHash<QString,QString>(), OperationType::Live);
+	ApplySingleOperation(mOperations["Erosion"], OperationType::Live);
 }
 
 void MainWindow::on_actionCartoon_triggered()
@@ -604,7 +622,7 @@ void MainWindow::on_actionOilify_triggered()
 
 void MainWindow::on_actionGrayscale_triggered()
 {
-	ApplySingleOperation(mOperations["Grayscale"], QHash<QString,QString>(), OperationType::Immediately);
+	ApplySingleOperation(mOperations["Grayscale"], OperationType::Immediately);
 }
 
 void MainWindow::on_actionColorize_triggered()

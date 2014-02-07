@@ -25,30 +25,31 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <QHash>
 #include <QImage>
+#include <QDebug>
 
 QImage MedianBlur::Draw(const QImage &image, const QHash<QString, QString>& args)
 {
 	int ksize = 7;
-	auto it = args.find("KernelSize");
+	auto it = args.find("Value");
 
-	if (it != args.end() && it.key() == "KernelSize") {
+	if (it != args.end()) {
 		bool ok = false;
 		ksize = it.value().toInt(&ok);
 
 		if (!ok) {
-			throw FormatException("couldn't convert \"KernelSize\" argument for median blur");
+			throw FormatException("couldn't convert \"Value\" argument for median blur");
 		} else if (ksize < 1) {
-			throw ArgumentException("\"KernelSize\" argument for median blur must be odd and greater than 1");
+			throw ArgumentException("\"Value\" argument for median blur must be odd and greater than 1");
 		}
 		ksize = 2 * ksize + 1;
 	}
 
 	cv::Mat mat = QImageToMat(image);
-	cv::medianBlur(mat.clone(), mat, ksize);
+	cv::medianBlur(mat, mat, ksize);
 	return MatToQImage(mat);
 }
 
 QString MedianBlur::GetName() const
 {
-	return "Median Blur";
+	return "MedianBlur";
 }

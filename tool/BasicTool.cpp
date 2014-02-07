@@ -87,3 +87,59 @@ void BasicTool::Arguments(const QHash<QString, QString> &args, cv::Point& pt, cv
 
 	color = cv::Scalar(b, g, r, a);
 }
+
+void BasicTool::Arguments(const QHash<QString, QString> &args, QPoint& pt, QColor& color, int& size)
+{
+	bool ok = false;
+	QHash<QString, QString>::const_iterator it;
+
+	// x
+	if ((it = args.find("X")) != args.end()) {
+		pt.setX(it.value().toInt(&ok));
+		if (!ok) {
+			throw FormatException("couldn't convert \"X\" argument for tool");
+		}
+	}
+	// y
+	if ((it = args.find("Y")) != args.end()) {
+		pt.setY(it.value().toInt(&ok));
+		if (!ok) {
+			throw FormatException("couldn't convert \"Y\" argument for tool");
+		}
+	}
+	// size
+	if ((it = args.find("Size")) != args.end()) {
+		size = it.value().toInt(&ok);
+		if (!ok) {
+			throw FormatException("couldn't convert \"Size\" argument for tool");
+		}
+	}
+	// red
+	if ((it = args.find("Red")) != args.end()) {
+		color.setRed(it.value().toInt(&ok));
+		if (!ok) {
+			throw FormatException("couldn't convert \"Red\" argument for tool");
+		}
+	}
+	// green
+	if ((it = args.find("Green")) != args.end()) {
+		color.setGreen(it.value().toInt(&ok));
+		if (!ok) {
+			throw FormatException("couldn't convert \"Green\" argument for tool");
+		}
+	}
+	// blue
+	if ((it = args.find("Blue")) != args.end()) {
+		color.setBlue(it.value().toInt(&ok));
+		if (!ok) {
+			throw FormatException("couldn't convert \"Blue\" argument for tool");
+		}
+	}
+	// alpha
+	if ((it = args.find("Alpha")) != args.end()) {
+		color.setAlpha(it.value().toInt(&ok));
+		if (!ok) {
+			throw FormatException("couldn't convert \"Blue\" argument for tool");
+		}
+	}
+}

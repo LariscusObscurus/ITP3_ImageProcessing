@@ -48,6 +48,8 @@ public:
 	void ResetImage();
 	bool IsChanged() const;
 	QString GetFileName() const;
+	void ApplyLiveImage();
+	void DiscardLiveImage();
 
 signals:
 
@@ -64,8 +66,9 @@ protected:
 	virtual void paintEvent(QPaintEvent *);
 
 private:
-	void Draw();
-	void Draw(IOperation*, const QHash<QString,QString>&);
+	QImage Draw();
+	QImage Draw(IOperation*, const QHash<QString,QString>&);
+	void DrawImage(const QImage&);
 
 	QImage mImage;
 	QImage mOriginal;

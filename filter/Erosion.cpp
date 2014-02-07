@@ -28,20 +28,34 @@
 
 QImage Erosion::Draw(const QImage &image, const QHash<QString, QString>& args)
 {
-	int shape = cv::MORPH_RECT;
+	int shape = cv::MORPH_ELLIPSE;
 	int ksize = 2;
+
 	Arguments(args, shape, ksize);
+
 	cv::Mat mat = QImageToMat(image);
 	cv::Mat kernel = cv::getStructuringElement(shape, cv::Size(ksize, ksize));
-	cv::erode(mat.clone(), mat, kernel);
+	cv::erode(mat, mat, kernel);
 	return MatToQImage(mat);
 }
 
 void Erosion::Arguments(const QHash<QString, QString> &args, int& shape, int& ksize)
 {
-	auto it = args.find("Shape");
+	bool ok = false;
+	QHash<QString, QString>::const_iterator it;
 
-	if (it != args.end() && it.key() == "Shape") {
+	if ((it = args.find("Value")) != args.end()) {
+		ksize = it.value().toInt(&ok);
+
+		if (!ok) {
+			throw FormatException("couldn't convert \"Value\" argument for erosion");
+		} else if (ksize < 0) {
+			throw ArgumentException("\"Value\" argument for erosion must be positive");
+		}
+		ksize = 2 * (ksize-1) + 1;
+	}
+
+	if ((it = args.find("Shape")) != args.end()) {
 		if (it.value() == "Rect") {
 			shape = cv::MORPH_RECT;
 		} else if (it.value() == "Cross") {
@@ -52,18 +66,16 @@ void Erosion::Arguments(const QHash<QString, QString> &args, int& shape, int& ks
 			throw ArgumentException("\"Shape\" doesn't name an existing type");
 		}
 	}
-	it = args.find("KernelSize");
 
-	if (it != args.end() && it.key() == "KernelSize") {
-		bool ok = false;
+	if ((it = args.find("KernelSize")) != args.end()) {
 		ksize = it.value().toInt(&ok);
 
 		if (!ok) {
-			throw FormatException("couldn't convert \"KernelSize\" argument for erosion effect");
+			throw FormatException("couldn't convert \"KernelSize\" argument for dilation effect");
 		} else if (ksize < 0) {
-			throw ArgumentException("\"KernelSize\" argument for erosion effect must be positive");
+			throw ArgumentException("\"KernelSize\" argument for dilation effect must be positive");
 		}
-		ksize = 2 * ksize + 1;
+		ksize = 2 * (ksize-1) + 1;
 	}
 }
 

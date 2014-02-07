@@ -151,6 +151,18 @@ QString ImageWidget::GetFileName() const
 	return mFileName;
 }
 
+void ImageWidget::ApplyLiveImage()
+{
+	mUndoBuffer.push(mImage.copy());
+	mLive = false;
+	mImage = mLiveImage;
+}
+
+void ImageWidget::DiscardLiveImage()
+{
+	mLive = false;
+}
+
 void ImageWidget::Operation(IOperation *o, const QHash<QString, QString> &args, OperationType type)
 {
 	switch (type) {
@@ -163,10 +175,11 @@ void ImageWidget::Operation(IOperation *o, const QHash<QString, QString> &args, 
 		mOperation = o;
 		mArgs = args;
 		mLive = true;
+		update();
 		break;
 	case OperationType::Immediately:
 		mLive = false;
-		Draw(o, args);
+		DrawImage(Draw(o, args));
 		break;
 	}
 }
@@ -174,20 +187,22 @@ void ImageWidget::Operation(IOperation *o, const QHash<QString, QString> &args, 
 void ImageWidget::Arguments(const QHash<QString, QString> &args)
 {
 	mArgs = args;
+	update();
 }
 
-void ImageWidget::Draw()
+QImage ImageWidget::Draw()
 {
-	Draw(mOperation, mArgs);
+	return Draw(mOperation, mArgs);
 }
 
-void ImageWidget::Draw(IOperation* o, const QHash<QString,QString>& args)
+QImage ImageWidget::Draw(IOperation* o, const QHash<QString,QString>& args)
 {
-	QImage img;
-
 	mRedoBuffer.clear();
-	img = o->Draw(mImage, args);
+	return o->Draw(mImage, args);
+}
 
+void ImageWidget::DrawImage(const QImage& img)
+{
 	// Wurde der Speicher kopiert dann übernimm  den neuen Speicher
 	if (mImage.bits() != img.bits()) {
 		mImage = img;
@@ -196,7 +211,6 @@ void ImageWidget::Draw(IOperation* o, const QHash<QString,QString>& args)
 			mImage = mImage.convertToFormat(QImage::Format_ARGB32);
 		}
 	}
-
 	update();
 }
 
@@ -215,8 +229,8 @@ void ImageWidget::mousePressEvent(QMouseEvent *event)
 		mChanged = true;
 		// Erlaube Zeichnen
 		mDraw = true;
-		// Zeichne neues Bild
-		Draw();
+		// Aktualisiere Bild
+		update();
 	}
 }
 
@@ -227,6 +241,8 @@ void ImageWidget::mouseReleaseEvent(QMouseEvent *event)
 	// Eventlogik
 	if (event->button() == Qt::LeftButton) {
 		mDraw = false;
+		// Aktualisiere Bild
+		update();
 	}
 }
 
@@ -239,10 +255,8 @@ void ImageWidget::mouseMoveEvent(QMouseEvent *event)
 		QPoint pos = event->pos();
 		mArgs["X"] = QString::number(pos.x());
 		mArgs["Y"] = QString::number(pos.y());
-
-		if (!mLive) {
-			Draw();
-		}
+		// Aktualisiere Bild
+		update();
 	}
 }
 
@@ -265,6 +279,9 @@ void ImageWidget::paintEvent(QPaintEvent *event)
 	if (mLive) {
 		mLiveImage = mOperation->Draw(mImage.copy(), mArgs);
 		painter.drawImage(dirtyRect, mLiveImage, dirtyRect);
+	} else if (mDraw) {
+		DrawImage(Draw());
+		painter.drawImage(dirtyRect, mImage, dirtyRect);
 	} else {
 		painter.drawImage(dirtyRect, mImage, dirtyRect);
 	}

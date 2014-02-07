@@ -9,11 +9,9 @@
         <file>icons/Palette-icon.png</file>
         <file>icons/Pencil-icon.png</file>
         <file>icons/Scalpel-icon.png</file>
-        <file>icons/Stamp-icon.png</file>
         <file>icons/Triangle-icon.png</file>
         <file>icons/Type-icon.png</file>
         <file>icons/Eyedropper-icon.png</file>
-        <file>icons/Ink-icon.png</file>
         <file>icons/Spray-icon.png</file>
     </qresource>
 </RCC>

@@ -29,7 +29,7 @@ public:
 	Grayscale() { }
 	virtual ~Grayscale() throw() { }
 	//! Konvertiert die RGB-Werte des Bildes in 8-Bit Graufstufen
-	virtual QImage Draw(const QImage& img, const QHash<QString, QString>& args);
+	virtual QImage Draw(const QImage& img, const QHash<QString, QString>&);
 	virtual QString GetName() const;
 };
 

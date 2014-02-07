@@ -21,47 +21,49 @@
 #include "Sobel.hpp"
 #include "../Conversion.hpp"
 #include "../Exception.hpp"
-#include "GaussianBlur.hpp"
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <QHash>
 #include <QImage>
+#include <QDebug>
 
 QImage Sobel::Draw(const QImage &image, const QHash<QString, QString>& args)
 {
-	int ddepth = CV_16U;
 	int ksize = 3;
-	cv::Mat srcGray, grad, result;
+
+	cv::Mat src, grad, result;
 	cv::Mat gradX, gradY;
 	cv::Mat absGradX, absGradY;
-	SetupOperation(image, args, 1);
-	srcGray = QImageToMat(image);
-	cv::Sobel(srcGray, gradX, ddepth, 1, 0, ksize);
-	cv::convertScaleAbs( gradX, absGradX );
-	cv::Sobel(srcGray, gradY, ddepth, 0, 1, ksize);
+
+	Arguments(args, ksize);
+
+	src = QImageToMat(image);
+	cv::cvtColor(src, src, CV_BGR2GRAY);
+	cv::Sobel(src, gradX, -1, 1, 0, ksize);
+	cv::convertScaleAbs(gradX, absGradX);
+	cv::Sobel(src, gradY, -1, 0, 1, ksize);
 	cv::convertScaleAbs(gradY, absGradY);
 	cv::addWeighted(absGradX, 0.5, absGradY, 0.5, 0, grad);
 	grad.convertTo(result, CV_8U);
 	return MatToQImage(result);
 }
 
-void Sobel::SetupOperation(const QImage& image, QHash<QString, QString> args, int ksize)
+void Sobel::Arguments(const QHash<QString, QString> &args, int& ksize)
 {
 	bool ok = false;
-	GaussianBlur gauss;
+	QHash<QString,QString>::const_iterator it;
 
-	if (args.find("KernelSize") == args.end()) {
-		args["KernelSize"] = QString().setNum(ksize);
-	} else {
-		ksize = args["KernelSize"].toInt(&ok);
+	if ((it = args.find("Value")) != args.end()) {
+		ksize = it.value().toInt(&ok);
 
 		if (!ok) {
-			throw FormatException("couldn't convert \"KernelSize\" argument for gaussian blur");
+			throw FormatException("couldn't convert \"Value\" argument for sobel");
 		} else if (ksize < 0) {
-			throw ArgumentException("\"KernelSize\" argument for gaussian blur must be positive");
+			throw ArgumentException("\"Value\" argument for sobel must be positive");
 		}
+		ksize = (2 * (ksize-1) + 1);
+		ksize = ksize > 31 ? 31 : ksize;
 	}
-	gauss.Draw(image, args);
 }
 
 QString Sobel::GetName() const

@@ -29,40 +29,50 @@
 
 QImage Canny::Draw(const QImage &image, const QHash<QString, QString>& args)
 {
-	Blur f;
 	int ksize = 3;
 	int threshold = 100;
-	f.Draw(image, args);
 	cv::Mat mat = QImageToMat(image);
+
 	Arguments(args, ksize, threshold);
-	cv::Canny(mat.clone(), mat, threshold, threshold * 3, ksize);
+
+	cv::blur(mat, mat, cv::Size(ksize, ksize));
+	cv::Canny(mat, mat, threshold, threshold * 3);
 	return MatToQImage(mat);
 }
 
 void Canny::Arguments(const QHash<QString, QString>& args, int& ksize, int& threshold)
 {
 	bool ok = false;
-	auto it = args.find("KernelSize");
+	QHash<QString, QString>::const_iterator it;
 
-	if (it != args.end() && it.key() == "KernelSize") {
-		ksize = args["KernelSize"].toInt(&ok);
+	if ((it = args.find("Value")) != args.end()) {
+		threshold = it.value().toInt(&ok);
 
 		if (!ok) {
-			throw FormatException("couldn't convert \"KernelSize\" argument for gaussian blur");
+			throw FormatException("couldn't convert \"Value\" argument for canny");
 		} else if (ksize < 0) {
-			throw ArgumentException("\"KernelSize\" argument for gaussian blur must be positive");
+			throw ArgumentException("\"Value\" argument for canny must be positive");
+		}
+	}
+
+	if ((it = args.find("KernelSize")) != args.end()) {
+		ksize = it.value().toInt(&ok);
+
+		if (!ok) {
+			throw FormatException("couldn't convert \"KernelSize\" argument for canny");
+		} else if (ksize < 0) {
+			throw ArgumentException("\"KernelSize\" argument for canny must be positive");
 		}
 		ksize = 2 * ksize + 1;
 	}
-	it = args.find("Threshold");
 
-	if (it != args.end() && it.key() == "Threshold") {
-		threshold = args["Threshold"].toInt(&ok);
+	if ((it = args.find("Threshold")) != args.end()) {
+		threshold = it.value().toInt(&ok);
 
 		if (!ok) {
-			throw FormatException("couldn't convert \"Threshold\" argument for gaussian blur");
+			throw FormatException("couldn't convert \"Threshold\" argument for canny");
 		} else if (ksize < 0) {
-			throw ArgumentException("\"Threshold\" argument for gaussian blur must be positive");
+			throw ArgumentException("\"Threshold\" argument for canny must be positive");
 		}
 	}
 }

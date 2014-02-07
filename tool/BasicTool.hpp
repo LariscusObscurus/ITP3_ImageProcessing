@@ -22,6 +22,9 @@
 #define BASICTOOL_HPP
 
 #include "../IOperation.hpp"
+#include <QPoint>
+#include <QColor>
+
 namespace cv {
 	template <typename T>
 	class Scalar_;
@@ -35,6 +38,7 @@ public:
 	virtual ~BasicTool() throw() { }
 protected:
 	void Arguments(const QHash<QString, QString>& args, cv::Point_<int>&, cv::Scalar_<double>&, int&);
+	void Arguments(const QHash<QString, QString> &args, QPoint&, QColor&, int&);
 };
 
 #endif

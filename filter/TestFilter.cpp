@@ -24,7 +24,7 @@
 #include <QHash>
 #include <QImage>
 
-QImage TestFilter::Draw(const QImage &img, const QHash<QString, QString>& args)
+QImage TestFilter::Draw(const QImage &, const QHash<QString, QString>&)
 {
 	qDebug() << "Draw TestFilter";
 	throw Exception("Test Exception");

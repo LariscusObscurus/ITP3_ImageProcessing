@@ -30,31 +30,43 @@ QImage GaussianBlur::Draw(const QImage &image, const QHash<QString, QString>& ar
 {
 	double sigma = 0;
 	int ksize = 3;
+
 	Arguments(args, ksize, sigma);
+
 	cv::Mat mat = QImageToMat(image);
-	cv::GaussianBlur(mat.clone(), mat, cv::Size(ksize, ksize), sigma);
+	cv::GaussianBlur(mat, mat, cv::Size(ksize, ksize), sigma);
 	return MatToQImage(mat);
 }
 
 void GaussianBlur::Arguments(const QHash<QString, QString> &args, int &ksize, double &sigma)
 {
-	// Name der Argumente steht noch nicht fest
 	bool ok = false;
-	auto ks = args.find("KernelSize");
-	auto sg = args.find("Sigma");
+	QHash<QString,QString>::const_iterator it;
 
-	if (ks != args.end() && ks.key() == "KernelSize") {
-		ksize = ks.value().toInt(&ok);
+	if ((it = args.find("Value")) != args.end()) {
+		ksize = it.value().toInt(&ok);
+
+		if (!ok) {
+			throw FormatException("couldn't convert \"Value\" argument for gaussian blur");
+		} else if (ksize < 0) {
+			throw ArgumentException("\"Value\" argument for gaussian blur must be positive");
+		}
+		ksize = 2 * (ksize-1) + 1;
+	}
+
+	if ((it = args.find("KernelSize")) != args.end()) {
+		ksize = it.value().toInt(&ok);
 
 		if (!ok) {
 			throw FormatException("couldn't convert \"KernelSize\" argument for gaussian blur");
 		} else if (ksize < 0) {
 			throw ArgumentException("\"KernelSize\" argument for gaussian blur must be positive");
 		}
-		ksize = 2 * ksize + 1;
+		ksize = 2 * (ksize-1) + 1;
 	}
-	if (sg != args.end() && sg.key() == "Sigma") {
-		sigma = sg.value().toDouble(&ok);
+
+	if ((it = args.find("Sigma")) != args.end()) {
+		sigma = it.value().toDouble(&ok);
 
 		if (!ok) {
 			throw FormatException("couldn't convert \"Sigma\" argument for gaussian blur");
@@ -66,5 +78,5 @@ void GaussianBlur::Arguments(const QHash<QString, QString> &args, int &ksize, do
 
 QString GaussianBlur::GetName() const
 {
-	return "Gaussian Blur";
+	return "GaussianBlur";
 }

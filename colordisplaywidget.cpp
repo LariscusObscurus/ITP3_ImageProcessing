@@ -81,8 +81,9 @@ void ColorDisplayWidget::paintEvent(QPaintEvent *e)
 
 void ColorDisplayWidget::drawActive()
 {
+	QColor tmp(m_selectedColor.red(), m_selectedColor.green(), m_selectedColor.blue());
 	QPainter painter(this);
-	painter.setBrush(QBrush(m_selectedColor));
+	painter.setBrush(QBrush(tmp));
 	// Zeichne ausgewählte Farbe
 	painter.drawRect(0, 0, width(), height());
 	// Zeichne Außenlinien
@@ -95,8 +96,9 @@ void ColorDisplayWidget::drawActive()
 
 void ColorDisplayWidget::drawInactive()
 {
+	QColor tmp(m_selectedColor.red(), m_selectedColor.green(), m_selectedColor.blue());
 	QPainter painter(this);
-	painter.setBrush(QBrush(m_selectedColor));
+	painter.setBrush(QBrush(tmp));
 	// Zeichne ausgewählte Farbe
 	painter.drawRect(0, 0, width(), height());
 	// Zeichne Außenlinien

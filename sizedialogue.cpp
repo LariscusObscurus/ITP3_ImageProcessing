@@ -26,6 +26,7 @@ SizeDialogue::SizeDialogue(QWidget *parent) :
 	ui->setupUi(this);
 	ui->horizontalSlider->setRange(1,100);
 	ui->spinBox->setRange(1,100);
+	layout()->setSizeConstraint(QLayout::SetFixedSize);
 	QObject::connect(ui->spinBox, SIGNAL(valueChanged(int)),ui->horizontalSlider, SLOT(setValue(int)));
 	QObject::connect(ui->horizontalSlider, SIGNAL(valueChanged(int)),ui->spinBox, SLOT(setValue(int)));
 }

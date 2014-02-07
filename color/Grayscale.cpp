@@ -27,7 +27,7 @@
 #include <QImage>
 #include <QDebug>
 
-QImage Grayscale::Draw(const QImage &image, const QHash<QString, QString>& args)
+QImage Grayscale::Draw(const QImage &image, const QHash<QString, QString>&)
 {
 	cv::Mat mat = QImageToMat(image);
 	cv::cvtColor(mat, mat, CV_BGR2GRAY);

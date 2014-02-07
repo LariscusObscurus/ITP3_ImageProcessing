@@ -8,6 +8,7 @@ SavePopupDialog::SavePopupDialog(QWidget *parent, const QString &fileName) :
 {
 	ui->setupUi(this);
 	ui->header->setText(QString("<html><head/><body><p><span style='font-size:10pt; font-weight:600;'>Save changes to \"%1\" before closing?</span></p></body></html>").arg(fileName));
+	layout()->setSizeConstraint(QLayout::SetFixedSize);
 }
 
 SavePopupDialog::~SavePopupDialog()

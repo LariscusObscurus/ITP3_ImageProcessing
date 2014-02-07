@@ -25,24 +25,26 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <QHash>
 #include <QImage>
+#include <QDebug>
 
 QImage Blur::Draw(const QImage &image, const QHash<QString, QString>& args)
 {
 	int ksize = 3;
 	cv::Mat mat = QImageToMat(image);
 	// Name des Argumentes steht noch nicht fest
-	auto it = args.find("KernelSize");
+	auto it = args.find("Value");
 
-	if (it != args.end() && it.key() == "KernelSize") {
+	if (it != args.end()) {
 		bool ok = false;
 		ksize = it.value().toInt(&ok);
 
 		if (!ok) {
-			throw FormatException("Couldn't convert \"KernelSize\" argument for blur");
+			throw FormatException("Couldn't convert \"Value\" argument for blur");
 		}
-		ksize = 2 * ksize + 1;
+		ksize = 2 * (ksize-1) + 1;
 	}
-	cv::blur(mat.clone(), mat, cv::Size(ksize, ksize));
+
+	cv::blur(mat, mat, cv::Size(ksize, ksize));
 	return MatToQImage(mat);
 }
 

@@ -21,25 +21,31 @@
 #include "Pencil.hpp"
 #include "../Conversion.hpp"
 #include "../Exception.hpp"
-#include <opencv2/core/core.hpp>
-#include <opencv2/imgproc/imgproc.hpp>
+#include <QPainter>
 #include <QImage>
 #include <QColor>
 #include <QPoint>
+#include <QPen>
 #include <QHash>
 #include <QDebug>
 
 QImage Pencil::Draw(const QImage &img, const QHash<QString, QString> &args)
 {
-	cv::Mat mat = QImageToMat(img);
-	cv::Point pt;
-	cv::Scalar color;
+	QPainter painter(const_cast<QImage*>(&img));
+	QColor color;
+	QPoint pt;
 	int size;
-
+	int adjustment;
+	// Lade argumente
 	Arguments(args, pt, color, size);
-
-	cv::circle(mat, pt, size, color, -1);
-	return MatToQImage(mat);
+	// Setze alle Werte
+	painter.setPen(color);
+	painter.setBrush(QBrush(color));
+	painter.setRenderHint(QPainter::Antialiasing);
+	adjustment = (size / 2);
+	// Zeichne Kreis
+	painter.drawEllipse(QRect(pt.x() - adjustment, pt.y() - adjustment, size, size));
+	return img;
 }
 
 QString Pencil::GetName() const

@@ -25,24 +25,39 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <QHash>
 #include <QImage>
+#include <QDebug>
 
 QImage Outline::Draw(const QImage &image, const QHash<QString, QString>& args)
 {
 	const int op = cv::MORPH_GRADIENT;
-	int shape = cv::MORPH_RECT;
+	int shape = cv::MORPH_ELLIPSE;
 	int ksize = 2;
+
 	Arguments(args, shape, ksize);
+	// TODO: Bug beseitigen
 	cv::Mat mat = QImageToMat(image);
-	cv::Mat kernel = cv::getStructuringElement(shape, cv::Size(ksize, ksize));
-	cv::morphologyEx(mat.clone(), mat, op, kernel);
+	cv::Mat kernel = cv::getStructuringElement(shape, cv::Size(ksize*2+1, ksize*2+1), cv::Point(ksize, ksize));
+	cv::morphologyEx(mat, mat, op, kernel);
 	return MatToQImage(mat);
 }
 
 void Outline::Arguments(const QHash<QString, QString> &args, int &shape, int &ksize)
 {
-	auto it = args.find("Shape");
+	bool ok = false;
+	QHash<QString,QString>::const_iterator it;
 
-	if (it != args.end() && it.key() == "Shape") {
+	if ((it = args.find("Value")) != args.end()) {
+		ksize = it.value().toInt(&ok);
+
+		if (!ok) {
+			throw FormatException("couldn't convert \"Value\" argument for outline");
+		} else if (ksize < 0) {
+			throw ArgumentException("\"Value\" argument for outline must be positive");
+		}
+		//ksize = 2 * (ksize-1) + 1;
+	}
+
+	if ((it = args.find("Shape")) != args.end()) {
 		if (it.value() == "Rect") {
 			shape = cv::MORPH_RECT;
 		} else if (it.value() == "Cross") {
@@ -53,22 +68,20 @@ void Outline::Arguments(const QHash<QString, QString> &args, int &shape, int &ks
 			throw ArgumentException("\"Shape\" doesn't name an existing type");
 		}
 	}
-	it = args.find("MorphSize");
 
-	if (it != args.end() && it.key() == "MorphSize") {
-		bool ok = false;
+	if ((it = args.find("MorphSize")) != args.end()) {
 		ksize = it.value().toInt(&ok);
 
 		if (!ok) {
-			throw FormatException("couldn't convert \"MorphSize\" argument for erosion effect");
+			throw FormatException("couldn't convert \"MorphSize\" argument for outline");
 		} else if (ksize < 0) {
-			throw ArgumentException("\"MorphSize\" argument for erosion effect must be positive");
+			throw ArgumentException("\"MorphSize\" argument for outline must be positive");
 		}
-		ksize = 2 * ksize + 1;
+		//ksize = 2 * (ksize-1) + 1;
 	}
 }
 
 QString Outline::GetName() const
 {
-	return "Edge";
+	return "Outline";
 }

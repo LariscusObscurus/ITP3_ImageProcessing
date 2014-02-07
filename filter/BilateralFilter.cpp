@@ -25,6 +25,7 @@
 #include <opencv2/imgproc/imgproc.hpp>
 #include <QHash>
 #include <QImage>
+#include <QDebug>
 
 QImage BilateralFilter::Draw(const QImage &image, const QHash<QString, QString>& args)
 {
@@ -34,6 +35,7 @@ QImage BilateralFilter::Draw(const QImage &image, const QHash<QString, QString>&
 	cv::Mat mat = QImageRgb32ToMat24(image);
 
 	Arguments(args, d, sigmaColor, sigmaSpace);
+
 	cv::bilateralFilter(mat.clone(), mat, d, sigmaColor, sigmaSpace);
 	return MatToQImage(mat);
 }
@@ -41,25 +43,30 @@ QImage BilateralFilter::Draw(const QImage &image, const QHash<QString, QString>&
 void BilateralFilter::Arguments(const QHash<QString, QString> &args, int &d, double &sigmaColor, double &sigmaSpace)
 {
 	bool ok = false;
-	auto it = args.find("Diameter");
+	QHash<QString, QString>::const_iterator it;
 
-	if (it != args.end() && it.key() == "Diameter") {
-		d = it.value().toInt(&ok);
+	if ((it = args.find("Value")) != args.end()) {
+		sigmaColor = sigmaSpace = static_cast<double>(it.value().toInt(&ok)) * 2.5;
 		if (!ok) {
-			throw FormatException("couldn't convert \"Diameter\" argument for bilateral filter");
+			throw FormatException("couldn't convert \"Value\" argument for bilateral filter");
 		}
 	}
-	it = args.find("SigmaColor");
 
-	if (it != args.end() && it.key() == "SigmaColor") {
-		sigmaColor = it.value().toDouble(&ok);
+	if ((it = args.find("Diameter")) != args.end()) {
+		d = it.value().toDouble(&ok);
 		if (!ok) {
 			throw FormatException("couldn't convert \"SigmaColor\" argument for bilateral filter");
 		}
 	}
-	it = args.find("SigmaSpace");
 
-	if (it != args.end() && it.key() == "SigmaSpace") {
+	if ((it = args.find("SigmaColor")) != args.end()) {
+		sigmaColor = it.value().toDouble(&ok);
+		if (!ok) {
+			throw FormatException("couldn't convert \"SigmaSpace\" argument for bilateral filter");
+		}
+	}
+
+	if ((it = args.find("SigmaSpace")) != args.end()) {
 		sigmaSpace = it.value().toDouble(&ok);
 		if (!ok) {
 			throw FormatException("couldn't convert \"SigmaSpace\" argument for bilateral filter");
@@ -69,5 +76,5 @@ void BilateralFilter::Arguments(const QHash<QString, QString> &args, int &d, dou
 
 QString BilateralFilter::GetName() const
 {
-	return "Bilateral Filter";
+	return "BilateralFilter";
 }
