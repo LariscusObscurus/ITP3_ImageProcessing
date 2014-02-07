@@ -29,12 +29,26 @@
 #include <QHash>
 #include <QDebug>
 
-void BasicTool::Arguments(const QHash<QString, QString> &args, cv::Point& pt, cv::Scalar& color, int& size)
+void BasicTool::Arguments(const QHash<QString, QString> &args, cv::Point& ppt, cv::Point& pt, cv::Scalar& color, int& size)
 {
 	bool ok = false;
 	int r, g, b, a;
 	QHash<QString, QString>::const_iterator it;
 
+	// previous x
+	if ((it = args.find("PreviousX")) != args.end()) {
+		ppt.x = it.value().toInt(&ok);
+		if (!ok) {
+			throw FormatException("couldn't convert \"X\" argument for tool");
+		}
+	}
+	// previous y
+	if ((it = args.find("PreviousY")) != args.end()) {
+		ppt.y = it.value().toInt(&ok);
+		if (!ok) {
+			throw FormatException("couldn't convert \"Y\" argument for tool");
+		}
+	}
 	// x
 	if ((it = args.find("X")) != args.end()) {
 		pt.x = it.value().toInt(&ok);
@@ -88,11 +102,25 @@ void BasicTool::Arguments(const QHash<QString, QString> &args, cv::Point& pt, cv
 	color = cv::Scalar(b, g, r, a);
 }
 
-void BasicTool::Arguments(const QHash<QString, QString> &args, QPoint& pt, QColor& color, int& size)
+void BasicTool::Arguments(const QHash<QString, QString> &args, QPoint& ppt, QPoint& pt, QColor& color, int& size)
 {
 	bool ok = false;
 	QHash<QString, QString>::const_iterator it;
 
+	// previous x
+	if ((it = args.find("PreviousX")) != args.end()) {
+		ppt.setX(it.value().toInt(&ok));
+		if (!ok) {
+			throw FormatException("couldn't convert \"PreviousX\" argument for tool");
+		}
+	}
+	// previous y
+	if ((it = args.find("PreviousY")) != args.end()) {
+		ppt.setY(it.value().toInt(&ok));
+		if (!ok) {
+			throw FormatException("couldn't convert \"PreviousY\" argument for tool");
+		}
+	}
 	// x
 	if ((it = args.find("X")) != args.end()) {
 		pt.setX(it.value().toInt(&ok));

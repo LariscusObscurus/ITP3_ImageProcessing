@@ -29,9 +29,19 @@
 
 QImage Grayscale::Draw(const QImage &image, const QHash<QString, QString>&)
 {
-	cv::Mat mat = QImageToMat(image);
-	cv::cvtColor(mat, mat, CV_BGR2GRAY);
-	return MatToQImage(mat);
+	if (image.format() == QImage::Format_RGB888) {
+		cv::Mat mat = QImageToMat(image);
+		cv::cvtColor(mat, mat, CV_BGR2GRAY);
+		cv::cvtColor(mat, mat, CV_GRAY2BGR);
+		return MatToQImage(mat);
+	} else if (image.format() == QImage::Format_ARGB32) {
+		cv::Mat mat = QImageToMat(image.convertToFormat(QImage::Format_RGB888));
+		cv::cvtColor(mat, mat, CV_BGR2GRAY);
+		cv::cvtColor(mat, mat, CV_GRAY2BGR);
+		return MatToQImage(mat);
+	}
+
+	return image;
 }
 
 QString Grayscale::GetName() const

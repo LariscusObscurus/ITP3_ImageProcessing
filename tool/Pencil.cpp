@@ -33,18 +33,22 @@ QImage Pencil::Draw(const QImage &img, const QHash<QString, QString> &args)
 {
 	QPainter painter(const_cast<QImage*>(&img));
 	QColor color;
-	QPoint pt;
+	QPoint pt, ppt;
+	QPen pen;
 	int size;
-	int adjustment;
+
 	// Lade argumente
-	Arguments(args, pt, color, size);
+	Arguments(args, ppt, pt, color, size);
+
 	// Setze alle Werte
-	painter.setPen(color);
-	painter.setBrush(QBrush(color));
+	pen.setWidth(size);
+	pen.setColor(color);
+	painter.setPen(pen);
+	painter.setBrush(QBrush(color, Qt::SolidPattern));
 	painter.setRenderHint(QPainter::Antialiasing);
-	adjustment = (size / 2);
-	// Zeichne Kreis
-	painter.drawEllipse(QRect(pt.x() - adjustment, pt.y() - adjustment, size, size));
+
+	// Zeichne Linie
+	painter.drawLine(ppt, pt);
 	return img;
 }
 

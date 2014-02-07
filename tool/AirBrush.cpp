@@ -1,4 +1,4 @@
-// Brush.cpp
+// AirBrush.cpp
 
 /* © 2014 David Wolf
  *
@@ -18,7 +18,7 @@
  * along with ImageProcessing.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Brush.hpp"
+#include "AirBrush.hpp"
 #include "../Conversion.hpp"
 #include "../Exception.hpp"
 #include <QPainter>
@@ -27,7 +27,7 @@
 #include <QPoint>
 #include <QDebug>
 
-QImage Brush::Draw(const QImage &img, const QHash<QString, QString>& args)
+QImage AirBrush::Draw(const QImage &img, const QHash<QString, QString>& args)
 {
 	QPainter painter(const_cast<QImage*>(&img));
 	QColor color;
@@ -39,9 +39,9 @@ QImage Brush::Draw(const QImage &img, const QHash<QString, QString>& args)
 
 	// Setze alle Werte
 	int numSteps = 2 + (pt - ppt).manhattanLength() / 2;
-	painter.setPen(Qt::NoPen);
-	painter.setBrush(QBrush(color, Qt::SolidPattern));
+	painter.setBrush(QBrush(color, Qt::Dense6Pattern));
 	painter.setRenderHint(QPainter::Antialiasing);
+	painter.setPen(Qt::NoPen);
 
 	// Zeichne Kreis
 	for (int i = 0; i < numSteps; ++i) {
@@ -50,10 +50,11 @@ QImage Brush::Draw(const QImage &img, const QHash<QString, QString>& args)
 
 		painter.drawEllipse(x - (size / 2), y - (size / 2), size, size);
 	}
+
 	return img;
 }
 
-QString Brush::GetName() const
+QString AirBrush::GetName() const
 {
-	return "Brush";
+	return "AirBrush";
 }

@@ -37,8 +37,8 @@ class BasicTool : public IOperation
 public:
 	virtual ~BasicTool() throw() { }
 protected:
-	void Arguments(const QHash<QString, QString>& args, cv::Point_<int>&, cv::Scalar_<double>&, int&);
-	void Arguments(const QHash<QString, QString> &args, QPoint&, QColor&, int&);
+	virtual void Arguments(const QHash<QString, QString>& args, cv::Point_<int>&, cv::Point_<int>&, cv::Scalar_<double>&, int&);
+	virtual void Arguments(const QHash<QString, QString> &args, QPoint&, QPoint&, QColor&, int&);
 };
 
 #endif

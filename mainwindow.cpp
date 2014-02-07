@@ -42,6 +42,7 @@
 #include "tool/Pencil.hpp"
 #include "tool/Flood.hpp"
 #include "tool/Brush.hpp"
+#include "tool/AirBrush.hpp"
 #include "Exception.hpp"
 #include "Utility.hpp"
 
@@ -97,6 +98,7 @@ void MainWindow::CreateOperations()
 		mOperations["Pencil"] = new Pencil();
 		mOperations["Brush"] = new Brush();
 		mOperations["FloodFill"] = new Flood();
+		mOperations["AirBrush"] = new AirBrush();
 	} catch (const std::bad_alloc& e) {
 		ClearOperations();
 		QMessageBox::critical(0, "Memory Error", e.what());
@@ -194,15 +196,27 @@ QHash<QString, QString>& MainWindow::GetArgs()
 	return mArgs;
 }
 
-void MainWindow::ApplySingleOperation(IOperation *o, OperationType t)
+void MainWindow::ApplyLiveOperation(IOperation *o)
 {
 	ImageWidget* img = GetImageWidget();
 
 	if (img) {
 		// Setze Bildfilter
-		img->Operation(o, GetArgs(), t);
+		img->Operation(o, GetArgs(), OperationType::Live);
 		// Erzeuge Live-Dialog
 		LiveDialog(img);
+		// Setze zurück auf vorherige Bildoperation
+		img->Operation(mOperation, GetArgs());
+	}
+}
+
+void MainWindow::ApplyImmediateOperation(IOperation *o)
+{
+	ImageWidget* img = GetImageWidget();
+
+	if (img) {
+		// Setze Bildfilter
+		img->Operation(o, GetArgs(), OperationType::Immediately);
 		// Setze zurück auf vorherige Bildoperation
 		img->Operation(mOperation, GetArgs());
 	}
@@ -471,7 +485,8 @@ void MainWindow::on_btnPencil_clicked()
 
 void MainWindow::on_btnBrush_clicked()
 {
-	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+	mOperation = mOperations["Brush"];
+	emit Operation(mOperation, GetArgs());
 }
 
 void MainWindow::on_btnEraser_clicked()
@@ -517,7 +532,8 @@ void MainWindow::on_btnSprayCan_clicked()
 
 void MainWindow::on_btnAirbrush_clicked()
 {
-	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+	mOperation = mOperations["AirBrush"];
+	emit Operation(mOperation, GetArgs());
 }
 
 void MainWindow::on_btnEyedropper_clicked()
@@ -567,47 +583,47 @@ void MainWindow::on_imagetab_tabCloseRequested(int index)
 
 void MainWindow::on_actionBlur_triggered()
 {
-	ApplySingleOperation(mOperations["Blur"], OperationType::Live);
+	ApplyLiveOperation(mOperations["Blur"]);
 }
 
 void MainWindow::on_actionGaussianBlur_triggered()
 {
-	ApplySingleOperation(mOperations["GaussianBlur"], OperationType::Live);
+	ApplyLiveOperation(mOperations["GaussianBlur"]);
 }
 
 void MainWindow::on_actionMedianBlur_triggered()
 {
-	ApplySingleOperation(mOperations["MedianBlur"], OperationType::Live);
+	ApplyLiveOperation(mOperations["MedianBlur"]);
 }
 
 void MainWindow::on_actionBilateralFilter_triggered()
 {
-	ApplySingleOperation(mOperations["BilateralFilter"], OperationType::Live);
+	ApplyLiveOperation(mOperations["BilateralFilter"]);
 }
 
 void MainWindow::on_actionEdge_triggered()
 {
-	ApplySingleOperation(mOperations["Outline"], OperationType::Live);
+	ApplyLiveOperation(mOperations["Outline"]);
 }
 
 void MainWindow::on_actionCanny_triggered()
 {
-	ApplySingleOperation(mOperations["Canny"], OperationType::Live);
+	ApplyLiveOperation(mOperations["Canny"]);
 }
 
 void MainWindow::on_actionSobel_triggered()
 {
-	ApplySingleOperation(mOperations["Sobel"], OperationType::Live);
+	ApplyLiveOperation(mOperations["Sobel"]);
 }
 
 void MainWindow::on_actionDilation_triggered()
 {
-	ApplySingleOperation(mOperations["Dilation"], OperationType::Live);
+	ApplyLiveOperation(mOperations["Dilation"]);
 }
 
 void MainWindow::on_actionErosion_triggered()
 {
-	ApplySingleOperation(mOperations["Erosion"], OperationType::Live);
+	ApplyLiveOperation(mOperations["Erosion"]);
 }
 
 void MainWindow::on_actionCartoon_triggered()
@@ -622,7 +638,7 @@ void MainWindow::on_actionOilify_triggered()
 
 void MainWindow::on_actionGrayscale_triggered()
 {
-	ApplySingleOperation(mOperations["Grayscale"], OperationType::Immediately);
+	ApplyImmediateOperation(mOperations["Grayscale"]);
 }
 
 void MainWindow::on_actionColorize_triggered()

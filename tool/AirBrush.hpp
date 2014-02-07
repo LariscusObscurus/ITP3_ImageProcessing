@@ -1,6 +1,6 @@
-// Grayscale.hpp
+// AirBrush.hpp
 
-/* © 2013 David Wolf
+/* © 2014 David Wolf
  *
  * This file is part of ImageProcessing.
  *
@@ -18,19 +18,18 @@
  * along with ImageProcessing.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef GRAYSCALE_HPP
-#define GRAYSCALE_HPP
+#ifndef AIRBRUSH_HPP
+#define AIRBRUSH_HPP
 
-#include "../IOperation.hpp"
+#include "BasicTool.hpp"
 
-class Grayscale : public IOperation
+class AirBrush : public BasicTool
 {
 public:
-	Grayscale() { }
-	virtual ~Grayscale() throw() { }
-	//! Konvertiert die RGB-Werte des Bildes in 8-Bit Graufstufen
-	virtual QImage Draw(const QImage& img, const QHash<QString, QString>&);
+	AirBrush() { }
+	virtual ~AirBrush() throw() { }
+	virtual QImage Draw(const QImage& img, const QHash<QString, QString>& args);
 	virtual QString GetName() const;
 };
 
-#endif // COLORIZE_HPP
+#endif

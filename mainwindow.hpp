@@ -196,7 +196,8 @@ private:
 	void ClearOperations();
 	void ConnectSignals();
 	QHash<QString,QString>& GetArgs();
-	void ApplySingleOperation(IOperation*, OperationType);
+	void ApplyLiveOperation(IOperation*);
+	void ApplyImmediateOperation(IOperation*);
 	bool CloseImage(ImageWidget*);
 	void LiveDialog(ImageWidget*);
 

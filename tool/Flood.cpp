@@ -31,14 +31,14 @@
 QImage Flood::Draw(const QImage &img, const QHash<QString, QString>& args)
 {
 	cv::Mat mat;
-	cv::Point seedPoint;
+	cv::Point seedPoint, tmp;
 	cv::Scalar color;
 	int size;
 
 	// Konvertiere Bild in ein valides Format
 	mat = QImageRgb32ToMat24(img);
 
-	Arguments(args, seedPoint, color, size);
+	Arguments(args, tmp, seedPoint, color, size);
 
 	cv::floodFill(mat, seedPoint, color);
 	return MatToQImage(mat);

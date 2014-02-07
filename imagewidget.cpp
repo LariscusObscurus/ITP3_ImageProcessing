@@ -220,8 +220,10 @@ void ImageWidget::mousePressEvent(QMouseEvent *event)
 
 	// Eventlogik
 	if (event->button() == Qt::LeftButton) {
-		// Speicher jetzige Position
+		// Speicher Position
 		QPoint pos = event->pos();
+		mArgs["PreviousX"] = QString::number(pos.x());
+		mArgs["PreviousY"] = QString::number(pos.y());
 		mArgs["X"] = QString::number(pos.x());
 		mArgs["Y"] = QString::number(pos.y());
 		// Speicher altes Bild
@@ -252,7 +254,10 @@ void ImageWidget::mouseMoveEvent(QMouseEvent *event)
 
 	// Eventlogik
 	if (mDraw && mOperation) {
+		// Speicher Position
 		QPoint pos = event->pos();
+		mArgs["PreviousX"] = mArgs["X"];
+		mArgs["PreviousY"] = mArgs["Y"];
 		mArgs["X"] = QString::number(pos.x());
 		mArgs["Y"] = QString::number(pos.y());
 		// Aktualisiere Bild
@@ -276,6 +281,9 @@ void ImageWidget::paintEvent(QPaintEvent *event)
 	QPainter painter(this);
 	QRect dirtyRect = event->rect();
 
+#ifdef QT_DEBUG
+	try {
+#endif
 	if (mLive) {
 		mLiveImage = mOperation->Draw(mImage.copy(), mArgs);
 		painter.drawImage(dirtyRect, mLiveImage, dirtyRect);
@@ -285,4 +293,9 @@ void ImageWidget::paintEvent(QPaintEvent *event)
 	} else {
 		painter.drawImage(dirtyRect, mImage, dirtyRect);
 	}
+#ifdef QT_DEBUG
+	} catch (const Exception& e) {
+		QMessageBox::critical(this, "Error", e.Message());
+	}
+#endif
 }

@@ -36,7 +36,8 @@ SOURCES += main.cpp\
     tool/Pencil.cpp \
     tool/BasicTool.cpp \
     SavePopupDialog.cpp \
-    LiveFilterDialog.cpp
+    LiveFilterDialog.cpp \
+    tool/AirBrush.cpp
 
 HEADERS  += \
     colordisplaywidget.hpp \
@@ -49,7 +50,6 @@ HEADERS  += \
     sizedialogue.hpp \
     ueberdialog.hpp \
     Utility.hpp \
-    color/Grayscale.hpp \
     filter/BilateralFilter.hpp \
     filter/Blur.hpp \
     filter/Canny.hpp \
@@ -66,7 +66,9 @@ HEADERS  += \
     tool/BasicTool.hpp \
     OperationType.hpp \
     SavePopupDialog.hpp \
-    LiveFilterDialog.hpp
+    LiveFilterDialog.hpp \
+    color/Grayscale.hpp \
+    tool/AirBrush.hpp
 
 FORMS    += mainwindow.ui \
     ueberdialog.ui \
@@ -85,6 +87,16 @@ unix:!macx: LIBS += -lopencv_imgproc
 
 unix: QMAKE_CXXFLAGS += -std=c++11
 win32-g++: QMAKE_CXXFLAGS += -std=c++11
+
+# Debug Code
+unix:CONFIG(debug, debug|release): QMAKE_CXXFLAGS += -g
+win32-g++:CONFIG(debug, debug|release): QMAKE_CXXFLAGS += -g
+win32-msvc2012:CONFIG(debug, debug|release): QMAKE_CXXFLAGS += /Zi
+
+# Optimiere Code
+unix:CONFIG(release, debug|release): QMAKE_CXXFLAGS += -O2
+win32-g++:CONFIG(release, debug|release): QMAKE_CXXFLAGS += -O2
+win32-msvc2012:CONFIG(release, debug|release): QMAKE_CXXFLAGS += /O2 /GA
 
 win32-msvc2012:!contains(QMAKE_HOST.arch, x86_64): {
 	CONFIG(release, debug|release): LIBS += -L$$PWD/dep/lib/x86/ -lopencv_core248
