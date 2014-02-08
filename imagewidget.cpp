@@ -32,7 +32,8 @@ ImageWidget::ImageWidget(QWidget *parent) :
 	mFileName(""),
 	mOperation(nullptr),
 	mDraw(false),
-	mLive(false)
+	mLive(false),
+	mTrack(false)
 {
 	setAttribute(Qt::WA_StaticContents);
 }
@@ -163,6 +164,17 @@ void ImageWidget::DiscardLiveImage()
 	mLive = false;
 }
 
+QColor ImageWidget::GetPixel() const
+{
+	QPoint pos(mArgs["X"].toInt(), mArgs["Y"].toInt());
+	return QColor(mImage.pixel(pos));
+}
+
+void ImageWidget::TrackColor(bool enabled)
+{
+	mTrack = enabled;
+}
+
 void ImageWidget::Operation(IOperation *o, const QHash<QString, QString> &args, OperationType type)
 {
 	switch (type) {
@@ -182,6 +194,7 @@ void ImageWidget::Operation(IOperation *o, const QHash<QString, QString> &args, 
 		DrawImage(Draw(o, args));
 		break;
 	}
+	mTrack = false;
 }
 
 void ImageWidget::Arguments(const QHash<QString, QString> &args)
@@ -226,13 +239,20 @@ void ImageWidget::mousePressEvent(QMouseEvent *event)
 		mArgs["PreviousY"] = QString::number(pos.y());
 		mArgs["X"] = QString::number(pos.x());
 		mArgs["Y"] = QString::number(pos.y());
+
 		// Speicher altes Bild
 		mUndoBuffer.push(mImage.copy());
 		mChanged = true;
+
 		// Erlaube Zeichnen
 		mDraw = true;
+
 		// Aktualisiere Bild
 		update();
+
+		if (mTrack) {
+			emit ColorChanged(GetPixel());
+		}
 	}
 }
 
@@ -243,8 +263,13 @@ void ImageWidget::mouseReleaseEvent(QMouseEvent *event)
 	// Eventlogik
 	if (event->button() == Qt::LeftButton) {
 		mDraw = false;
+
 		// Aktualisiere Bild
 		update();
+
+		if (mTrack) {
+			emit ColorChanged(GetPixel());
+		}
 	}
 }
 
@@ -260,8 +285,13 @@ void ImageWidget::mouseMoveEvent(QMouseEvent *event)
 		mArgs["PreviousY"] = mArgs["Y"];
 		mArgs["X"] = QString::number(pos.x());
 		mArgs["Y"] = QString::number(pos.y());
+
 		// Aktualisiere Bild
 		update();
+
+		if (mTrack) {
+			emit ColorChanged(GetPixel());
+		}
 	}
 }
 

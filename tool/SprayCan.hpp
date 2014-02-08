@@ -1,4 +1,6 @@
-/* © 2013 Leonhardt Schwarz, David Wolf
+// SprayCan.hpp
+
+/* © 2014 David Wolf
  *
  * This file is part of ImageProcessing.
  *
@@ -16,39 +18,18 @@
  * along with ImageProcessing.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef COLORDISPLAYWIDGET_H
-#define COLORDISPLAYWIDGET_H
+#ifndef SPRAYCAN_HPP
+#define SPRAYCAN_HPP
 
-#include <QWidget>
+#include "BasicTool.hpp"
 
-class ColorDisplayWidget : public QWidget
+class SprayCan : public BasicTool
 {
-	Q_OBJECT
 public:
-	explicit ColorDisplayWidget(QWidget *parent = 0);
-	const QColor& getColor();
-	bool isActive() const;
-
-protected:
-	virtual void mousePressEvent(QMouseEvent *);
-	virtual void paintEvent(QPaintEvent *);
-
-signals:
-	void colorChanged(const QColor&);
-	void activated();
-
-public slots:
-	void setColor(const QColor &color);
-	void background();
-	void foreground();
-
-private:
-	void drawActive();
-	void drawInactive();
-	void drawLines(QPainter&, QColor, QColor, QColor, QColor);
-
-	QColor m_selectedColor;
-	bool m_active;
+	SprayCan() { }
+	virtual ~SprayCan() throw() { }
+	virtual QImage Draw(const QImage& img, const QHash<QString, QString>& args);
+	virtual QString GetName() const;
 };
 
-#endif // COLORDISPLAYWIDGET_H
+#endif

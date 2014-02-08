@@ -50,8 +50,11 @@ public:
 	QString GetFileName() const;
 	void ApplyLiveImage();
 	void DiscardLiveImage();
+	QColor GetPixel() const;
+	void TrackColor(bool enabled);
 
 signals:
+	void ColorChanged(const QColor&);
 
 public slots:
 	void Operation(IOperation*, const QHash<QString,QString>&, OperationType type = OperationType::Auto);
@@ -83,6 +86,7 @@ private:
 	QHash<QString, QString> mArgs;
 	bool mDraw;
 	bool mLive;
+	bool mTrack;
 };
 
 #endif // IMAGEWIDGET_H

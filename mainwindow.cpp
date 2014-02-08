@@ -43,6 +43,7 @@
 #include "tool/Flood.hpp"
 #include "tool/Brush.hpp"
 #include "tool/AirBrush.hpp"
+#include "tool/SprayCan.hpp"
 #include "Exception.hpp"
 #include "Utility.hpp"
 
@@ -99,6 +100,7 @@ void MainWindow::CreateOperations()
 		mOperations["Brush"] = new Brush();
 		mOperations["FloodFill"] = new Flood();
 		mOperations["AirBrush"] = new AirBrush();
+		mOperations["SprayCan"] = new SprayCan();
 	} catch (const std::bad_alloc& e) {
 		ClearOperations();
 		QMessageBox::critical(0, "Memory Error", e.what());
@@ -122,6 +124,9 @@ void MainWindow::ConnectSignals()
 
 	// Werkzeuggröße
 	connect(mSizeDialog, SIGNAL(sizeChanged(int)), this, SLOT(SizeChanged(int)));
+
+	// Befehl hat sich geändert
+	connect(this, SIGNAL(Operation(IOperation*,QHash<QString,QString>,OperationType)), this, SLOT(Operation(IOperation*,QHash<QString,QString>,OperationType)));
 }
 
 void MainWindow::ClearOperations()
@@ -313,6 +318,22 @@ void MainWindow::ColorChanged(const QColor &c)
 {
 	mColor = c;
 	emit Arguments(GetArgs());
+}
+
+void MainWindow::OperationChanged(IOperation *, const QHash<QString, QString> &, OperationType)
+{
+	ImageWidget* img = GetImageWidget();
+
+	if (img) {
+		// Verfolge den Pixelwert unter dem Cursor
+		img->TrackColor(true);
+
+		if (ui->ColorPickerFront->isActive()) {
+			disconnect(img, SIGNAL(ColorChanged(QColor)), ui->ColorPickerFront, SLOT(setColor(QColor)));
+		} else {
+			disconnect(img, SIGNAL(ColorChanged(QColor)), ui->ColorPickerBack, SLOT(setColor(QColor)));
+		}
+	}
 }
 
 void MainWindow::on_actionNew_triggered()
@@ -527,7 +548,8 @@ void MainWindow::on_btnText_clicked()
 
 void MainWindow::on_btnSprayCan_clicked()
 {
-	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+	mOperation = mOperations["SprayCan"];
+	emit Operation(mOperation, GetArgs());
 }
 
 void MainWindow::on_btnAirbrush_clicked()
@@ -538,7 +560,18 @@ void MainWindow::on_btnAirbrush_clicked()
 
 void MainWindow::on_btnEyedropper_clicked()
 {
-	QMessageBox::information(this, "Information", "Action is not yet implemented.");
+	ImageWidget* img = GetImageWidget();
+
+	if (img) {
+		// Verfolge den Pixelwert unter dem Cursor
+		img->TrackColor(true);
+
+		if (ui->ColorPickerFront->isActive()) {
+			connect(img, SIGNAL(ColorChanged(QColor)), ui->ColorPickerFront, SLOT(setColor(QColor)));
+		} else {
+			connect(img, SIGNAL(ColorChanged(QColor)), ui->ColorPickerBack, SLOT(setColor(QColor)));
+		}
+	}
 }
 
 void MainWindow::on_btnPalette_clicked()
@@ -603,7 +636,8 @@ void MainWindow::on_actionBilateralFilter_triggered()
 
 void MainWindow::on_actionEdge_triggered()
 {
-	ApplyLiveOperation(mOperations["Outline"]);
+	QMessageBox::information(this, "Information", "This filter is buggy and therefore not active.");
+	//ApplyLiveOperation(mOperations["Outline"]);
 }
 
 void MainWindow::on_actionCanny_triggered()

@@ -37,7 +37,8 @@ SOURCES += main.cpp\
     tool/BasicTool.cpp \
     SavePopupDialog.cpp \
     LiveFilterDialog.cpp \
-    tool/AirBrush.cpp
+    tool/AirBrush.cpp \
+    tool/SprayCan.cpp
 
 HEADERS  += \
     colordisplaywidget.hpp \
@@ -68,7 +69,8 @@ HEADERS  += \
     SavePopupDialog.hpp \
     LiveFilterDialog.hpp \
     color/Grayscale.hpp \
-    tool/AirBrush.hpp
+    tool/AirBrush.hpp \
+    tool/SprayCan.hpp
 
 FORMS    += mainwindow.ui \
     ueberdialog.ui \

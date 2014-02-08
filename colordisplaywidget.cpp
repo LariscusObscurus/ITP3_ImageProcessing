@@ -48,6 +48,11 @@ const QColor &ColorDisplayWidget::getColor()
 	return m_selectedColor;
 }
 
+bool ColorDisplayWidget::isActive() const
+{
+	return m_active;
+}
+
 void ColorDisplayWidget::mousePressEvent(QMouseEvent *e)
 {
 	// Basis Event

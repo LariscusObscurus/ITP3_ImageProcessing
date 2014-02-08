@@ -54,6 +54,7 @@ signals:
 private slots:
 	void SizeChanged(int);
 	void ColorChanged(const QColor&);
+	void OperationChanged(IOperation*,const QHash<QString,QString>&,OperationType);
 
 	void on_actionOpen_triggered();
 
