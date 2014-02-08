@@ -1,4 +1,4 @@
-/* © 2013 Leonhardt Schwarz, David Wolf
+/* © 2014 David Wolf
  *
  * This file is part of ImageProcessing.
  *
@@ -16,27 +16,43 @@
  * along with ImageProcessing.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sizedialogue.hpp"
-#include "ui_sizedialogue.h"
+#include "SavePopupDialog.hpp"
+#include "ui_SavePopupDialog.h"
 
-SizeDialogue::SizeDialogue(QWidget *parent) :
+SavePopupDialog::SavePopupDialog(QWidget *parent, const QString &fileName) :
 	QDialog(parent),
-	ui(new Ui::SizeDialogue)
+	ui(new Ui::SavePopupDialog),
+	mResult(Result::Cancel)
 {
 	ui->setupUi(this);
-	ui->horizontalSlider->setRange(1,100);
-	ui->spinBox->setRange(1,100);
+	ui->header->setText(QString("<html><head/><body><p><span style='font-size:10pt; font-weight:600;'>Save changes to \"%1\" before closing?</span></p></body></html>").arg(fileName));
 	layout()->setSizeConstraint(QLayout::SetFixedSize);
-	QObject::connect(ui->spinBox, SIGNAL(valueChanged(int)),ui->horizontalSlider, SLOT(setValue(int)));
-	QObject::connect(ui->horizontalSlider, SIGNAL(valueChanged(int)),ui->spinBox, SLOT(setValue(int)));
 }
 
-SizeDialogue::~SizeDialogue()
+SavePopupDialog::~SavePopupDialog()
 {
 	delete ui;
 }
 
-void SizeDialogue::on_buttonBox_accepted()
+int SavePopupDialog::result()
 {
-    emit sizeChanged(ui->spinBox->value());
+	return static_cast<int>(mResult);
+}
+
+void SavePopupDialog::on_btnClose_clicked()
+{
+	mResult = Result::Close;
+	close();
+}
+
+void SavePopupDialog::on_btnCancel_clicked()
+{
+	mResult = Result::Cancel;
+	close();
+}
+
+void SavePopupDialog::on_btnSave_clicked()
+{
+	mResult = Result::Save;
+	close();
 }

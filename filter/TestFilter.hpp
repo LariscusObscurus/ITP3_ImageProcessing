@@ -1,4 +1,6 @@
-/* © 2013 Leonhardt Schwarz, David Wolf
+// TestFilter.hpp
+
+/* © 2013 David Wolf
  *
  * This file is part of ImageProcessing.
  *
@@ -16,27 +18,14 @@
  * along with ImageProcessing.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sizedialogue.hpp"
-#include "ui_sizedialogue.h"
+#include "../IOperation.hpp"
 
-SizeDialogue::SizeDialogue(QWidget *parent) :
-	QDialog(parent),
-	ui(new Ui::SizeDialogue)
+//! Dieser Filter hat keine direkte Bildoperation, er gibt lediglich Debugdaten aus.
+class TestFilter : public IOperation
 {
-	ui->setupUi(this);
-	ui->horizontalSlider->setRange(1,100);
-	ui->spinBox->setRange(1,100);
-	layout()->setSizeConstraint(QLayout::SetFixedSize);
-	QObject::connect(ui->spinBox, SIGNAL(valueChanged(int)),ui->horizontalSlider, SLOT(setValue(int)));
-	QObject::connect(ui->horizontalSlider, SIGNAL(valueChanged(int)),ui->spinBox, SLOT(setValue(int)));
-}
-
-SizeDialogue::~SizeDialogue()
-{
-	delete ui;
-}
-
-void SizeDialogue::on_buttonBox_accepted()
-{
-    emit sizeChanged(ui->spinBox->value());
-}
+public:
+	TestFilter() { }
+	virtual ~TestFilter() throw() { }
+	virtual QImage Draw(const QImage&, const QHash<QString, QString>&);
+	virtual QString GetName() const;
+};

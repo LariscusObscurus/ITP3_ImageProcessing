@@ -1,5 +1,17 @@
 <RCC>
     <qresource prefix="/Images">
-        <file>icons/brush.png</file>
+        <file>icons/Airbrush-icon.png</file>
+        <file>icons/Brush-icon.png</file>
+        <file>icons/Eraser-icon.png</file>
+        <file>icons/Magic-Wand-icon.png</file>
+        <file>icons/Magnifier-icon.png</file>
+        <file>icons/Paint-icon.png</file>
+        <file>icons/Palette-icon.png</file>
+        <file>icons/Pencil-icon.png</file>
+        <file>icons/Scalpel-icon.png</file>
+        <file>icons/Triangle-icon.png</file>
+        <file>icons/Type-icon.png</file>
+        <file>icons/Eyedropper-icon.png</file>
+        <file>icons/Spray-icon.png</file>
     </qresource>
 </RCC>

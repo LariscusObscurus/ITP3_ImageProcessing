@@ -1,4 +1,6 @@
-/* © 2013 Leonhardt Schwarz, David Wolf
+// SprayCan.hpp
+
+/* © 2014 David Wolf
  *
  * This file is part of ImageProcessing.
  *
@@ -16,27 +18,18 @@
  * along with ImageProcessing.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sizedialogue.hpp"
-#include "ui_sizedialogue.h"
+#ifndef SPRAYCAN_HPP
+#define SPRAYCAN_HPP
 
-SizeDialogue::SizeDialogue(QWidget *parent) :
-	QDialog(parent),
-	ui(new Ui::SizeDialogue)
-{
-	ui->setupUi(this);
-	ui->horizontalSlider->setRange(1,100);
-	ui->spinBox->setRange(1,100);
-	layout()->setSizeConstraint(QLayout::SetFixedSize);
-	QObject::connect(ui->spinBox, SIGNAL(valueChanged(int)),ui->horizontalSlider, SLOT(setValue(int)));
-	QObject::connect(ui->horizontalSlider, SIGNAL(valueChanged(int)),ui->spinBox, SLOT(setValue(int)));
-}
+#include "BasicTool.hpp"
 
-SizeDialogue::~SizeDialogue()
+class SprayCan : public BasicTool
 {
-	delete ui;
-}
+public:
+	SprayCan() { }
+	virtual ~SprayCan() throw() { }
+	virtual QImage Draw(const QImage& img, const QHash<QString, QString>& args);
+	virtual QString GetName() const;
+};
 
-void SizeDialogue::on_buttonBox_accepted()
-{
-    emit sizeChanged(ui->spinBox->value());
-}
+#endif

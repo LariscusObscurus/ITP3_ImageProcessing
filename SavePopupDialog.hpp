@@ -1,4 +1,4 @@
-/* © 2013 Leonhardt Schwarz, David Wolf
+/* © 2014 David Wolf
  *
  * This file is part of ImageProcessing.
  *
@@ -16,27 +16,41 @@
  * along with ImageProcessing.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sizedialogue.hpp"
-#include "ui_sizedialogue.h"
+#ifndef SAVEPOPUPDIALOG_HPP
+#define SAVEPOPUPDIALOG_HPP
 
-SizeDialogue::SizeDialogue(QWidget *parent) :
-	QDialog(parent),
-	ui(new Ui::SizeDialogue)
-{
-	ui->setupUi(this);
-	ui->horizontalSlider->setRange(1,100);
-	ui->spinBox->setRange(1,100);
-	layout()->setSizeConstraint(QLayout::SetFixedSize);
-	QObject::connect(ui->spinBox, SIGNAL(valueChanged(int)),ui->horizontalSlider, SLOT(setValue(int)));
-	QObject::connect(ui->horizontalSlider, SIGNAL(valueChanged(int)),ui->spinBox, SLOT(setValue(int)));
+#include <QDialog>
+
+namespace Ui {
+class SavePopupDialog;
 }
 
-SizeDialogue::~SizeDialogue()
+class SavePopupDialog : public QDialog
 {
-	delete ui;
-}
+	Q_OBJECT
 
-void SizeDialogue::on_buttonBox_accepted()
-{
-    emit sizeChanged(ui->spinBox->value());
-}
+public:
+	explicit SavePopupDialog(QWidget *parent = 0, const QString& fileName = "");
+	~SavePopupDialog();
+
+	enum class Result {
+		Save,
+		Close,
+		Cancel
+	};
+
+	virtual int result();
+
+private slots:
+	void on_btnClose_clicked();
+
+	void on_btnCancel_clicked();
+
+	void on_btnSave_clicked();
+
+private:
+	Ui::SavePopupDialog *ui;
+	Result mResult;
+};
+
+#endif // SAVEPOPUPDIALOG_HPP

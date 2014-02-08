@@ -1,4 +1,6 @@
-/* © 2013 Leonhardt Schwarz, David Wolf
+// Flood.cpp
+
+/* © 2014 David Wolf
  *
  * This file is part of ImageProcessing.
  *
@@ -16,27 +18,33 @@
  * along with ImageProcessing.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sizedialogue.hpp"
-#include "ui_sizedialogue.h"
+#include "Flood.hpp"
+#include "../Conversion.hpp"
+#include "../Exception.hpp"
+#include <opencv2/core/core.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <QImage>
+#include <QColor>
+#include <QPoint>
+#include <QHash>
 
-SizeDialogue::SizeDialogue(QWidget *parent) :
-	QDialog(parent),
-	ui(new Ui::SizeDialogue)
+QImage Flood::Draw(const QImage &img, const QHash<QString, QString>& args)
 {
-	ui->setupUi(this);
-	ui->horizontalSlider->setRange(1,100);
-	ui->spinBox->setRange(1,100);
-	layout()->setSizeConstraint(QLayout::SetFixedSize);
-	QObject::connect(ui->spinBox, SIGNAL(valueChanged(int)),ui->horizontalSlider, SLOT(setValue(int)));
-	QObject::connect(ui->horizontalSlider, SIGNAL(valueChanged(int)),ui->spinBox, SLOT(setValue(int)));
+	cv::Mat mat;
+	cv::Point seedPoint, tmp;
+	cv::Scalar color;
+	int size;
+
+	// Konvertiere Bild in ein valides Format
+	mat = QImageRgb32ToMat24(img);
+
+	Arguments(args, tmp, seedPoint, color, size);
+
+	cv::floodFill(mat, seedPoint, color);
+	return MatToQImage(mat);
 }
 
-SizeDialogue::~SizeDialogue()
+QString Flood::GetName() const
 {
-	delete ui;
-}
-
-void SizeDialogue::on_buttonBox_accepted()
-{
-    emit sizeChanged(ui->spinBox->value());
+	return "FloodFill";
 }

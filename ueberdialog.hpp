@@ -1,4 +1,4 @@
-/* © 2013 Leonhardt Schwarz, David Wolf
+/* © 2013 Leonhardt Schwarz
  *
  * This file is part of ImageProcessing.
  *
@@ -16,27 +16,25 @@
  * along with ImageProcessing.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sizedialogue.hpp"
-#include "ui_sizedialogue.h"
+#ifndef UEBER_H
+#define UEBER_H
 
-SizeDialogue::SizeDialogue(QWidget *parent) :
-	QDialog(parent),
-	ui(new Ui::SizeDialogue)
-{
-	ui->setupUi(this);
-	ui->horizontalSlider->setRange(1,100);
-	ui->spinBox->setRange(1,100);
-	layout()->setSizeConstraint(QLayout::SetFixedSize);
-	QObject::connect(ui->spinBox, SIGNAL(valueChanged(int)),ui->horizontalSlider, SLOT(setValue(int)));
-	QObject::connect(ui->horizontalSlider, SIGNAL(valueChanged(int)),ui->spinBox, SLOT(setValue(int)));
+#include <QDialog>
+
+namespace Ui {
+class Ueberdialog;
 }
 
-SizeDialogue::~SizeDialogue()
+class Ueberdialog : public QDialog
 {
-	delete ui;
-}
+	Q_OBJECT
 
-void SizeDialogue::on_buttonBox_accepted()
-{
-    emit sizeChanged(ui->spinBox->value());
-}
+public:
+	explicit Ueberdialog(QWidget *parent = 0);
+	~Ueberdialog();
+
+private:
+	Ui::Ueberdialog *ui;
+};
+
+#endif // UEBER_H

@@ -1,135 +1,303 @@
+/* © 2013 Leonhardt Schwarz, David Wolf
+ *
+ * This file is part of ImageProcessing.
+ *
+ * ImageProcessing is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * ImageProcessing is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with ImageProcessing.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 #include <QPainter>
-#include "imagewidget.h"
-#include"IOperation.h"
+#include <QDebug>
+#include <QMessageBox>
+#include "imagewidget.hpp"
+#include "IOperation.hpp"
+#include "Utility.hpp"
+#include "Exception.hpp"
 
 ImageWidget::ImageWidget(QWidget *parent) :
 	QWidget(parent),
-	m_penColor(Qt::black),
-	m_drawing(false),
-	m_undoBuffer(20),
-	m_pen(m_penColor, 1, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin),
-	m_penWidth(2),
-	m_penStyle(solid),
-	m_fileName("")
+	mChanged(false),
+	mUndoBuffer(20),
+	mRedoBuffer(20),
+	mFileName(""),
+	mOperation(nullptr),
+	mDraw(false),
+	mLive(false),
+	mTrack(false)
 {
 	setAttribute(Qt::WA_StaticContents);
-
 }
 
-bool ImageWidget::openImage(const QString &fileName)
+ImageWidget::~ImageWidget() throw()
+{
+}
+
+bool ImageWidget::OpenImage(const QString &fileName)
 {
 	QImage loadedImage;
+
 	if(!loadedImage.load(fileName)) {
 		return false;
 	}
+
 	QSize imageSize = loadedImage.size();
-	this->resize(imageSize);
-	loadedImage.convertToFormat(QImage::Format_ARGB32);
-	m_image = m_original = loadedImage;
-	m_fileName = fileName;
-	drawImage();
+	resize(imageSize);
+	mImage = loadedImage.convertToFormat(QImage::Format_ARGB32);
+	mOriginal = mImage.copy();
+	mFileName = fileName;
 	update();
+
 	return true;
 }
 
-bool ImageWidget::saveImage()
+bool ImageWidget::SaveImage()
 {
-	QStringList splitedFile = m_fileName.split(".");
+	QStringList splitedFile = mFileName.split(".");
 	QString ext;
 
 	if (!splitedFile.isEmpty()) {
 		ext = splitedFile.last();
 	}
 
-	return (m_image.save(m_fileName, ext.toLatin1()));
+	if (mImage.save(mFileName, ext.toLatin1())) {
+		mChanged = false;
+		return true;
+	}
+
+	return false;
 }
 
-bool ImageWidget::saveImage(const QString &fileName, const char *fileFormat)
+bool ImageWidget::SaveImage(const QString &fileName, const char *fileFormat)
 {
-	return (m_image.save(fileName, fileFormat));
+	if (mImage.save(fileName, fileFormat)) {
+		mFileName = fileName;
+		mChanged = false;
+		return true;
+	}
+
+	return false;
 }
 
-QColor ImageWidget::getPenColor() const
+bool ImageWidget::Undo()
 {
-	return m_penColor;
-}
+	QImage old = mUndoBuffer.pop();
 
-void ImageWidget::setPenColor(const QColor &newColor)
-{
-	m_penColor = newColor;
-	m_pen.setColor(m_penColor);
-}
-
-void ImageWidget::setPenWidth(int width)
-{
-	m_penWidth = width;
-}
-
-void ImageWidget::setPenStyle(PenStyle style)
-{
-	m_penStyle = style;
-}
-
-void ImageWidget::applyFilter(IOperation& filter)
-{
-	m_undoBuffer.push(m_image.copy());
-	QMap<QString, QString> arg;
-	filter.Draw(m_image, arg);
-	update();
-
-}
-
-bool ImageWidget::undo()
-{
-	QImage old = m_undoBuffer.pop();
-	if(old.isNull()) {
+	if (!old.isNull()) {
+		mRedoBuffer.push(mImage.copy());
+	} else {
 		return false;
 	}
-	m_image = old;
+
+	mImage = old;
 	update();
 	return true;
 }
 
-bool ImageWidget::redo()
+bool ImageWidget::Redo()
 {
-	return false;
+	QImage redo = mRedoBuffer.pop();
+
+	if (redo.isNull()) {
+		return false;
+	}
+
+	mUndoBuffer.push(mImage.copy());
+	mImage = redo;
+	update();
+	return true;
 }
 
-void ImageWidget::resetImage()
+void ImageWidget::UndoHistory()
 {
-	m_undoBuffer.push(m_image.copy());
-	m_image = m_original;
+	mRedoBuffer.push(mImage.copy());
+
+	while (true) {
+		QImage current = mUndoBuffer.pop();
+
+		if (!current.isNull()) {
+			mRedoBuffer.push(current.copy());
+		} else {
+			mImage = mRedoBuffer.pop();
+			break;
+		}
+	}
+
 	update();
 }
 
-void ImageWidget::clearImage()
+void ImageWidget::ResetImage()
 {
-	m_image.fill(Qt::white);
+	mUndoBuffer.push(mImage.copy());
+	mImage = mOriginal.copy();
+	update();
+}
+
+bool ImageWidget::IsChanged() const
+{
+	return mChanged;
+}
+
+QString ImageWidget::GetFileName() const
+{
+	return mFileName;
+}
+
+void ImageWidget::ApplyLiveImage()
+{
+	mUndoBuffer.push(mImage.copy());
+	mLive = false;
+	mImage = mLiveImage;
+}
+
+void ImageWidget::DiscardLiveImage()
+{
+	mLive = false;
+}
+
+QColor ImageWidget::GetPixel() const
+{
+	QPoint pos(mArgs["X"].toInt(), mArgs["Y"].toInt());
+	return QColor(mImage.pixel(pos));
+}
+
+void ImageWidget::TrackColor(bool enabled)
+{
+	mTrack = enabled;
+}
+
+void ImageWidget::Operation(IOperation *o, const QHash<QString, QString> &args, OperationType type)
+{
+	switch (type) {
+	case OperationType::Auto:
+		mOperation = o;
+		mArgs = args;
+		mLive = false;
+		break;
+	case OperationType::Live:
+		mOperation = o;
+		mArgs = args;
+		mLive = true;
+		update();
+		break;
+	case OperationType::Immediately:
+		mLive = false;
+		DrawImage(Draw(o, args));
+		break;
+	}
+	mTrack = false;
+}
+
+void ImageWidget::Arguments(const QHash<QString, QString> &args)
+{
+	mArgs = args;
+	update();
+}
+
+QImage ImageWidget::Draw()
+{
+	return Draw(mOperation, mArgs);
+}
+
+QImage ImageWidget::Draw(IOperation* o, const QHash<QString,QString>& args)
+{
+	mRedoBuffer.clear();
+	return o->Draw(mImage, args);
+}
+
+void ImageWidget::DrawImage(const QImage& img)
+{
+	// Wurde der Speicher kopiert dann übernimm  den neuen Speicher
+	if (mImage.bits() != img.bits()) {
+		mImage = img;
+
+		if (mImage.format() == QImage::Format_RGB32 || mImage.format() == QImage::Format_RGB888) {
+			mImage = mImage.convertToFormat(QImage::Format_ARGB32);
+		}
+	}
 	update();
 }
 
 void ImageWidget::mousePressEvent(QMouseEvent *event)
 {
-	m_undoBuffer.push(m_image.copy());
-	if (event->button() == Qt::LeftButton) {
-		m_lastPoint = event->pos();
-		m_drawing = true;
-	}
-}
+	QWidget::mousePressEvent(event);
 
-void ImageWidget::mouseMoveEvent(QMouseEvent *event)
-{
-	if ((event->buttons() & Qt::LeftButton) && m_drawing) {
-		drawLineTo(event->pos());
+	// Eventlogik
+	if (event->button() == Qt::LeftButton) {
+		// Speicher Position
+		QPoint pos = event->pos();
+		mArgs["PreviousX"] = QString::number(pos.x());
+		mArgs["PreviousY"] = QString::number(pos.y());
+		mArgs["X"] = QString::number(pos.x());
+		mArgs["Y"] = QString::number(pos.y());
+
+		// Speicher altes Bild
+		mUndoBuffer.push(mImage.copy());
+		mChanged = true;
+
+		// Erlaube Zeichnen
+		mDraw = true;
+
+		// Aktualisiere Bild
+		update();
+
+		if (mTrack) {
+			emit ColorChanged(GetPixel());
+		}
 	}
 }
 
 void ImageWidget::mouseReleaseEvent(QMouseEvent *event)
 {
-	if (event->button() == Qt::LeftButton && m_drawing) {
-		drawLineTo(event->pos());
-		m_drawing = false;
+	QWidget::mouseReleaseEvent(event);
+
+	// Eventlogik
+	if (event->button() == Qt::LeftButton) {
+		mDraw = false;
+
+		// Aktualisiere Bild
+		update();
+
+		if (mTrack) {
+			emit ColorChanged(GetPixel());
+		}
 	}
+}
+
+void ImageWidget::mouseMoveEvent(QMouseEvent *event)
+{
+	QWidget::mouseMoveEvent(event);
+
+	// Eventlogik
+	if (mDraw && mOperation) {
+		// Speicher Position
+		QPoint pos = event->pos();
+		mArgs["PreviousX"] = mArgs["X"];
+		mArgs["PreviousY"] = mArgs["Y"];
+		mArgs["X"] = QString::number(pos.x());
+		mArgs["Y"] = QString::number(pos.y());
+
+		// Aktualisiere Bild
+		update();
+
+		if (mTrack) {
+			emit ColorChanged(GetPixel());
+		}
+	}
+}
+
+void ImageWidget::wheelEvent(QWheelEvent *event)
+{
+	QWidget::wheelEvent(event);
 }
 
 void ImageWidget::resizeEvent(QResizeEvent *event)
@@ -139,44 +307,25 @@ void ImageWidget::resizeEvent(QResizeEvent *event)
 
 void ImageWidget::paintEvent(QPaintEvent *event)
 {
+	QWidget::paintEvent(event);
 	QPainter painter(this);
 	QRect dirtyRect = event->rect();
-	painter.drawImage(dirtyRect, m_image, dirtyRect);
-}
 
-void ImageWidget::drawImage()
-{
-	QPainter painter(&m_image);
-	painter.drawImage(QPoint(0,0), m_image);
-}
-
-void ImageWidget::drawLineTo(const QPoint &endPoint)
-{
-	bool ok = false;
-
-	QPainter painter(&m_image);
-	painter.setBrush(QBrush(m_penColor));
-	painter.setRenderHint(QPainter::HighQualityAntialiasing);
-	painter.setPen(m_pen);
-
-	switch (m_penStyle) {
-	case solid:
-		m_pen.setWidth(m_penWidth);
-		painter.drawLine(m_lastPoint, endPoint);
-		ok = true;
-		break;
-	case dots:
-		m_pen.setWidth(1);
-		QPoint vectAB = m_lastPoint - endPoint;
-		if((pow(vectAB.x(), 2.0) + pow(vectAB.y(),2.0)) >= 100) {
-			painter.drawEllipse(endPoint, m_penWidth, m_penWidth);
-			ok = true;
-		}
-		break;
+#ifdef QT_DEBUG
+	try {
+#endif
+	if (mLive) {
+		mLiveImage = mOperation->Draw(mImage.copy(), mArgs);
+		painter.drawImage(dirtyRect, mLiveImage, dirtyRect);
+	} else if (mDraw) {
+		DrawImage(Draw());
+		painter.drawImage(dirtyRect, mImage, dirtyRect);
+	} else {
+		painter.drawImage(dirtyRect, mImage, dirtyRect);
 	}
-	if(ok)  {
-		int rad = (0) + m_penWidth;
-		update();
-		m_lastPoint = endPoint;
+#ifdef QT_DEBUG
+	} catch (const Exception& e) {
+		QMessageBox::critical(this, "Error", e.Message());
 	}
+#endif
 }

@@ -16,27 +16,31 @@
  * along with ImageProcessing.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sizedialogue.hpp"
-#include "ui_sizedialogue.h"
+#ifndef RINGBUFFER_H
+#define RINGBUFFER_H
 
-SizeDialogue::SizeDialogue(QWidget *parent) :
-	QDialog(parent),
-	ui(new Ui::SizeDialogue)
-{
-	ui->setupUi(this);
-	ui->horizontalSlider->setRange(1,100);
-	ui->spinBox->setRange(1,100);
-	layout()->setSizeConstraint(QLayout::SetFixedSize);
-	QObject::connect(ui->spinBox, SIGNAL(valueChanged(int)),ui->horizontalSlider, SLOT(setValue(int)));
-	QObject::connect(ui->horizontalSlider, SIGNAL(valueChanged(int)),ui->spinBox, SLOT(setValue(int)));
-}
+#include <QList>
 
-SizeDialogue::~SizeDialogue()
+template <typename T>
+class RingBuffer
 {
-	delete ui;
-}
+public:
+	explicit RingBuffer(uchar size);
+	~RingBuffer();
+	void clear();
+	void push(const T& inputItem);
+	T pop();
+	T first() const;
+	T last() const;
 
-void SizeDialogue::on_buttonBox_accepted()
-{
-    emit sizeChanged(ui->spinBox->value());
-}
+private:
+	RingBuffer(const RingBuffer& thereShallBeOnlyOne){}
+
+	uchar m_bufferSize;
+	uchar m_count;
+	QList<T> m_buffer;
+};
+
+#include "ringbuffer.inl"
+
+#endif // RINGBUFFER_H

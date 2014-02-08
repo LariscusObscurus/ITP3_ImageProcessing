@@ -1,4 +1,6 @@
-/* © 2013 Leonhardt Schwarz, David Wolf
+// Grayscale.hpp
+
+/* © 2013 David Wolf
  *
  * This file is part of ImageProcessing.
  *
@@ -16,27 +18,19 @@
  * along with ImageProcessing.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sizedialogue.hpp"
-#include "ui_sizedialogue.h"
+#ifndef GRAYSCALE_HPP
+#define GRAYSCALE_HPP
 
-SizeDialogue::SizeDialogue(QWidget *parent) :
-	QDialog(parent),
-	ui(new Ui::SizeDialogue)
-{
-	ui->setupUi(this);
-	ui->horizontalSlider->setRange(1,100);
-	ui->spinBox->setRange(1,100);
-	layout()->setSizeConstraint(QLayout::SetFixedSize);
-	QObject::connect(ui->spinBox, SIGNAL(valueChanged(int)),ui->horizontalSlider, SLOT(setValue(int)));
-	QObject::connect(ui->horizontalSlider, SIGNAL(valueChanged(int)),ui->spinBox, SLOT(setValue(int)));
-}
+#include "../IOperation.hpp"
 
-SizeDialogue::~SizeDialogue()
+class Grayscale : public IOperation
 {
-	delete ui;
-}
+public:
+	Grayscale() { }
+	virtual ~Grayscale() throw() { }
+	//! Konvertiert die RGB-Werte des Bildes in 8-Bit Graufstufen
+	virtual QImage Draw(const QImage& img, const QHash<QString, QString>&);
+	virtual QString GetName() const;
+};
 
-void SizeDialogue::on_buttonBox_accepted()
-{
-    emit sizeChanged(ui->spinBox->value());
-}
+#endif // COLORIZE_HPP

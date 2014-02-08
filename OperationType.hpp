@@ -1,4 +1,4 @@
-/* © 2013 Leonhardt Schwarz, David Wolf
+/* © 2013 David Wolf
  *
  * This file is part of ImageProcessing.
  *
@@ -16,27 +16,13 @@
  * along with ImageProcessing.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sizedialogue.hpp"
-#include "ui_sizedialogue.h"
+#ifndef OPERATIONTYPE_HPP
+#define OPERATIONTYPE_HPP
 
-SizeDialogue::SizeDialogue(QWidget *parent) :
-	QDialog(parent),
-	ui(new Ui::SizeDialogue)
-{
-	ui->setupUi(this);
-	ui->horizontalSlider->setRange(1,100);
-	ui->spinBox->setRange(1,100);
-	layout()->setSizeConstraint(QLayout::SetFixedSize);
-	QObject::connect(ui->spinBox, SIGNAL(valueChanged(int)),ui->horizontalSlider, SLOT(setValue(int)));
-	QObject::connect(ui->horizontalSlider, SIGNAL(valueChanged(int)),ui->spinBox, SLOT(setValue(int)));
-}
+enum class OperationType {
+	Auto,
+	Live,
+	Immediately
+};
 
-SizeDialogue::~SizeDialogue()
-{
-	delete ui;
-}
-
-void SizeDialogue::on_buttonBox_accepted()
-{
-    emit sizeChanged(ui->spinBox->value());
-}
+#endif // OPERATIONTYPE_HPP

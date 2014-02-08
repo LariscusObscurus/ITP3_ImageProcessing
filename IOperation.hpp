@@ -1,4 +1,6 @@
-/* © 2013 Leonhardt Schwarz, David Wolf
+// IOperation.hpp
+
+/* © 2013 David Wolf
  *
  * This file is part of ImageProcessing.
  *
@@ -16,27 +18,31 @@
  * along with ImageProcessing.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sizedialogue.hpp"
-#include "ui_sizedialogue.h"
+#ifndef IOPERATION_H
+#define IOPERATION_H
 
-SizeDialogue::SizeDialogue(QWidget *parent) :
-	QDialog(parent),
-	ui(new Ui::SizeDialogue)
-{
-	ui->setupUi(this);
-	ui->horizontalSlider->setRange(1,100);
-	ui->spinBox->setRange(1,100);
-	layout()->setSizeConstraint(QLayout::SetFixedSize);
-	QObject::connect(ui->spinBox, SIGNAL(valueChanged(int)),ui->horizontalSlider, SLOT(setValue(int)));
-	QObject::connect(ui->horizontalSlider, SIGNAL(valueChanged(int)),ui->spinBox, SLOT(setValue(int)));
-}
+// classes
+template <typename T, typename U>
+class QHash;
+class QImage;
 
-SizeDialogue::~SizeDialogue()
-{
-	delete ui;
-}
+// headers
+#include <QString>
 
-void SizeDialogue::on_buttonBox_accepted()
+//! Schnittstelle für Bildoperationen
+class IOperation
 {
-    emit sizeChanged(ui->spinBox->value());
-}
+public:
+	//! Default destructor
+	virtual ~IOperation() throw() { }
+	//! Führt die Bildoperation aus
+	/*!
+	 * Zeichnet die Bilddaten anhande der Operation um.
+	 *
+	 * \param image Das Bild das bearbeitet werden soll
+	 * \param args Die Argumente für die Bildbearbeitung
+	 */
+	virtual QImage Draw(const QImage& img, const QHash<QString, QString>& args) = 0;
+};
+
+#endif // IOPERATION_H

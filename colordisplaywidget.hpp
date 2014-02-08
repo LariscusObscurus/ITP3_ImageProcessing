@@ -16,27 +16,39 @@
  * along with ImageProcessing.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sizedialogue.hpp"
-#include "ui_sizedialogue.h"
+#ifndef COLORDISPLAYWIDGET_H
+#define COLORDISPLAYWIDGET_H
 
-SizeDialogue::SizeDialogue(QWidget *parent) :
-	QDialog(parent),
-	ui(new Ui::SizeDialogue)
-{
-	ui->setupUi(this);
-	ui->horizontalSlider->setRange(1,100);
-	ui->spinBox->setRange(1,100);
-	layout()->setSizeConstraint(QLayout::SetFixedSize);
-	QObject::connect(ui->spinBox, SIGNAL(valueChanged(int)),ui->horizontalSlider, SLOT(setValue(int)));
-	QObject::connect(ui->horizontalSlider, SIGNAL(valueChanged(int)),ui->spinBox, SLOT(setValue(int)));
-}
+#include <QWidget>
 
-SizeDialogue::~SizeDialogue()
+class ColorDisplayWidget : public QWidget
 {
-	delete ui;
-}
+	Q_OBJECT
+public:
+	explicit ColorDisplayWidget(QWidget *parent = 0);
+	const QColor& getColor();
+	bool isActive() const;
 
-void SizeDialogue::on_buttonBox_accepted()
-{
-    emit sizeChanged(ui->spinBox->value());
-}
+protected:
+	virtual void mousePressEvent(QMouseEvent *);
+	virtual void paintEvent(QPaintEvent *);
+
+signals:
+	void colorChanged(const QColor&);
+	void activated();
+
+public slots:
+	void setColor(const QColor &color);
+	void background();
+	void foreground();
+
+private:
+	void drawActive();
+	void drawInactive();
+	void drawLines(QPainter&, QColor, QColor, QColor, QColor);
+
+	QColor m_selectedColor;
+	bool m_active;
+};
+
+#endif // COLORDISPLAYWIDGET_H

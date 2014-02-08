@@ -1,4 +1,6 @@
-/* © 2013 Leonhardt Schwarz, David Wolf
+// Canny.hpp
+
+/* © 2013 David Wolf
  *
  * This file is part of ImageProcessing.
  *
@@ -16,27 +18,25 @@
  * along with ImageProcessing.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sizedialogue.hpp"
-#include "ui_sizedialogue.h"
+#ifndef CANNY_H
+#define CANNY_H
 
-SizeDialogue::SizeDialogue(QWidget *parent) :
-	QDialog(parent),
-	ui(new Ui::SizeDialogue)
-{
-	ui->setupUi(this);
-	ui->horizontalSlider->setRange(1,100);
-	ui->spinBox->setRange(1,100);
-	layout()->setSizeConstraint(QLayout::SetFixedSize);
-	QObject::connect(ui->spinBox, SIGNAL(valueChanged(int)),ui->horizontalSlider, SLOT(setValue(int)));
-	QObject::connect(ui->horizontalSlider, SIGNAL(valueChanged(int)),ui->spinBox, SLOT(setValue(int)));
-}
+#include "../IOperation.hpp"
 
-SizeDialogue::~SizeDialogue()
+class Canny : public virtual IOperation
 {
-	delete ui;
-}
+public:
+	//! Default constructor
+	Canny() { }
+	//! Default destructor
+	virtual ~Canny() throw() { }
+	//!
+	/*!
+	 */
+	virtual QImage Draw(const QImage& img, const QHash<QString, QString>& args);
+	virtual QString GetName() const;
+private:
+	void Arguments(const QHash<QString, QString>& args, int& ksize, int &threshold);
+};
 
-void SizeDialogue::on_buttonBox_accepted()
-{
-    emit sizeChanged(ui->spinBox->value());
-}
+#endif // CANNY_H

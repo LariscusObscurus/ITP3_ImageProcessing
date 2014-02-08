@@ -1,4 +1,4 @@
-/* © 2013 Leonhardt Schwarz, David Wolf
+/* © 2014 David Wolf
  *
  * This file is part of ImageProcessing.
  *
@@ -16,27 +16,32 @@
  * along with ImageProcessing.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sizedialogue.hpp"
-#include "ui_sizedialogue.h"
+#include "LiveFilterDialog.hpp"
+#include "ui_LiveFilterDialog.h"
+#include <QHash>
+#include <QDebug>
 
-SizeDialogue::SizeDialogue(QWidget *parent) :
+LiveFilterDialog::LiveFilterDialog(QHash<QString, QString> &args, QWidget *parent) :
 	QDialog(parent),
-	ui(new Ui::SizeDialogue)
+	ui(new Ui::LiveFilterDialog),
+	mArgs(args)
 {
 	ui->setupUi(this);
 	ui->horizontalSlider->setRange(1,100);
 	ui->spinBox->setRange(1,100);
 	layout()->setSizeConstraint(QLayout::SetFixedSize);
-	QObject::connect(ui->spinBox, SIGNAL(valueChanged(int)),ui->horizontalSlider, SLOT(setValue(int)));
-	QObject::connect(ui->horizontalSlider, SIGNAL(valueChanged(int)),ui->spinBox, SLOT(setValue(int)));
+	QObject::connect(ui->spinBox, SIGNAL(valueChanged(int)), ui->horizontalSlider, SLOT(setValue(int)));
+	QObject::connect(ui->horizontalSlider, SIGNAL(valueChanged(int)), ui->spinBox, SLOT(setValue(int)));
+	QObject::connect(ui->spinBox, SIGNAL(valueChanged(int)), this, SLOT(ValueChanged(int)));
 }
 
-SizeDialogue::~SizeDialogue()
+LiveFilterDialog::~LiveFilterDialog()
 {
 	delete ui;
 }
 
-void SizeDialogue::on_buttonBox_accepted()
+void LiveFilterDialog::ValueChanged(int val)
 {
-    emit sizeChanged(ui->spinBox->value());
+	mArgs["Value"] = QString::number(val);
+	emit Arguments(mArgs);
 }

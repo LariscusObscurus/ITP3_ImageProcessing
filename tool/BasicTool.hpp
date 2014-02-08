@@ -1,4 +1,6 @@
-/* © 2013 Leonhardt Schwarz, David Wolf
+// BasicBrush.hpp
+
+/* © 2014 David Wolf
  *
  * This file is part of ImageProcessing.
  *
@@ -16,27 +18,27 @@
  * along with ImageProcessing.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sizedialogue.hpp"
-#include "ui_sizedialogue.h"
+#ifndef BASICTOOL_HPP
+#define BASICTOOL_HPP
 
-SizeDialogue::SizeDialogue(QWidget *parent) :
-	QDialog(parent),
-	ui(new Ui::SizeDialogue)
-{
-	ui->setupUi(this);
-	ui->horizontalSlider->setRange(1,100);
-	ui->spinBox->setRange(1,100);
-	layout()->setSizeConstraint(QLayout::SetFixedSize);
-	QObject::connect(ui->spinBox, SIGNAL(valueChanged(int)),ui->horizontalSlider, SLOT(setValue(int)));
-	QObject::connect(ui->horizontalSlider, SIGNAL(valueChanged(int)),ui->spinBox, SLOT(setValue(int)));
+#include "../IOperation.hpp"
+#include <QPoint>
+#include <QColor>
+
+namespace cv {
+	template <typename T>
+	class Scalar_;
+	template <typename T>
+	class Point_;
 }
 
-SizeDialogue::~SizeDialogue()
+class BasicTool : public IOperation
 {
-	delete ui;
-}
+public:
+	virtual ~BasicTool() throw() { }
+protected:
+	virtual void Arguments(const QHash<QString, QString>& args, cv::Point_<int>&, cv::Point_<int>&, cv::Scalar_<double>&, int&);
+	virtual void Arguments(const QHash<QString, QString> &args, QPoint&, QPoint&, QColor&, int&);
+};
 
-void SizeDialogue::on_buttonBox_accepted()
-{
-    emit sizeChanged(ui->spinBox->value());
-}
+#endif

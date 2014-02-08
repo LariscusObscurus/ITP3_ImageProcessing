@@ -9,14 +9,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1031</width>
-    <height>616</height>
+    <width>640</width>
+    <height>574</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>600</width>
-    <height>400</height>
+    <width>640</width>
+    <height>574</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -31,7 +31,7 @@
 	 color: #007acc;
  }
 
- QMainWindow {
+QMainWindow {
 	background: #424242;
 }
 /*Desing MenuBar*/
@@ -81,7 +81,11 @@
      background-color: #007acc;
  }
 
-</string>
+QToolTip {
+	color: d8d8d8;
+	background-color: 2e2e2e;
+	border: 1px solid d8d8d8;
+}</string>
   </property>
   <property name="animated">
    <bool>true</bool>
@@ -116,7 +120,7 @@
       </property>
       <property name="minimumSize">
        <size>
-        <width>80</width>
+        <width>140</width>
         <height>0</height>
        </size>
       </property>
@@ -139,7 +143,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>80</width>
+         <width>141</width>
          <height>24</height>
         </rect>
        </property>
@@ -163,10 +167,10 @@
        <widget class="QLabel" name="Brush">
         <property name="geometry">
          <rect>
-          <x>3</x>
-          <y>4</y>
-          <width>73</width>
-          <height>13</height>
+          <x>0</x>
+          <y>0</y>
+          <width>140</width>
+          <height>20</height>
          </rect>
         </property>
         <property name="font">
@@ -176,9 +180,6 @@
           <bold>true</bold>
          </font>
         </property>
-        <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-        </property>
         <property name="styleSheet">
          <string notr="true">#Brush {
 	color: #D8D8D8;
@@ -187,16 +188,91 @@
         <property name="text">
          <string>Brush Tools</string>
         </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
        </widget>
+      </widget>
+      <widget class="QPushButton" name="btnPencil">
+       <property name="geometry">
+        <rect>
+         <x>16</x>
+         <y>36</y>
+         <width>46</width>
+         <height>46</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Pencil</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+     border: 1px solid #2E2E2E;
+	 border-radius: 4px;
+     background-color: #52524f;
+ }
+
+ QPushButton:pressed {
+      border: 1px solid #007acc;
+      background-color: #52524f;
+ }</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="Icons.qrc">
+         <normaloff>:/Images/icons/Pencil-icon.png</normaloff>:/Images/icons/Pencil-icon.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>42</width>
+         <height>32</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="ColorDisplayWidget" name="ColorPickerFront" native="true">
+       <property name="geometry">
+        <rect>
+         <x>16</x>
+         <y>470</y>
+         <width>46</width>
+         <height>32</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Front Color</string>
+       </property>
       </widget>
       <widget class="QPushButton" name="btnBrush">
        <property name="geometry">
         <rect>
-         <x>17</x>
-         <y>35</y>
+         <x>78</x>
+         <y>36</y>
          <width>46</width>
          <height>46</height>
         </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Brush</string>
        </property>
        <property name="styleSheet">
         <string notr="true">QPushButton {
@@ -215,7 +291,7 @@
        </property>
        <property name="icon">
         <iconset resource="Icons.qrc">
-         <normaloff>:/Images/icons/brush.png</normaloff>:/Images/icons/brush.png</iconset>
+         <normaloff>:/Images/icons/Brush-icon.png</normaloff>:/Images/icons/Brush-icon.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -224,14 +300,23 @@
         </size>
        </property>
       </widget>
-      <widget class="QPushButton" name="btnTest">
+      <widget class="QPushButton" name="btnEraser">
        <property name="geometry">
         <rect>
-         <x>17</x>
-         <y>94</y>
+         <x>16</x>
+         <y>98</y>
          <width>46</width>
          <height>46</height>
         </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Eraser</string>
        </property>
        <property name="styleSheet">
         <string notr="true">QPushButton {
@@ -250,7 +335,7 @@
        </property>
        <property name="icon">
         <iconset resource="Icons.qrc">
-         <normaloff>:/Images/icons/brush.png</normaloff>:/Images/icons/brush.png</iconset>
+         <normaloff>:/Images/icons/Eraser-icon.png</normaloff>:/Images/icons/Eraser-icon.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -259,16 +344,481 @@
         </size>
        </property>
       </widget>
-      <widget class="ColorDisplayWidget" name="ColorPicker" native="true">
+      <widget class="QPushButton" name="btnMagicWand">
        <property name="geometry">
         <rect>
-         <x>0</x>
-         <y>450</y>
-         <width>120</width>
-         <height>80</height>
+         <x>78</x>
+         <y>346</y>
+         <width>46</width>
+         <height>46</height>
         </rect>
        </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Magic Wand</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+     border: 1px solid #2E2E2E;
+	 border-radius: 4px;
+     background-color: #52524f;
+ }
+
+ QPushButton:pressed {
+      border: 1px solid #007acc;
+      background-color: #52524f;
+ }</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="Icons.qrc">
+         <normaloff>:/Images/icons/Magic-Wand-icon.png</normaloff>:/Images/icons/Magic-Wand-icon.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>42</width>
+         <height>32</height>
+        </size>
+       </property>
       </widget>
+      <widget class="QPushButton" name="btnMagnifier">
+       <property name="geometry">
+        <rect>
+         <x>78</x>
+         <y>222</y>
+         <width>46</width>
+         <height>46</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Magnifier</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+     border: 1px solid #2E2E2E;
+	 border-radius: 4px;
+     background-color: #52524f;
+ }
+
+ QPushButton:pressed {
+      border: 1px solid #007acc;
+      background-color: #52524f;
+ }</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="Icons.qrc">
+         <normaloff>:/Images/icons/Magnifier-icon.png</normaloff>:/Images/icons/Magnifier-icon.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>42</width>
+         <height>32</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btnFloodFill">
+       <property name="geometry">
+        <rect>
+         <x>78</x>
+         <y>98</y>
+         <width>46</width>
+         <height>46</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Flood Fill</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+     border: 1px solid #2E2E2E;
+	 border-radius: 4px;
+     background-color: #52524f;
+ }
+
+ QPushButton:pressed {
+      border: 1px solid #007acc;
+      background-color: #52524f;
+ }</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="Icons.qrc">
+         <normaloff>:/Images/icons/Paint-icon.png</normaloff>:/Images/icons/Paint-icon.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>42</width>
+         <height>32</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btnCrop">
+       <property name="geometry">
+        <rect>
+         <x>16</x>
+         <y>222</y>
+         <width>46</width>
+         <height>46</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Crop</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+     border: 1px solid #2E2E2E;
+	 border-radius: 4px;
+     background-color: #52524f;
+ }
+
+ QPushButton:pressed {
+      border: 1px solid #007acc;
+      background-color: #52524f;
+ }</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="Icons.qrc">
+         <normaloff>:/Images/icons/Scalpel-icon.png</normaloff>:/Images/icons/Scalpel-icon.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>42</width>
+         <height>32</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btnGeometry">
+       <property name="geometry">
+        <rect>
+         <x>16</x>
+         <y>284</y>
+         <width>46</width>
+         <height>46</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Geometry</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+     border: 1px solid #2E2E2E;
+	 border-radius: 4px;
+     background-color: #52524f;
+ }
+
+ QPushButton:pressed {
+      border: 1px solid #007acc;
+      background-color: #52524f;
+ }</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="Icons.qrc">
+         <normaloff>:/Images/icons/Triangle-icon.png</normaloff>:/Images/icons/Triangle-icon.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>42</width>
+         <height>32</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btnText">
+       <property name="geometry">
+        <rect>
+         <x>78</x>
+         <y>284</y>
+         <width>46</width>
+         <height>46</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Text</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+     border: 1px solid #2E2E2E;
+	 border-radius: 4px;
+     background-color: #52524f;
+ }
+
+ QPushButton:pressed {
+      border: 1px solid #007acc;
+      background-color: #52524f;
+ }</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="Icons.qrc">
+         <normaloff>:/Images/icons/Type-icon.png</normaloff>:/Images/icons/Type-icon.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>42</width>
+         <height>32</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btnSprayCan">
+       <property name="geometry">
+        <rect>
+         <x>16</x>
+         <y>160</y>
+         <width>46</width>
+         <height>46</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Spray Can</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+     border: 1px solid #2E2E2E;
+	 border-radius: 4px;
+     background-color: #52524f;
+ }
+
+ QPushButton:pressed {
+      border: 1px solid #007acc;
+      background-color: #52524f;
+ }</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="Icons.qrc">
+         <normaloff>:/Images/icons/Spray-icon.png</normaloff>:/Images/icons/Spray-icon.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>42</width>
+         <height>32</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btnAirbrush">
+       <property name="geometry">
+        <rect>
+         <x>78</x>
+         <y>160</y>
+         <width>46</width>
+         <height>46</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Airbrush</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+     border: 1px solid #2E2E2E;
+	 border-radius: 4px;
+     background-color: #52524f;
+ }
+
+ QPushButton:pressed {
+      border: 1px solid #007acc;
+      background-color: #52524f;
+ }</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="Icons.qrc">
+         <normaloff>:/Images/icons/Airbrush-icon.png</normaloff>:/Images/icons/Airbrush-icon.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>42</width>
+         <height>32</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btnEyedropper">
+       <property name="geometry">
+        <rect>
+         <x>16</x>
+         <y>346</y>
+         <width>46</width>
+         <height>46</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Eyedropper</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+     border: 1px solid #2E2E2E;
+	 border-radius: 4px;
+     background-color: #52524f;
+ }
+
+ QPushButton:pressed {
+      border: 1px solid #007acc;
+      background-color: #52524f;
+ }</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="Icons.qrc">
+         <normaloff>:/Images/icons/Eyedropper-icon.png</normaloff>:/Images/icons/Eyedropper-icon.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>42</width>
+         <height>32</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="ColorDisplayWidget" name="ColorPickerBack" native="true">
+       <property name="geometry">
+        <rect>
+         <x>78</x>
+         <y>470</y>
+         <width>46</width>
+         <height>32</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Back Color</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="btnPalette">
+       <property name="geometry">
+        <rect>
+         <x>47</x>
+         <y>408</y>
+         <width>46</width>
+         <height>46</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="toolTip">
+        <string>Switch Colors</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+	border: 1px solid #d8d8d8;
+	border-radius: 4px;
+	background: #383838;
+ }
+
+ QPushButton:pressed {
+      border: 1px solid #007acc;
+      background-color: #52524f;
+ }</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="Icons.qrc">
+         <normaloff>:/Images/icons/Palette-icon.png</normaloff>:/Images/icons/Palette-icon.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>42</width>
+         <height>42</height>
+        </size>
+       </property>
+      </widget>
+      <zorder>ColorPickerBack</zorder>
+      <zorder>title</zorder>
+      <zorder>btnPencil</zorder>
+      <zorder>ColorPickerFront</zorder>
+      <zorder>btnBrush</zorder>
+      <zorder>btnEraser</zorder>
+      <zorder>btnMagicWand</zorder>
+      <zorder>btnMagnifier</zorder>
+      <zorder>btnFloodFill</zorder>
+      <zorder>btnCrop</zorder>
+      <zorder>btnGeometry</zorder>
+      <zorder>btnText</zorder>
+      <zorder>btnSprayCan</zorder>
+      <zorder>btnAirbrush</zorder>
+      <zorder>btnEyedropper</zorder>
+      <zorder>btnPalette</zorder>
      </widget>
     </item>
     <item>
@@ -305,35 +855,35 @@ QTabWidget::pane {
 	 border: 1px solid #2E2E2E;
 }
 
-
-
 QTabBar::tab {
 	background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
 	stop: 0 #a6a6a6, stop: 0.08 #7f7f7f,
 	stop: 0.39999 #717171, stop: 0.4 #626262,
 	stop: 0.9 #4c4c4c, stop: 1 #333333);
-	border: none;
 	border: 1px solid #2E2E2E;
 	color: #D8D8D8;
 	min-width: 8ex;
 	border-top-left-radius: 2.5px;
 	border-top-right-radius: 2.5px;
-	padding: 2px 10px
+	padding: 2px 10px;
 }
-	QTabBar::tab:selected, QTabBar::tab:hover {
+
+QTabBar::tab:selected, QTabBar::tab:hover {
 	background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
 	stop: 0 #2E9AFE, stop: 0.08 #0174DF,
 	stop: 0.39999 #0080FF, stop: 0.4 #045FB4,
 	stop: 0.9 #084B8A, stop: 1 #0B243B)
 }
+
 QTabBar::tab:selected {
 	background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
 	stop: 0 #2E9AFE, stop: 0.08 #0174DF,
 	stop: 0.39999 #0080FF, stop: 0.4 #045FB4,
 	stop: 0.9 #084B8A, stop: 1 #0B243B)
 }
+
 QTabBar::tab:!selected {
-margin-top: 3px; /* make non-selected tabs look smaller */
+	margin-top: 3px; /* make non-selected tabs look smaller */
 }</string>
          </property>
          <property name="currentIndex">
@@ -362,7 +912,7 @@ margin-top: 3px; /* make non-selected tabs look smaller */
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1031</width>
+     <width>640</width>
      <height>24</height>
     </rect>
    </property>
@@ -373,30 +923,31 @@ margin-top: 3px; /* make non-selected tabs look smaller */
    </property>
    <widget class="QMenu" name="menuTest">
     <property name="title">
-     <string>Datei</string>
+     <string>File</string>
     </property>
-    <addaction name="actionNeu"/>
-    <addaction name="action_ffnen"/>
+    <addaction name="actionNew"/>
+    <addaction name="actionOpen"/>
     <addaction name="separator"/>
-    <addaction name="actionSpeichern"/>
-    <addaction name="actionSpeichern_unter"/>
+    <addaction name="actionSave"/>
+    <addaction name="actionSaveAs"/>
     <addaction name="separator"/>
-    <addaction name="actionDrucken"/>
-    <addaction name="separator"/>
-    <addaction name="actionBeenden"/>
+    <addaction name="actionClose"/>
+    <addaction name="actionCloseAll"/>
+    <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuBearbeiten">
     <property name="title">
-     <string>Bearbeiten</string>
+     <string>Edit</string>
     </property>
-    <addaction name="actionR_ckg_ngig"/>
-    <addaction name="actionWiederherstellen"/>
-    <addaction name="actionZur_cksetzen"/>
+    <addaction name="actionUndo"/>
+    <addaction name="actionRedo"/>
+    <addaction name="actionUndoHistory"/>
+    <addaction name="actionResetImage"/>
     <addaction name="separator"/>
-    <addaction name="actionKopieren"/>
-    <addaction name="actionEinf_gen"/>
-    <addaction name="actionL_schen"/>
-    <addaction name="actionPinsel_gr_e"/>
+    <addaction name="actionCopy"/>
+    <addaction name="actionPaste"/>
+    <addaction name="actionCut"/>
+    <addaction name="actionBrushSize"/>
    </widget>
    <widget class="QMenu" name="menuFilter">
     <property name="title">
@@ -407,122 +958,214 @@ margin-top: 3px; /* make non-selected tabs look smaller */
       <string>Blur</string>
      </property>
      <addaction name="actionBlur"/>
-     <addaction name="actionGaussian_Blur"/>
-     <addaction name="actionMedian_Blur"/>
-     <addaction name="actionBilateral_Filter"/>
+     <addaction name="actionGaussianBlur"/>
+     <addaction name="actionMedianBlur"/>
+     <addaction name="actionBilateralFilter"/>
     </widget>
     <widget class="QMenu" name="menuEdge_Detection">
      <property name="title">
-      <string>Edge-Detection</string>
+      <string>Edge Detection</string>
      </property>
-     <addaction name="actionSobel"/>
      <addaction name="actionEdge"/>
      <addaction name="actionCanny"/>
+     <addaction name="actionSobel"/>
+    </widget>
+    <widget class="QMenu" name="menuGeneric">
+     <property name="title">
+      <string>Generic</string>
+     </property>
+     <addaction name="actionDilation"/>
+     <addaction name="actionErosion"/>
     </widget>
     <widget class="QMenu" name="menuArtistic">
      <property name="title">
       <string>Artistic</string>
      </property>
-     <addaction name="actionDilation"/>
-     <addaction name="actionErotion"/>
-    </widget>
-    <widget class="QMenu" name="menuColor">
-     <property name="title">
-      <string>Color</string>
-     </property>
-     <addaction name="actionGrayscale"/>
+     <addaction name="actionCartoon"/>
+     <addaction name="actionOilify"/>
     </widget>
     <addaction name="menuBlur"/>
     <addaction name="menuEdge_Detection"/>
+    <addaction name="menuGeneric"/>
     <addaction name="menuArtistic"/>
-    <addaction name="menuColor"/>
    </widget>
    <widget class="QMenu" name="menuHilfe">
     <property name="title">
-     <string>Hilfe</string>
+     <string>Help</string>
     </property>
-    <addaction name="actionHilfe"/>
+    <addaction name="actionHelp"/>
     <addaction name="separator"/>
-    <addaction name="action_ber"/>
+    <addaction name="actionAbout"/>
+   </widget>
+   <widget class="QMenu" name="menuColor">
+    <property name="title">
+     <string>Color</string>
+    </property>
+    <addaction name="actionGrayscale"/>
+    <addaction name="actionColorize"/>
+    <addaction name="actionSaturation"/>
+    <addaction name="actionBrightness"/>
+    <addaction name="actionContrast"/>
+    <addaction name="actionDisaturate"/>
+    <addaction name="actionBalance"/>
+    <addaction name="actionHistogram"/>
+    <addaction name="actionInvertColor"/>
+   </widget>
+   <widget class="QMenu" name="menuTool">
+    <property name="title">
+     <string>Tool</string>
+    </property>
+    <addaction name="actionZoom"/>
+    <addaction name="actionEyedropper"/>
+    <addaction name="actionText"/>
+   </widget>
+   <widget class="QMenu" name="menuSelect">
+    <property name="title">
+     <string>Select</string>
+    </property>
+    <addaction name="actionAll"/>
+    <addaction name="actionNone"/>
+    <addaction name="actionInvertSelect"/>
+    <addaction name="actionByColor"/>
+    <addaction name="actionMagicWand"/>
+    <addaction name="separator"/>
+    <addaction name="actionGrowth"/>
+    <addaction name="actionShrink"/>
    </widget>
    <addaction name="menuTest"/>
    <addaction name="menuBearbeiten"/>
+   <addaction name="menuSelect"/>
+   <addaction name="menuColor"/>
+   <addaction name="menuTool"/>
    <addaction name="menuFilter"/>
    <addaction name="menuHilfe"/>
   </widget>
-  <action name="actionNeu">
+  <action name="actionNew">
    <property name="text">
-    <string>Neu</string>
+    <string>New</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
    </property>
   </action>
-  <action name="action_ffnen">
+  <action name="actionOpen">
    <property name="text">
-    <string>Öffnen</string>
+    <string>Open</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
    </property>
   </action>
-  <action name="actionSpeichern">
+  <action name="actionSave">
    <property name="text">
-    <string>Speichern</string>
+    <string>Save</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
-  <action name="actionSpeichern_unter">
+  <action name="actionSaveAs">
    <property name="text">
-    <string>Speichern unter ...</string>
+    <string>Save As ...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
    </property>
   </action>
-  <action name="actionKopieren">
+  <action name="actionCopy">
    <property name="text">
-    <string>Kopieren</string>
+    <string>Copy</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
    </property>
   </action>
-  <action name="actionEinf_gen">
+  <action name="actionPaste">
    <property name="text">
-    <string>Einfügen</string>
+    <string>Paste</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
    </property>
   </action>
-  <action name="action_ber">
+  <action name="actionAbout">
    <property name="text">
-    <string>Über ...</string>
+    <string>About</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
    </property>
   </action>
-  <action name="actionHilfe">
+  <action name="actionHelp">
    <property name="text">
-    <string>Hilfe</string>
+    <string>Help</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+H</string>
    </property>
   </action>
-  <action name="actionBeenden">
+  <action name="actionClose">
    <property name="text">
-    <string>Beenden</string>
+    <string>Close</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
    </property>
   </action>
-  <action name="actionDrucken">
+  <action name="actionUndo">
    <property name="text">
-    <string>Drucken</string>
+    <string>Undo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
    </property>
   </action>
-  <action name="actionR_ckg_ngig">
+  <action name="actionRedo">
    <property name="text">
-    <string>Rückgängig</string>
+    <string>Redo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
    </property>
   </action>
-  <action name="actionWiederherstellen">
+  <action name="actionCut">
    <property name="text">
-    <string>Wiederherstellen</string>
+    <string>Cut</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+X</string>
    </property>
   </action>
-  <action name="actionL_schen">
+  <action name="actionUndoHistory">
    <property name="text">
-    <string>Ausschneiden</string>
+    <string>Undo History</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+Z</string>
    </property>
   </action>
-  <action name="actionZur_cksetzen">
+  <action name="actionBrushSize">
    <property name="text">
-    <string>Zurücksetzen</string>
+    <string>Brush Size</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
    </property>
   </action>
-  <action name="actionPinsel_gr_e">
+  <action name="actionCloseAll">
    <property name="text">
-    <string>Pinsel größe</string>
+    <string>Close All</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+W</string>
+   </property>
+  </action>
+  <action name="actionQuit">
+   <property name="text">
+    <string>Quit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
    </property>
   </action>
   <action name="actionBlur">
@@ -530,29 +1173,19 @@ margin-top: 3px; /* make non-selected tabs look smaller */
     <string>Blur</string>
    </property>
   </action>
-  <action name="actionGaussian_Blur">
+  <action name="actionGaussianBlur">
    <property name="text">
     <string>Gaussian Blur</string>
    </property>
   </action>
-  <action name="actionMedian_Blur">
+  <action name="actionMedianBlur">
    <property name="text">
     <string>Median Blur</string>
    </property>
   </action>
-  <action name="actionBilateral_Filter">
-   <property name="text">
-    <string>Bilateral Filter</string>
-   </property>
-  </action>
-  <action name="actionSobel">
-   <property name="text">
-    <string>Sobel</string>
-   </property>
-  </action>
   <action name="actionEdge">
    <property name="text">
-    <string>Edge</string>
+    <string>Outline</string>
    </property>
   </action>
   <action name="actionCanny">
@@ -560,14 +1193,34 @@ margin-top: 3px; /* make non-selected tabs look smaller */
     <string>Canny</string>
    </property>
   </action>
+  <action name="actionSobel">
+   <property name="text">
+    <string>Sobel</string>
+   </property>
+  </action>
   <action name="actionDilation">
    <property name="text">
     <string>Dilation</string>
    </property>
   </action>
-  <action name="actionErotion">
+  <action name="actionErosion">
    <property name="text">
-    <string>Erotion</string>
+    <string>Erosion</string>
+   </property>
+  </action>
+  <action name="actionResetImage">
+   <property name="text">
+    <string>Reset Image</string>
+   </property>
+  </action>
+  <action name="actionCartoon">
+   <property name="text">
+    <string>Cartoon</string>
+   </property>
+  </action>
+  <action name="actionOilify">
+   <property name="text">
+    <string>Oilify</string>
    </property>
   </action>
   <action name="actionGrayscale">
@@ -575,19 +1228,113 @@ margin-top: 3px; /* make non-selected tabs look smaller */
     <string>Grayscale</string>
    </property>
   </action>
+  <action name="actionColorize">
+   <property name="text">
+    <string>Colorize</string>
+   </property>
+  </action>
+  <action name="actionSaturation">
+   <property name="text">
+    <string>Saturation</string>
+   </property>
+  </action>
+  <action name="actionBrightness">
+   <property name="text">
+    <string>Brightness</string>
+   </property>
+  </action>
+  <action name="actionContrast">
+   <property name="text">
+    <string>Contrast</string>
+   </property>
+  </action>
+  <action name="actionDisaturate">
+   <property name="text">
+    <string>Disaturate</string>
+   </property>
+  </action>
+  <action name="actionBalance">
+   <property name="text">
+    <string>Balance</string>
+   </property>
+  </action>
+  <action name="actionHistogram">
+   <property name="text">
+    <string>Histogram</string>
+   </property>
+  </action>
+  <action name="actionInvertColor">
+   <property name="text">
+    <string>Invert</string>
+   </property>
+  </action>
+  <action name="actionZoom">
+   <property name="text">
+    <string>Magnifier</string>
+   </property>
+  </action>
+  <action name="actionEyedropper">
+   <property name="text">
+    <string>Eyedropper</string>
+   </property>
+  </action>
+  <action name="actionText">
+   <property name="text">
+    <string>Text</string>
+   </property>
+  </action>
+  <action name="actionAll">
+   <property name="text">
+    <string>All</string>
+   </property>
+  </action>
+  <action name="actionNone">
+   <property name="text">
+    <string>None</string>
+   </property>
+  </action>
+  <action name="actionInvertSelect">
+   <property name="text">
+    <string>Invert</string>
+   </property>
+  </action>
+  <action name="actionByColor">
+   <property name="text">
+    <string>By Color</string>
+   </property>
+  </action>
+  <action name="actionMagicWand">
+   <property name="text">
+    <string>Magic Wand</string>
+   </property>
+  </action>
+  <action name="actionGrowth">
+   <property name="text">
+    <string>Grow</string>
+   </property>
+  </action>
+  <action name="actionShrink">
+   <property name="text">
+    <string>Shrink</string>
+   </property>
+  </action>
+  <action name="actionBilateralFilter">
+   <property name="text">
+    <string>Bilateral Filter</string>
+   </property>
+  </action>
  </widget>
  <customwidgets>
   <customwidget>
    <class>ColorDisplayWidget</class>
    <extends>QWidget</extends>
-   <header>colordisplaywidget.h</header>
+   <header>colordisplaywidget.hpp</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>imagetab</tabstop>
-  <tabstop>btnBrush</tabstop>
-  <tabstop>btnTest</tabstop>
+  <tabstop>btnPencil</tabstop>
  </tabstops>
  <resources>
   <include location="Icons.qrc"/>
